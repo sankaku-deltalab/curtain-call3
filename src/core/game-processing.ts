@@ -2,16 +2,25 @@ import {ActressTrait, AnyActressBehavior, AnyActressState} from './actress';
 import {Overlaps} from './components/collision';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
-import {GameState, MindId} from './game-state';
+import {GameState, GameStateTrait, MindId} from './game-state';
 import {CanvasInput, CanvasInputTrait, Input} from './components/inputs/input';
 import {Res, Result} from './result';
 import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
-import {Mut} from './util';
+import {Mut, Vec2d} from './util';
 import {Graphic, GraphicTrait} from './components/graphics/graphic';
 import {RenderingState} from './components/camera';
 
 export class GameProcessing {
+  static init<Stg extends Setting>(args: {
+    camera: {
+      pos: Vec2d;
+      size: Vec2d;
+    };
+  }): GameState<Stg> {
+    return GameStateTrait.initialState(args);
+  }
+
   static update<Stg extends Setting>(
     state: GameState<Stg>,
     args: {

@@ -5,12 +5,21 @@ import {
   CanvasPointerInputTrait,
   PointerInput,
   PointerInputState,
+  PointerInputTrait,
 } from './pointer-input';
 
 export type Input<_Stg extends Setting> = {pointer: PointerInput};
 export type InputState<_Stg extends Setting> = {pointer: PointerInputState};
 
 export type CanvasInput<_Stg extends Setting> = {pointer: CanvasPointerInput};
+
+export class InputTrait {
+  static initialState<Stg extends Setting>(): InputState<Stg> {
+    return {
+      pointer: PointerInputTrait.initialState(),
+    };
+  }
+}
 
 export class CanvasInputTrait {
   static convertInputToGame<Stg extends Setting>(

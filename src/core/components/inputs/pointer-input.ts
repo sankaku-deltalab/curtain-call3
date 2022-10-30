@@ -16,6 +16,10 @@ export type CanvasPointerInput = {
 };
 
 export class PointerInputTrait {
+  static initialState(): PointerInputState {
+    return {prev: {down: false, pos: Vec2dTrait.zero()}};
+  }
+
   static deltaWhileDown(input: PointerInput): Vec2d {
     const {current, prev} = input;
     const downing = current.down && prev.down;

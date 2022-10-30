@@ -1,8 +1,9 @@
-import {CameraState} from './components/camera';
+import {CameraState, CameraTrait} from './components/camera';
 import {Res, Result} from './result';
 import {AnyEvent, BodyTypes, MindTypes, Setting} from './setting';
-import {TimeState} from './components/time';
-import {InputState} from './components/inputs/input';
+import {TimeState, TimeTrait} from './components/time';
+import {InputState, InputTrait} from './components/inputs/input';
+import {Vec2d} from './util';
 
 export type GameState<Stg extends Setting> = {
   time: TimeState<Stg>;
@@ -49,7 +50,26 @@ type MindStateRaw<
   MT extends MindTypes<Stg>
 > = Stg['minds'][MT];
 
+export type StateInitializer<_Stg extends Setting> = {
+  camera: {
+    size: Vec2d;
+  };
+};
+
 export class GameStateTrait {
+  static initialState<Stg extends Setting>(
+    args: StateInitializer<Stg>
+  ): GameState<Stg> {
+    return {
+      time: TimeTrait.initialState(),
+      camera: CameraTrait.initialState(args.camera),
+      input: InputTrait.initialState(),
+      bodies: {},
+      minds: {},
+      events: [],
+    };
+  }
+
   static extractVisibleState<Stg extends Setting>(
     st: GameState<Stg>
   ): VisibleGameState<Stg> {
