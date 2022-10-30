@@ -21,6 +21,7 @@
     "typescript": "~4.7.0"
   },
   "dependencies": {
+    "ctix": "^1.5.3",
     "immer": "^9.0.16"
   }
 }
