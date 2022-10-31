@@ -1,4 +1,4 @@
-import {BodyId} from '../game-state';
+import {BodyId} from '../actress';
 import {RecSet, AaRect2d} from '../util';
 
 export type Collision = {

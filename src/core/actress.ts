@@ -1,17 +1,46 @@
 import product, {castDraft} from 'immer';
 import {Collision} from './components/collision';
-import {
-  BodyState,
-  GameState,
-  GameStateTrait,
-  MindId,
-  MindState,
-  VisibleGameState,
-} from './game-state';
+import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
 import {Input} from './components/inputs/input';
 import {Res, Result} from './result';
 import {AnyEvent, BodyTypes, MindTypes, Setting} from './setting';
+
+export type ActressesState<Stg extends Setting> = {
+  bodies: Record<BodyId, AnyBodyState<Stg>>;
+  minds: Record<MindId, AnyMindState<Stg>>;
+};
+
+export type BodyId = string;
+export type MindId = string;
+
+export type BodyState<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>
+> = BodyStateRaw<Stg, BT> & {
+  meta: {bodyType: BT};
+};
+
+export type AnyBodyState<Stg extends Setting> = BodyState<Stg, BodyTypes<Stg>>;
+
+export type MindState<
+  Stg extends Setting,
+  MT extends MindTypes<Stg>
+> = MindStateRaw<Stg, MT> & {
+  meta: {mindType: MT; bodyId: BodyId};
+};
+
+export type AnyMindState<Stg extends Setting> = MindState<Stg, MindTypes<Stg>>;
+
+type BodyStateRaw<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>
+> = Stg['bodies'][BT];
+
+type MindStateRaw<
+  Stg extends Setting,
+  MT extends MindTypes<Stg>
+> = Stg['minds'][MT];
 
 export type ActressState<
   Stg extends Setting,
@@ -26,6 +55,25 @@ export type AnyActressState<Stg extends Setting> = ActressState<
 >;
 
 export class ActressTrait {
+  static initialState<Stg extends Setting>(): ActressesState<Stg> {
+    return {
+      bodies: {},
+      minds: {},
+    };
+  }
+
+  static getMinds<Stg extends Setting>(
+    st: ActressesState<Stg>
+  ): Record<MindId, AnyMindState<Stg>> {
+    return st.minds;
+  }
+
+  static getBodies<Stg extends Setting>(
+    st: ActressesState<Stg>
+  ): Record<BodyId, AnyBodyState<Stg>> {
+    return st.bodies;
+  }
+
   static extractActressState<Stg extends Setting>(
     st: GameState<Stg>,
     mindId: MindId
@@ -50,8 +98,8 @@ export class ActressTrait {
   ): GameState<Stg> {
     const bodyId = act.mind.meta.bodyId;
     return product(st, st => {
-      st.minds[mindId] = castDraft(act.mind);
-      st.bodies[bodyId] = castDraft(act.body);
+      st.actresses.minds[mindId] = castDraft(act.mind);
+      st.actresses.bodies[bodyId] = castDraft(act.body);
       st.events.concat(castDraft(act.ev));
     });
   }

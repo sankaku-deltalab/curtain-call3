@@ -1,8 +1,13 @@
-import {ActressTrait, AnyActressBehavior, AnyActressState} from './actress';
+import {
+  ActressTrait,
+  AnyActressBehavior,
+  AnyActressState,
+  MindId,
+} from './actress';
 import {Overlaps} from './components/collision';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
-import {GameState, GameStateTrait, MindId} from './game-state';
+import {GameState, GameStateTrait} from './game-state';
 import {CanvasInput, CanvasInputTrait, Input} from './components/inputs/input';
 import {Res, Result} from './result';
 import {Setting} from './setting';
@@ -76,7 +81,8 @@ const collectActInState = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {instances: GameInstances<Stg>}
 ): [MindId, AnyActressState<Stg>, AnyActressBehavior<Stg>][] => {
-  const lis = Object.entries(state.minds).map(([mindId, mind]) => {
+  const minds = ActressTrait.getMinds(state.actresses);
+  const lis = Object.entries(minds).map(([mindId, mind]) => {
     const act = GameInstancesTrait.getActressBehavior(
       mind.meta.mindType,
       args.instances

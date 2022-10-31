@@ -1,16 +1,23 @@
 import {CameraState, CameraTrait} from './components/camera';
 import {Res, Result} from './result';
-import {AnyEvent, BodyTypes, MindTypes, Setting} from './setting';
+import {AnyEvent, Setting} from './setting';
 import {TimeState, TimeTrait} from './components/time';
 import {InputState, InputTrait} from './components/inputs/input';
 import {Vec2d} from './util';
+import {
+  ActressesState,
+  ActressTrait,
+  AnyBodyState,
+  AnyMindState,
+  BodyId,
+  MindId,
+} from './actress';
 
 export type GameState<Stg extends Setting> = {
   time: TimeState<Stg>;
   camera: CameraState<Stg>;
   input: InputState<Stg>;
-  bodies: Record<BodyId, AnyBodyState<Stg>>;
-  minds: Record<MindId, AnyMindState<Stg>>;
+  actresses: ActressesState<Stg>;
   events: AnyEvent<Stg>[];
 };
 
@@ -18,37 +25,6 @@ export type VisibleGameState<Stg extends Setting> = Exclude<
   GameState<Stg>,
   'minds' | 'events'
 >;
-
-export type BodyId = string;
-export type MindId = string;
-
-export type BodyState<
-  Stg extends Setting,
-  BT extends BodyTypes<Stg>
-> = BodyStateRaw<Stg, BT> & {
-  meta: {bodyType: BT};
-};
-
-export type AnyBodyState<Stg extends Setting> = BodyState<Stg, BodyTypes<Stg>>;
-
-export type MindState<
-  Stg extends Setting,
-  MT extends MindTypes<Stg>
-> = MindStateRaw<Stg, MT> & {
-  meta: {mindType: MT; bodyId: BodyId};
-};
-
-export type AnyMindState<Stg extends Setting> = MindState<Stg, MindTypes<Stg>>;
-
-type BodyStateRaw<
-  Stg extends Setting,
-  BT extends BodyTypes<Stg>
-> = Stg['bodies'][BT];
-
-type MindStateRaw<
-  Stg extends Setting,
-  MT extends MindTypes<Stg>
-> = Stg['minds'][MT];
 
 export type StateInitializer<_Stg extends Setting> = {
   camera: {
@@ -64,8 +40,7 @@ export class GameStateTrait {
       time: TimeTrait.initialState(),
       camera: CameraTrait.initialState(args.camera),
       input: InputTrait.initialState(),
-      bodies: {},
-      minds: {},
+      actresses: ActressTrait.initialState(),
       events: [],
     };
   }
@@ -87,8 +62,9 @@ export class GameStateTrait {
     mindId: MindId,
     st: GameState<Stg>
   ): Result<AnyMindState<Stg>> {
+    const minds = ActressTrait.getMinds(st.actresses);
     return Res.errIfUndefined(
-      st.minds[mindId],
+      minds[mindId],
       `Mind of id '${mindId}' is not exists`
     );
   }
@@ -97,8 +73,9 @@ export class GameStateTrait {
     bodyId: BodyId,
     st: GameState<Stg>
   ): Result<AnyBodyState<Stg>> {
+    const bodies = ActressTrait.getBodies(st.actresses);
     return Res.errIfUndefined(
-      st.bodies[bodyId],
+      bodies[bodyId],
       `Body of id '${bodyId}' is not exists`
     );
   }
