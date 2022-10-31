@@ -1,6 +1,7 @@
 type Rec = Record<string, unknown>;
 
 export type Setting = {
+  level: Rec;
   bodies: Record<string, Rec>;
   minds: Record<string, Rec>;
   events: Record<string, Rec>;
@@ -15,25 +16,10 @@ export type EventPayload<
   Type extends EventTypes<Stg>
 > = Setting['events'][Type];
 
-export type Event<Stg extends Setting, Type extends EventTypes<Stg>> = {
-  type: Type;
-  payload: EventPayload<Stg, Type>;
-};
-
-export type AnyEvent<Stg extends Setting> = Event<Stg, EventTypes<Stg>>;
+export type LevelState<Stg extends Setting> = Stg['level'];
 
 export const bodyTypes = <Stg extends Setting>(
   setting: Stg
 ): BodyTypes<Stg> => {
   return Object.keys(setting.bodies) as unknown as BodyTypes<Stg>;
-};
-
-export const createEvent = <Stg extends Setting, Type extends EventTypes<Stg>>(
-  type: Type,
-  payload: EventPayload<Stg, Type>
-): Event<Stg, Type> => {
-  return {
-    type,
-    payload,
-  };
 };

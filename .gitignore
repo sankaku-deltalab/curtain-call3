@@ -168,3 +168,6 @@ dist
 
 # gts output directory
 /build
+
+# ctix
+index.ts.bak

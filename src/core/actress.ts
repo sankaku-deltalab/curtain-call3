@@ -4,7 +4,9 @@ import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
 import {Input} from './components/inputs/input';
 import {Res, Result} from './result';
-import {AnyEvent, BodyTypes, MindTypes, Setting} from './setting';
+import {BodyTypes, MindTypes, Setting} from './setting';
+import {AnyEvent, SceneTrait} from './scene';
+import {Mut} from './util';
 
 export type ActressesState<Stg extends Setting> = {
   bodies: Record<BodyId, AnyBodyState<Stg>>;
@@ -74,6 +76,19 @@ export class ActressTrait {
     return st.bodies;
   }
 
+  static mergeMindsAndBodies<Stg extends Setting>(
+    state: ActressesState<Stg>,
+    args: {
+      minds: Record<MindId, AnyMindState<Stg>>;
+      bodies: Record<BodyId, AnyBodyState<Stg>>;
+    }
+  ): ActressesState<Stg> {
+    let st = state;
+    st = Mut.replace(st, 'minds', m => ({...m, ...args.minds}));
+    st = Mut.replace(st, 'bodies', b => ({...b, ...args.bodies}));
+    return st;
+  }
+
   static extractActressState<Stg extends Setting>(
     st: GameState<Stg>,
     mindId: MindId
@@ -91,17 +106,25 @@ export class ActressTrait {
     return Res.ok({mind: mind.val, body: body.val, ev: []});
   }
 
-  static mergeActressState<Stg extends Setting>(
-    st: GameState<Stg>,
-    mindId: MindId,
-    act: AnyActressState<Stg>
+  static mergeActressStates<Stg extends Setting>(
+    state: GameState<Stg>,
+    actSts: [MindId, AnyActressState<Stg>][]
   ): GameState<Stg> {
-    const bodyId = act.mind.meta.bodyId;
-    return product(st, st => {
-      st.actresses.minds[mindId] = castDraft(act.mind);
-      st.actresses.bodies[bodyId] = castDraft(act.body);
-      st.events.concat(castDraft(act.ev));
-    });
+    const minds: Record<MindId, AnyMindState<Stg>> = Object.fromEntries(
+      actSts.map(([mid, s]) => [mid, s.mind])
+    );
+    const bodies = Object.fromEntries(
+      actSts.map(([_, s]) => [s.mind.meta.bodyId, s.body])
+    );
+    const newEvents = actSts.flatMap(([_, s]) => s.ev);
+
+    let st = state;
+    st = Mut.replace(st, 'scene', s => SceneTrait.mergeEvents(s, newEvents));
+    st = Mut.replace(st, 'actresses', s =>
+      ActressTrait.mergeMindsAndBodies(s, {minds, bodies})
+    );
+
+    return st;
   }
 }
 

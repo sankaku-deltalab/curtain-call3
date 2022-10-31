@@ -1,6 +1,6 @@
 import {CameraState, CameraTrait} from './components/camera';
 import {Res, Result} from './result';
-import {AnyEvent, Setting} from './setting';
+import {LevelState, Setting} from './setting';
 import {TimeState, TimeTrait} from './components/time';
 import {InputState, InputTrait} from './components/inputs/input';
 import {Vec2d} from './util';
@@ -12,13 +12,14 @@ import {
   BodyId,
   MindId,
 } from './actress';
+import {SceneState, SceneTrait} from './scene';
 
 export type GameState<Stg extends Setting> = {
   time: TimeState<Stg>;
   camera: CameraState<Stg>;
   input: InputState<Stg>;
   actresses: ActressesState<Stg>;
-  events: AnyEvent<Stg>[];
+  scene: SceneState<Stg>;
 };
 
 export type VisibleGameState<Stg extends Setting> = Exclude<
@@ -26,10 +27,11 @@ export type VisibleGameState<Stg extends Setting> = Exclude<
   'minds' | 'events'
 >;
 
-export type StateInitializer<_Stg extends Setting> = {
+export type StateInitializer<Stg extends Setting> = {
   camera: {
     size: Vec2d;
   };
+  level: LevelState<Stg>;
 };
 
 export class GameStateTrait {
@@ -41,7 +43,7 @@ export class GameStateTrait {
       camera: CameraTrait.initialState(args.camera),
       input: InputTrait.initialState(),
       actresses: ActressTrait.initialState(),
-      events: [],
+      scene: SceneTrait.initialState({initialLevel: args.level}),
     };
   }
 

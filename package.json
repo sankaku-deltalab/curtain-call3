@@ -8,6 +8,9 @@
     "lib": "build/src",
     "test": "__tests__"
   },
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "gts lint",
@@ -16,7 +19,8 @@
     "fix": "gts fix",
     "prepare": "npm.cmd run compile",
     "pretest": "npm.cmd run compile",
-    "posttest": "npm.cmd run lint"
+    "posttest": "npm.cmd run lint",
+    "create-index": "ctix create"
   },
   "author": "",
   "license": "ISC",

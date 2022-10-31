@@ -7,22 +7,19 @@ import {
 import {Overlaps} from './components/collision';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
-import {GameState, GameStateTrait} from './game-state';
+import {GameState, GameStateTrait, StateInitializer} from './game-state';
 import {CanvasInput, CanvasInputTrait, Input} from './components/inputs/input';
 import {Res, Result} from './result';
 import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
-import {Mut, Vec2d} from './util';
+import {Mut} from './util';
 import {Graphic, GraphicTrait} from './components/graphics/graphic';
 import {RenderingState} from './components/camera';
 
 export class GameProcessing {
-  static init<Stg extends Setting>(args: {
-    camera: {
-      pos: Vec2d;
-      size: Vec2d;
-    };
-  }): GameState<Stg> {
+  static init<Stg extends Setting>(
+    args: StateInitializer<Stg>
+  ): GameState<Stg> {
     return GameStateTrait.initialState(args);
   }
 
@@ -108,17 +105,9 @@ const mergeActressStates = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
     actStates: Result<[MindId, AnyActressState<Stg>]>[];
-    instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
-  return args.actStates
-    .filter(Res.isOk)
-    .map(Res.unwrap)
-    .reduce(
-      (gameSt, [mindId, actSt]) =>
-        ActressTrait.mergeActressState(gameSt, mindId, actSt),
-      state
-    );
+  return ActressTrait.mergeActressStates(state, Res.onlyOk(args.actStates));
 };
 
 const applyInputToState = <Stg extends Setting>(
@@ -150,7 +139,7 @@ const applyInputToActresses = <Stg extends Setting>(
     }
   );
 
-  return mergeActressStates(state, {actStates, instances});
+  return mergeActressStates(state, {actStates});
 };
 
 const calcOverlaps = <Stg extends Setting>(state: GameState<Stg>): Overlaps => {
@@ -186,5 +175,5 @@ const updateByActresses = <Stg extends Setting>(
     }
   );
 
-  return mergeActressStates(state, {actStates, instances});
+  return mergeActressStates(state, {actStates});
 };

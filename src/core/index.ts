@@ -5,5 +5,6 @@ export * from './game-instances';
 export * from './game-processing';
 export * from './game-state';
 export * from './result';
+export * from './scene';
 export * from './setting';
 export * from './util';
