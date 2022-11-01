@@ -9,6 +9,8 @@ import {AnyEvent, SceneTrait} from './scene';
 import {Mut} from './util';
 
 export type ActressesState<Stg extends Setting> = {
+  bodyIdCount: number;
+  mindIdCount: number;
   bodies: Record<BodyId, AnyBodyState<Stg>>;
   minds: Record<MindId, AnyMindState<Stg>>;
 };
@@ -34,15 +36,25 @@ export type MindState<
 
 export type AnyMindState<Stg extends Setting> = MindState<Stg, MindTypes<Stg>>;
 
-type BodyStateRaw<
+export type BodyStateRaw<
   Stg extends Setting,
   BT extends BodyTypes<Stg>
 > = Stg['bodies'][BT];
 
-type MindStateRaw<
+export type AnyBodyStateRaw<Stg extends Setting> = BodyStateRaw<
+  Stg,
+  BodyTypes<Stg>
+>;
+
+export type MindStateRaw<
   Stg extends Setting,
   MT extends MindTypes<Stg>
 > = Stg['minds'][MT];
+
+export type AnyMindStateRaw<Stg extends Setting> = MindStateRaw<
+  Stg,
+  MindTypes<Stg>
+>;
 
 export type ActressState<
   Stg extends Setting,
@@ -59,6 +71,8 @@ export type AnyActressState<Stg extends Setting> = ActressState<
 export class ActressTrait {
   static initialState<Stg extends Setting>(): ActressesState<Stg> {
     return {
+      bodyIdCount: 0,
+      mindIdCount: 0,
       bodies: {},
       minds: {},
     };
@@ -87,6 +101,80 @@ export class ActressTrait {
     st = Mut.replace(st, 'minds', m => ({...m, ...args.minds}));
     st = Mut.replace(st, 'bodies', b => ({...b, ...args.bodies}));
     return st;
+  }
+
+  static addActress<
+    Stg extends Setting,
+    BT extends BodyTypes<Stg>,
+    MT extends MindTypes<Stg>
+  >(
+    state: ActressesState<Stg>,
+    act: {
+      bodyType: BT;
+      mindType: MT;
+      body: BodyStateRaw<Stg, BT>;
+      mind: MindStateRaw<Stg, MT>;
+    }
+  ): [ActressesState<Stg>, {bodyId: BodyId; mindId: MindId}] {
+    let st = state;
+    const [st2, ids] = this.generateActressId(st);
+    st = st2;
+    const actress = this.createActress({...ids, ...act});
+    st = Mut.replace(st, 'minds', m => ({
+      ...m,
+      ...{[actress.mindId]: actress.mind},
+    }));
+    st = Mut.replace(st, 'bodies', b => ({
+      ...b,
+      ...{[actress.bodyId]: actress.body},
+    }));
+
+    return [st, ids];
+  }
+
+  static generateActressId<Stg extends Setting>(
+    state: ActressesState<Stg>
+  ): [ActressesState<Stg>, {bodyId: BodyId; mindId: MindId}] {
+    const bodyId = `b${state.bodyIdCount}`;
+    const mindId = `b${state.mindIdCount}`;
+    let st = state;
+    st = Mut.replace(st, 'bodyIdCount', c => c + 1);
+    st = Mut.replace(st, 'mindIdCount', c => c + 1);
+    return [st, {bodyId, mindId}];
+  }
+
+  static createActress<
+    Stg extends Setting,
+    BT extends BodyTypes<Stg>,
+    MT extends MindTypes<Stg>
+  >(args: {
+    bodyId: BodyId;
+    mindId: MindId;
+    bodyType: BT;
+    mindType: MT;
+    body: BodyStateRaw<Stg, BT>;
+    mind: MindStateRaw<Stg, MT>;
+  }): {
+    bodyId: BodyId;
+    mindId: MindId;
+    body: BodyState<Stg, BT>;
+    mind: MindState<Stg, MT>;
+  } {
+    const body: BodyState<Stg, BT> = {
+      ...args.body,
+      meta: {bodyType: args.bodyType},
+    };
+    const mind: MindState<Stg, MT> = {
+      ...args.mind,
+      meta: {bodyId: args.bodyId, mindType: args.mindType},
+    };
+
+    return {
+      bodyId: args.bodyId,
+      body,
+      mindId: args.mindId,
+      mind,
+    };
   }
 
   static extractActressState<Stg extends Setting>(
