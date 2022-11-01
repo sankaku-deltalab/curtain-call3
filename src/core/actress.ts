@@ -1,4 +1,3 @@
-import product, {castDraft} from 'immer';
 import {Collision} from './components/collision';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
