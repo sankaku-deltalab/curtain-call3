@@ -39,4 +39,12 @@ export class SceneTrait {
       payload,
     };
   }
+
+  static consumeAllEvents<Stg extends Setting>(
+    state: SceneState<Stg>
+  ): [SceneState<Stg>, AnyEvent<Stg>[]] {
+    const ev = state.events;
+    const st = Mut.replace(state, 'events', () => []);
+    return [st, ev];
+  }
 }
