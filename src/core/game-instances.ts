@@ -1,6 +1,6 @@
 import {ActressBehavior} from './actress';
 import {DirectorBehavior} from './director';
-import {Res, Result} from './result';
+import {Res, Result} from './utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
 
 export type GameInstances<Stg extends Setting> = {

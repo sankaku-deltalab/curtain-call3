@@ -1,5 +1,5 @@
 import {EventPayload, EventTypes, LevelState, Setting} from './setting';
-import {Mut} from './util';
+import {Mut} from './utils/util';
 
 export type SceneState<Stg extends Setting> = {
   level: LevelState<Stg>;

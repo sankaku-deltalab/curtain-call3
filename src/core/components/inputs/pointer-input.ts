@@ -1,5 +1,5 @@
 import {Setting} from '../../setting';
-import {Vec2d, Vec2dTrait} from '../../util';
+import {Vec2d, Vec2dTrait} from '../../utils/util';
 import {CameraState, CameraTrait, RenderingState} from '../camera';
 
 export type PointerInput = {current: Pointer; prev: Pointer};

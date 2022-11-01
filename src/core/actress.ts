@@ -2,10 +2,10 @@ import {Collision} from './components/collision';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
 import {Input} from './components/inputs/input';
-import {Res, Result} from './result';
+import {Res, Result} from './utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
 import {AnyEvent, SceneTrait} from './scene';
-import {Mut} from './util';
+import {Mut} from './utils/util';
 
 export type ActressesState<Stg extends Setting> = {
   bodyIdCount: number;

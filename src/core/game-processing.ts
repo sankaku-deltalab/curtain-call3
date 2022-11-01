@@ -9,10 +9,10 @@ import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState, GameStateTrait, StateInitializer} from './game-state';
 import {CanvasInput, CanvasInputTrait, Input} from './components/inputs/input';
-import {Res, Result} from './result';
+import {Res, Result} from './utils/result';
 import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
-import {Mut} from './util';
+import {Mut} from './utils/util';
 import {Graphic, GraphicTrait} from './components/graphics/graphic';
 import {RenderingState} from './components/camera';
 

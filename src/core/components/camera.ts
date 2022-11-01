@@ -1,5 +1,5 @@
 import {Setting} from '../setting';
-import {AaRect2d, AaRect2dTrait, Vec2d, Vec2dTrait} from '../util';
+import {AaRect2d, AaRect2dTrait, Vec2d, Vec2dTrait} from '../utils/util';
 
 export type CameraState<_Stg extends Setting> = {
   pos: Vec2d;

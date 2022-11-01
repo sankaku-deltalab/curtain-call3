@@ -1,5 +1,5 @@
 import {BodyId} from '../actress';
-import {RecSet, AaRect2d} from '../util';
+import {RecSet, AaRect2d} from '../utils/util';
 
 export type Collision = {
   shapes: CollisionShape[];
