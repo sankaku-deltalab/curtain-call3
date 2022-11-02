@@ -29,5 +29,8 @@
     "ctix": "^1.5.3",
     "gts": "^3.1.1",
     "typescript": "~4.7.0"
+  },
+  "dependencies": {
+    "rambda": "^7.3.0"
   }
 }
