@@ -4,14 +4,17 @@ import {
   AnyBodyState,
   AnyMindState,
   BodyId,
+  BodyState,
   BodyStateRaw,
   MindId,
   MindStateRaw,
 } from './actress';
+import {PointerInputTrait} from './components';
 import {GameState} from './game-state';
 import {AnyEvent, SceneTrait} from './scene';
 import {BodyTypes, MindTypes, Setting} from './setting';
-import {Im} from './utils/util';
+import {Res, Result} from './utils/result';
+import {Im, Vec2d} from './utils/util';
 
 export class GameHelper {
   static getMinds<Stg extends Setting>(
@@ -24,6 +27,21 @@ export class GameHelper {
     state: GameState<Stg>
   ): Record<BodyId, AnyBodyState<Stg>> {
     return ActressTrait.getBodies(state.actresses);
+  }
+
+  static getBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    state: GameState<Stg>,
+    bodyId: BodyId,
+    bodyType: BT
+  ): Result<BodyState<Stg, BT>> {
+    const body = ActressTrait.getBodies(state.actresses)[bodyId];
+    if (body === undefined) {
+      return Res.err('not found');
+    }
+    if (body.meta.bodyType !== bodyType) {
+      return Res.err('incorrect body type');
+    }
+    return Res.ok(body as BodyState<Stg, BT>);
   }
 
   static addActress<
@@ -63,5 +81,11 @@ export class GameHelper {
         events,
       })
     )();
+  }
+}
+
+export class InputHelper {
+  static deltaWhileDown<Stg extends Setting>(state: GameState<Stg>): Vec2d {
+    return PointerInputTrait.deltaWhileDown(state.input.pointer);
   }
 }
