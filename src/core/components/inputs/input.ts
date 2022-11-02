@@ -1,17 +1,15 @@
+import {pipe} from 'rambda';
 import {Setting} from '../../setting';
+import {Mut} from '../../utils/util';
 import {CameraState, RenderingState} from '../camera';
 import {
-  CanvasPointerInput,
-  CanvasPointerInputTrait,
-  PointerInput,
+  CanvasInputPointer,
   PointerInputState,
   PointerInputTrait,
 } from './pointer-input';
 
-export type Input<_Stg extends Setting> = {pointer: PointerInput};
 export type InputState<_Stg extends Setting> = {pointer: PointerInputState};
-
-export type CanvasInput<_Stg extends Setting> = {pointer: CanvasPointerInput};
+export type CanvasInput<_Stg extends Setting> = {pointer: CanvasInputPointer};
 
 export class InputTrait {
   static initialState<Stg extends Setting>(): InputState<Stg> {
@@ -19,19 +17,26 @@ export class InputTrait {
       pointer: PointerInputTrait.initialState(),
     };
   }
-}
 
-export class CanvasInputTrait {
-  static convertInputToGame<Stg extends Setting>(
-    [canvasInput, inputState]: [CanvasInput<Stg>, InputState<Stg>],
-    args: {camSt: CameraState<Stg>; renSt: RenderingState}
-  ): [Input<Stg>, InputState<Stg>] {
-    const [pointerInput, pointerState] =
-      CanvasPointerInputTrait.convertInputToGame(
-        [canvasInput.pointer, inputState.pointer],
-        args
-      );
+  static updateState<Stg extends Setting>(
+    state: InputState<Stg>,
+    args: {
+      canvasInput: CanvasInput<Stg>;
+      camSt: CameraState<Stg>;
+      renSt: RenderingState;
+    }
+  ): InputState<Stg> {
+    const pointerArgs = {
+      canvasPointer: args.canvasInput.pointer,
+      ...args,
+    };
 
-    return [{pointer: pointerInput}, {pointer: pointerState}];
+    return pipe(
+      () => state,
+      st =>
+        Mut.replace(st, 'pointer', s =>
+          PointerInputTrait.updateState(s, pointerArgs)
+        )
+    )();
   }
 }

@@ -105,6 +105,15 @@ export class Mut {
     const newValue = updater(obj[key]);
     return {...obj, [key]: newValue};
   }
+
+  static add<
+    Key extends string,
+    Val extends unknown,
+    T extends Record<Key, Val>,
+    NewVal extends Val
+  >(obj: T, key: Key, val: NewVal): T {
+    return {...obj, [key]: val};
+  }
 }
 
 export type RecSet = Record<string, true | undefined>;

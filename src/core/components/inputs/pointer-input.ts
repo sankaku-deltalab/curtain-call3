@@ -2,25 +2,27 @@ import {Setting} from '../../setting';
 import {Vec2d, Vec2dTrait} from '../../utils/util';
 import {CameraState, CameraTrait, RenderingState} from '../camera';
 
-export type PointerInput = {current: Pointer; prev: Pointer};
-export type PointerInputState = {prev: Pointer};
+export type PointerInputState = {current: Pointer; prev: Pointer};
 
 export type Pointer = {
   down: boolean;
   pos: Vec2d;
 };
 
-export type CanvasPointerInput = {
+export type CanvasInputPointer = {
   down: boolean;
   canvasPos: Vec2d;
 };
 
 export class PointerInputTrait {
   static initialState(): PointerInputState {
-    return {prev: {down: false, pos: Vec2dTrait.zero()}};
+    return {
+      current: {down: false, pos: Vec2dTrait.zero()},
+      prev: {down: false, pos: Vec2dTrait.zero()},
+    };
   }
 
-  static deltaWhileDown(input: PointerInput): Vec2d {
+  static deltaWhileDown(input: PointerInputState): Vec2d {
     const {current, prev} = input;
     const downing = current.down && prev.down;
 
@@ -30,24 +32,27 @@ export class PointerInputTrait {
 
     return Vec2dTrait.sub(current.pos, prev.pos);
   }
-}
 
-export class CanvasPointerInputTrait {
-  static convertInputToGame<Stg extends Setting>(
-    [canvasPointer, inputState]: [CanvasPointerInput, PointerInputState],
-    args: {camSt: CameraState<Stg>; renSt: RenderingState}
-  ): [PointerInput, PointerInputState] {
-    const pointer = CanvasPointerInputTrait.convertPointerToGame(
-      canvasPointer,
+  static updateState<Stg extends Setting>(
+    state: PointerInputState,
+    args: {
+      canvasPointer: CanvasInputPointer;
+      camSt: CameraState<Stg>;
+      renSt: RenderingState;
+    }
+  ): PointerInputState {
+    const newPointer = this.convertCanvasPointerToGame(
+      args.canvasPointer,
       args
     );
-    const st: PointerInputState = {prev: pointer};
-    const input: PointerInput = {current: pointer, prev: inputState.prev};
-    return [input, st];
+    return {
+      current: newPointer,
+      prev: state.current,
+    };
   }
 
-  private static convertPointerToGame<Stg extends Setting>(
-    canvasPointer: CanvasPointerInput,
+  private static convertCanvasPointerToGame<Stg extends Setting>(
+    canvasPointer: CanvasInputPointer,
     args: {camSt: CameraState<Stg>; renSt: RenderingState}
   ): Pointer {
     const pos = CameraTrait.projectCanvasPointToGame(

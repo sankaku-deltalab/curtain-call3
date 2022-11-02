@@ -1,7 +1,7 @@
+import {pipe} from 'rambda';
 import {Collision} from './components/collision';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
-import {Input} from './components/inputs/input';
 import {Res, Result} from './utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
 import {AnyEvent, SceneTrait} from './scene';
@@ -114,32 +114,27 @@ export class ActressTrait {
       body: BodyStateRaw<Stg, BT>;
       mind: MindStateRaw<Stg, MT>;
     }
-  ): [ActressesState<Stg>, {bodyId: BodyId; mindId: MindId}] {
-    let st = state;
-    const [st2, ids] = this.generateActressId(st);
-    st = st2;
-    const actress = this.createActress({...ids, ...act});
-    st = Mut.replace(st, 'minds', m => ({
-      ...m,
-      ...{[actress.mindId]: actress.mind},
-    }));
-    st = Mut.replace(st, 'bodies', b => ({
-      ...b,
-      ...{[actress.bodyId]: actress.body},
-    }));
+  ): {state: ActressesState<Stg>; bodyId: BodyId; mindId: MindId} {
+    const {state: st, bodyId, mindId} = this.generateActressId(state);
+    const {body, mind} = this.createActress({bodyId, mindId, ...act});
+    const st2 = pipe(
+      () => st,
+      st => Mut.replace(st, 'minds', m => Mut.add(m, mindId, mind)),
+      st => Mut.replace(st, 'bodies', b => Mut.add(b, bodyId, body))
+    )();
 
-    return [st, ids];
+    return {state: st2, bodyId, mindId};
   }
 
   static generateActressId<Stg extends Setting>(
     state: ActressesState<Stg>
-  ): [ActressesState<Stg>, {bodyId: BodyId; mindId: MindId}] {
+  ): {state: ActressesState<Stg>; bodyId: BodyId; mindId: MindId} {
     const bodyId = `b${state.bodyIdCount}`;
     const mindId = `b${state.mindIdCount}`;
     let st = state;
     st = Mut.replace(st, 'bodyIdCount', c => c + 1);
     st = Mut.replace(st, 'mindIdCount', c => c + 1);
-    return [st, {bodyId, mindId}];
+    return {state: st, bodyId, mindId};
   }
 
   static createActress<
@@ -226,7 +221,6 @@ export interface ActressBehavior<
   apply_input(
     st: ActressState<Stg, BT, MT>,
     args: {
-      input: Input<Stg>;
       gameState: VisibleGameState<Stg>;
     }
   ): ActressState<Stg, BT, MT>;

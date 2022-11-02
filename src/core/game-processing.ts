@@ -1,3 +1,4 @@
+import {pipe} from 'rambda';
 import {
   ActressTrait,
   AnyActressBehavior,
@@ -8,7 +9,7 @@ import {Overlaps} from './components/collision';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState, GameStateTrait, StateInitializer} from './game-state';
-import {CanvasInput, CanvasInputTrait, Input} from './components/inputs/input';
+import {CanvasInput, InputTrait} from './components/inputs/input';
 import {Res, Result} from './utils/result';
 import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
@@ -33,15 +34,20 @@ export class GameProcessing {
     }
   ): GameState<Stg> {
     let st = state;
+    st = pipe(
+      () => state,
+      st => updateTime(st, args),
+      st => updateInput(st, args),
+      st => applyInputToActresses(st, args)
+    )();
 
-    st = updateTime(st, args);
-    const r = applyInputToState(st, args);
-    st = r[0];
-    const input = r[1];
-    st = applyInputToActresses(st, {...args, input});
     const overlaps = calcOverlaps(st);
-    st = updateByDirector(st, {...args, overlaps});
-    st = updateByActresses(st, args);
+
+    st = pipe(
+      () => st,
+      st => updateByDirector(st, {...args, overlaps}),
+      st => updateByActresses(st, args)
+    )();
 
     return st;
   }
@@ -49,7 +55,6 @@ export class GameProcessing {
   static generateGraphics<Stg extends Setting>(
     state: GameState<Stg>,
     args: {
-      input: Input<Stg>;
       time: TimeInput<Stg>;
       instances: GameInstances<Stg>;
     }
@@ -110,22 +115,21 @@ const mergeActressStates = <Stg extends Setting>(
   return ActressTrait.mergeActressStates(state, Res.onlyOk(args.actStates));
 };
 
-const applyInputToState = <Stg extends Setting>(
+const updateInput = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {input: CanvasInput<Stg>; renderingState: RenderingState}
-): [GameState<Stg>, Input<Stg>] => {
-  const prevState = state.input;
-  const [input, inputSt] = CanvasInputTrait.convertInputToGame(
-    [args.input, prevState],
-    {renSt: args.renderingState, camSt: state.camera}
-  );
-  const newSt = Mut.replace(state, 'input', () => inputSt);
-  return [newSt, input];
+): GameState<Stg> => {
+  const updArgs = {
+    canvasInput: args.input,
+    camSt: state.camera,
+    renSt: args.renderingState,
+  };
+  return Mut.replace(state, 'input', st => InputTrait.updateState(st, updArgs));
 };
 
 const applyInputToActresses = <Stg extends Setting>(
   state: GameState<Stg>,
-  args: {input: Input<Stg>; time: TimeInput<Stg>; instances: GameInstances<Stg>}
+  args: {time: TimeInput<Stg>; instances: GameInstances<Stg>}
 ): GameState<Stg> => {
   const instances = args.instances;
   const actresses = collectActInState(state, {instances});

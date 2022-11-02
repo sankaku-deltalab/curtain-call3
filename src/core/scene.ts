@@ -42,9 +42,9 @@ export class SceneTrait {
 
   static consumeAllEvents<Stg extends Setting>(
     state: SceneState<Stg>
-  ): [SceneState<Stg>, AnyEvent<Stg>[]] {
+  ): {state: SceneState<Stg>; events: AnyEvent<Stg>[]} {
     const ev = state.events;
     const st = Mut.replace(state, 'events', () => []);
-    return [st, ev];
+    return {state: st, events: ev};
   }
 }

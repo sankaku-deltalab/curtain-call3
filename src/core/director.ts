@@ -1,6 +1,5 @@
 import {Overlaps} from './components/collision';
 import {GameState} from './game-state';
-import {Input} from './components/inputs/input';
 import {Setting} from './setting';
 
 export type DirectorGameState<Stg extends Setting> = GameState<Stg>;
