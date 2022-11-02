@@ -11,7 +11,7 @@ import {
 import {GameState} from './game-state';
 import {AnyEvent, SceneTrait} from './scene';
 import {BodyTypes, MindTypes, Setting} from './setting';
-import {Mut} from './utils/util';
+import {Im} from './utils/util';
 
 export class GameHelper {
   static getMinds<Stg extends Setting>(
@@ -44,7 +44,7 @@ export class GameHelper {
       () => state,
       st => ActressTrait.addActress(st.actresses, act),
       ({state: actSt, bodyId, mindId}) => ({
-        state: Mut.replace(originalSt, 'actresses', () => actSt),
+        state: Im.replace(originalSt, 'actresses', () => actSt),
         bodyId,
         mindId,
       })
@@ -59,7 +59,7 @@ export class GameHelper {
       () => state.scene,
       st => SceneTrait.consumeAllEvents(st),
       ({state: sceneSt, events}) => ({
-        state: Mut.replace(originalSt, 'scene', () => sceneSt),
+        state: Im.replace(originalSt, 'scene', () => sceneSt),
         events,
       })
     )();

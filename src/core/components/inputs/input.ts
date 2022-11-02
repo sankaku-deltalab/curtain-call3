@@ -1,6 +1,6 @@
 import {pipe} from 'rambda';
 import {Setting} from '../../setting';
-import {Mut} from '../../utils/util';
+import {Im} from '../../utils/util';
 import {CameraState, RenderingState} from '../camera';
 import {
   CanvasInputPointer,
@@ -34,7 +34,7 @@ export class InputTrait {
     return pipe(
       () => state,
       st =>
-        Mut.replace(st, 'pointer', s =>
+        Im.replace(st, 'pointer', s =>
           PointerInputTrait.updateState(s, pointerArgs)
         )
     )();

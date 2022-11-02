@@ -13,7 +13,7 @@ import {CanvasInput, InputTrait} from './components/inputs/input';
 import {Res, Result} from './utils/result';
 import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
-import {Mut} from './utils/util';
+import {Im} from './utils/util';
 import {Graphic, GraphicTrait} from './components/graphics/graphic';
 import {RenderingState} from './components/camera';
 
@@ -76,7 +76,7 @@ const updateTime = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {time: TimeInput<Stg>}
 ): GameState<Stg> => {
-  return Mut.replace(state, 'time', s => TimeTrait.applyInput(s, args.time));
+  return Im.replace(state, 'time', s => TimeTrait.applyInput(s, args.time));
 };
 
 const collectActInState = <Stg extends Setting>(
@@ -124,7 +124,7 @@ const updateInput = <Stg extends Setting>(
     camSt: state.camera,
     renSt: args.renderingState,
   };
-  return Mut.replace(state, 'input', st => InputTrait.updateState(st, updArgs));
+  return Im.replace(state, 'input', st => InputTrait.updateState(st, updArgs));
 };
 
 const applyInputToActresses = <Stg extends Setting>(

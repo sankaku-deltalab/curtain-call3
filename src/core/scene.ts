@@ -1,5 +1,5 @@
 import {EventPayload, EventTypes, LevelState, Setting} from './setting';
-import {Mut} from './utils/util';
+import {Im} from './utils/util';
 
 export type SceneState<Stg extends Setting> = {
   level: LevelState<Stg>;
@@ -27,7 +27,7 @@ export class SceneTrait {
     st: SceneState<Stg>,
     events: AnyEvent<Stg>[]
   ): SceneState<Stg> {
-    return Mut.replace(st, 'events', oldEv => [...oldEv, ...events]);
+    return Im.replace(st, 'events', oldEv => [...oldEv, ...events]);
   }
 
   static event<Stg extends Setting, Type extends EventTypes<Stg>>(
@@ -44,7 +44,7 @@ export class SceneTrait {
     state: SceneState<Stg>
   ): {state: SceneState<Stg>; events: AnyEvent<Stg>[]} {
     const ev = state.events;
-    const st = Mut.replace(state, 'events', () => []);
+    const st = Im.replace(state, 'events', () => []);
     return {state: st, events: ev};
   }
 }

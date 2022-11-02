@@ -96,7 +96,7 @@ export class AaRect2dTrait {
   }
 }
 
-export class Mut {
+export class Im {
   static replace<T extends Rec, Key extends keyof T>(
     obj: T,
     key: Key,

@@ -5,7 +5,7 @@ import {Graphic} from './components/graphics/graphic';
 import {Res, Result} from './utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
 import {AnyEvent, SceneTrait} from './scene';
-import {Mut} from './utils/util';
+import {Im} from './utils/util';
 
 export type ActressesState<Stg extends Setting> = {
   bodyIdCount: number;
@@ -97,8 +97,8 @@ export class ActressTrait {
     }
   ): ActressesState<Stg> {
     let st = state;
-    st = Mut.replace(st, 'minds', m => ({...m, ...args.minds}));
-    st = Mut.replace(st, 'bodies', b => ({...b, ...args.bodies}));
+    st = Im.replace(st, 'minds', m => ({...m, ...args.minds}));
+    st = Im.replace(st, 'bodies', b => ({...b, ...args.bodies}));
     return st;
   }
 
@@ -119,8 +119,8 @@ export class ActressTrait {
     const {body, mind} = this.createActress({bodyId, mindId, ...act});
     const st2 = pipe(
       () => st,
-      st => Mut.replace(st, 'minds', m => Mut.add(m, mindId, mind)),
-      st => Mut.replace(st, 'bodies', b => Mut.add(b, bodyId, body))
+      st => Im.replace(st, 'minds', m => Im.add(m, mindId, mind)),
+      st => Im.replace(st, 'bodies', b => Im.add(b, bodyId, body))
     )();
 
     return {state: st2, bodyId, mindId};
@@ -132,8 +132,8 @@ export class ActressTrait {
     const bodyId = `b${state.bodyIdCount}`;
     const mindId = `b${state.mindIdCount}`;
     let st = state;
-    st = Mut.replace(st, 'bodyIdCount', c => c + 1);
-    st = Mut.replace(st, 'mindIdCount', c => c + 1);
+    st = Im.replace(st, 'bodyIdCount', c => c + 1);
+    st = Im.replace(st, 'mindIdCount', c => c + 1);
     return {state: st, bodyId, mindId};
   }
 
@@ -201,8 +201,8 @@ export class ActressTrait {
     const newEvents = actSts.flatMap(([_, s]) => s.ev);
 
     let st = state;
-    st = Mut.replace(st, 'scene', s => SceneTrait.mergeEvents(s, newEvents));
-    st = Mut.replace(st, 'actresses', s =>
+    st = Im.replace(st, 'scene', s => SceneTrait.mergeEvents(s, newEvents));
+    st = Im.replace(st, 'actresses', s =>
       ActressTrait.mergeMindsAndBodies(s, {minds, bodies})
     );
 
