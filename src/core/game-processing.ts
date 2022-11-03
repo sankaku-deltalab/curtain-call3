@@ -13,8 +13,13 @@ import {CanvasInput, InputTrait} from './components/inputs/input';
 import {Res, Result} from './utils/result';
 import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
-import {Im} from './utils/util';
-import {Graphic, GraphicTrait} from './components/graphics/graphic';
+import {AaRect2d, Im} from './utils/util';
+import {
+  CanvasGraphic,
+  CanvasGraphicTrait,
+  Graphic,
+  GraphicTrait,
+} from './components/graphics/graphic';
 import {RenderingState} from './components/camera';
 
 export class GameProcessing {
@@ -55,20 +60,35 @@ export class GameProcessing {
   static generateGraphics<Stg extends Setting>(
     state: GameState<Stg>,
     args: {
-      time: TimeInput<Stg>;
+      renderingState: RenderingState;
       instances: GameInstances<Stg>;
     }
-  ): Graphic<Stg>[] {
+  ): CanvasGraphic<Stg>[] {
     const instances = args.instances;
     const actresses = collectActInState(state, {instances});
 
-    return actresses
+    const graphics = actresses
       .map<[string, Graphic<Stg>[]]>(([mindId, actSt, beh]) => {
         return [mindId, beh.generate_graphics(actSt, {gameState: state})];
       })
       .flatMap(([mindId, graphics]) =>
         GraphicTrait.appendKeys(mindId, graphics)
       );
+    return CanvasGraphicTrait.convertGraphicsToCanvas(graphics, {
+      camSt: state.camera,
+      renSt: args.renderingState,
+    });
+  }
+  static getRenderingArea<Stg extends Setting>(
+    state: GameState<Stg>,
+    args: {
+      renSt: RenderingState;
+    }
+  ): AaRect2d {
+    return CanvasGraphicTrait.getRenderingArea({
+      camSt: state.camera,
+      renSt: args.renSt,
+    });
   }
 }
 

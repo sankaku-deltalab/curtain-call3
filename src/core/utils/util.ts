@@ -32,6 +32,10 @@ export class Vec2dTrait {
     // Hadamard product
     return {x: a.x * b.x, y: a.y * b.y};
   }
+
+  static eq(a: Vec2d, b: Vec2d): boolean {
+    return a.x === b.x && a.y === b.y;
+  }
 }
 
 export class AaRect2dTrait {

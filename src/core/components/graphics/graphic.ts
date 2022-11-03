@@ -1,5 +1,7 @@
+import {pipe} from 'rambda';
 import {Setting} from '../../setting';
-import {CameraState, RenderingState} from '../camera';
+import {AaRect2d, Vec2dTrait} from '../../utils';
+import {CameraState, CameraTrait, RenderingState} from '../camera';
 import {
   CanvasLineGraphic,
   LineGraphic,
@@ -29,14 +31,32 @@ export class GraphicTrait {
 }
 
 export class CanvasGraphicTrait {
-  static appendKeys<Stg extends Setting>(
-    preKey: string,
-    graphics: Graphic<Stg>[]
-  ): Graphic<Stg>[] {
-    return graphics.map(g => ({
-      ...g,
-      key: `${preKey}-${g.key}`,
-    }));
+  static getRenderingArea<Stg extends Setting>(args: {
+    camSt: CameraState<Stg>;
+    renSt: RenderingState;
+  }): AaRect2d {
+    const gameNw = pipe(
+      () => args.camSt.size,
+      s => Vec2dTrait.div(s, 2)
+    )();
+    const gameSe = pipe(
+      () => gameNw,
+      s => Vec2dTrait.mlt(s, -1)
+    )();
+
+    const canvasNw = pipe(
+      () => gameNw,
+      p => CameraTrait.projectGamePointToCanvas(p, args)
+    )();
+    const canvasSe = pipe(
+      () => gameSe,
+      p => CameraTrait.projectGamePointToCanvas(p, args)
+    )();
+
+    return {
+      nw: canvasNw,
+      se: canvasSe,
+    };
   }
 
   static convertGraphicsToCanvas<Stg extends Setting>(
