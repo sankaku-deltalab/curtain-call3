@@ -6,16 +6,24 @@ export type Setting = {
   minds: Record<string, Rec>;
   events: Record<string, Rec>;
   representation: Rec;
+  notification: Record<string, Rec>;
 };
 
 export type BodyTypes<Stg extends Setting> = keyof Stg['bodies'] & string;
 export type MindTypes<Stg extends Setting> = keyof Stg['minds'] & string;
 export type EventTypes<Stg extends Setting> = keyof Stg['events'] & string;
+export type NotificationTypes<Stg extends Setting> = keyof Stg['notification'] &
+  string;
 
 export type EventPayload<
   Stg extends Setting,
   Type extends EventTypes<Stg>
 > = Setting['events'][Type];
+
+export type NotificationPayload<
+  Stg extends Setting,
+  Type extends NotificationTypes<Stg>
+> = Setting['notification'][Type];
 
 export type LevelState<Stg extends Setting> = Stg['level'];
 export type Representation<Stg extends Setting> = Stg['representation'];

@@ -4,7 +4,7 @@ import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
 import {Res, Result} from './utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
-import {AnyEvent, SceneTrait} from './scene';
+import {AnyEvent, AnyNotification, SceneTrait} from './scene';
 import {Im} from './utils/util';
 
 export type ActressesState<Stg extends Setting> = {
@@ -59,7 +59,12 @@ export type ActressState<
   Stg extends Setting,
   BT extends BodyTypes<Stg>,
   MT extends MindTypes<Stg>
-> = {body: BodyState<Stg, BT>; mind: MindState<Stg, MT>; ev: AnyEvent<Stg>[]};
+> = {
+  body: BodyState<Stg, BT>;
+  mind: MindState<Stg, MT>;
+  ev: AnyEvent<Stg>[];
+  notifications: AnyNotification<Stg>[];
+};
 
 export type AnyActressState<Stg extends Setting> = ActressState<
   Stg,
@@ -185,7 +190,7 @@ export class ActressTrait {
       return body;
     }
 
-    return Res.ok({mind: mind.val, body: body.val, ev: []});
+    return Res.ok({mind: mind.val, body: body.val, ev: [], notifications: []});
   }
 
   static mergeActressStates<Stg extends Setting>(
@@ -199,14 +204,20 @@ export class ActressTrait {
       actSts.map(([_, s]) => [s.mind.meta.bodyId, s.body])
     );
     const newEvents = actSts.flatMap(([_, s]) => s.ev);
+    const newNotifications = actSts.flatMap(([_, s]) => s.notifications);
 
-    let st = state;
-    st = Im.replace(st, 'scene', s => SceneTrait.mergeEvents(s, newEvents));
-    st = Im.replace(st, 'actresses', s =>
-      ActressTrait.mergeMindsAndBodies(s, {minds, bodies})
-    );
-
-    return st;
+    return pipe(
+      () => state,
+      st => Im.replace(st, 'scene', s => SceneTrait.mergeEvents(s, newEvents)),
+      st =>
+        Im.replace(st, 'scene', s =>
+          SceneTrait.mergeNotifications(s, newNotifications)
+        ),
+      st =>
+        Im.replace(st, 'actresses', s =>
+          this.mergeMindsAndBodies(s, {minds, bodies})
+        )
+    )();
   }
 }
 
