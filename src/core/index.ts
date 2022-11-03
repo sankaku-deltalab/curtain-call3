@@ -4,6 +4,8 @@ export * from './director';
 export * from './game-helper';
 export * from './game-instances';
 export * from './game-processing';
+export * from './game-progress-controller';
+export * from './game-representation';
 export * from './game-state';
 export * from './scene';
 export * from './setting';
