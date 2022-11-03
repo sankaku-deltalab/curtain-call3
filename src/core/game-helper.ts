@@ -9,12 +9,28 @@ import {
   MindId,
   MindStateRaw,
 } from './actress';
-import {PointerInputTrait} from './components';
+import {
+  CanvasGraphic,
+  CanvasLineGraphic,
+  CanvasSpriteGraphic,
+  PointerInputTrait,
+} from './components';
 import {GameState} from './game-state';
 import {AnyEvent, SceneTrait} from './scene';
 import {BodyTypes, MindTypes, Setting} from './setting';
 import {Res, Result} from './utils/result';
 import {Im, Vec2d} from './utils/util';
+
+export type ActressInitializer<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>,
+  MT extends MindTypes<Stg>
+> = {
+  bodyType: BT;
+  mindType: MT;
+  body: BodyStateRaw<Stg, BT>;
+  mind: MindStateRaw<Stg, MT>;
+};
 
 export class GameHelper {
   static getMinds<Stg extends Setting>(
@@ -50,12 +66,7 @@ export class GameHelper {
     MT extends MindTypes<Stg>
   >(
     state: GameState<Stg>,
-    act: {
-      bodyType: BT;
-      mindType: MT;
-      body: BodyStateRaw<Stg, BT>;
-      mind: MindStateRaw<Stg, MT>;
-    }
+    act: ActressInitializer<Stg, BT, MT>
   ): {state: GameState<Stg>; bodyId: BodyId; mindId: MindId} {
     const originalSt = state;
     return pipe(
