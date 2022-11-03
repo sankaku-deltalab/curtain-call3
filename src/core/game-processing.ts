@@ -69,7 +69,7 @@ export class GameProcessing {
 
     const graphics = actresses
       .map<[string, Graphic<Stg>[]]>(([mindId, actSt, beh]) => {
-        return [mindId, beh.generate_graphics(actSt, {gameState: state})];
+        return [mindId, beh.generateGraphics(actSt, {gameState: state})];
       })
       .flatMap(([mindId, graphics]) =>
         GraphicTrait.appendKeys(mindId, graphics)
@@ -158,7 +158,7 @@ const applyInputToActresses = <Stg extends Setting>(
     ([mindId, actSt, beh]) => {
       return Res.ok([
         mindId,
-        beh.apply_input(actSt, {...args, gameState: state}),
+        beh.applyInput(actSt, {...args, gameState: state}),
       ]);
     }
   );

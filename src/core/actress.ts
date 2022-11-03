@@ -218,7 +218,7 @@ export interface ActressBehavior<
   readonly bodyType: BT;
   readonly mindType: MT;
 
-  apply_input(
+  applyInput(
     st: ActressState<Stg, BT, MT>,
     args: {
       gameState: VisibleGameState<Stg>;
@@ -232,14 +232,14 @@ export interface ActressBehavior<
     }
   ): ActressState<Stg, BT, MT>;
 
-  generate_graphics(
+  generateGraphics(
     st: ActressState<Stg, BT, MT>,
     args: {
       gameState: VisibleGameState<Stg>;
     }
   ): Graphic<Stg>[];
 
-  generate_collision(
+  generateCollision(
     st: ActressState<Stg, BT, MT>,
     args: {
       gameState: VisibleGameState<Stg>;
