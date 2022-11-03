@@ -89,3 +89,17 @@ export class InputHelper {
     return PointerInputTrait.deltaWhileDown(state.input.pointer);
   }
 }
+
+export class GraphicHelper {
+  static isCanvasSpriteGraphic<Stg extends Setting>(
+    graphic: CanvasGraphic<Stg>
+  ): graphic is CanvasSpriteGraphic {
+    return graphic.type === 'canvas-sprite';
+  }
+
+  static isCanvasLineGraphic<Stg extends Setting>(
+    graphic: CanvasGraphic<Stg>
+  ): graphic is CanvasLineGraphic {
+    return graphic.type === 'canvas-line';
+  }
+}

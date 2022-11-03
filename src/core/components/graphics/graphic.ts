@@ -40,7 +40,8 @@ export class CanvasGraphicTrait {
       s => Vec2dTrait.div(s, 2)
     )();
     const gameSe = pipe(
-      () => gameNw,
+      () => args.camSt.size,
+      s => Vec2dTrait.div(s, 2),
       s => Vec2dTrait.mlt(s, -1)
     )();
 

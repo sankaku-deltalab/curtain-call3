@@ -35,21 +35,13 @@ export class CameraTrait {
     const camSt = args.camSt;
     const renSt = args.renSt;
 
-    const canvasArea = {
-      nw: Vec2dTrait.zero(),
-      se: renSt.canvasSize,
-    };
     const renderingArea = AaRect2dTrait.fromCenterAndSize(
       renSt.center,
       Vec2dTrait.mlt(camSt.size, renSt.scale)
     );
     const cameraArea = CameraTrait.cameraArea(args.camSt);
 
-    const renderingAreaPos = AaRect2dTrait.projectPoint(canvasPos, {
-      prevArea: canvasArea,
-      nextArea: renderingArea,
-    });
-    const gameAreaPos = AaRect2dTrait.projectPoint(renderingAreaPos, {
+    const gameAreaPos = AaRect2dTrait.projectPoint(canvasPos, {
       prevArea: renderingArea,
       nextArea: cameraArea,
     });
@@ -63,10 +55,6 @@ export class CameraTrait {
     const camSt = args.camSt;
     const renSt = args.renSt;
 
-    const canvasArea = {
-      nw: Vec2dTrait.zero(),
-      se: renSt.canvasSize,
-    };
     const renderingArea = AaRect2dTrait.fromCenterAndSize(
       renSt.center,
       Vec2dTrait.mlt(camSt.size, renSt.scale)
@@ -77,11 +65,7 @@ export class CameraTrait {
       prevArea: cameraArea,
       nextArea: renderingArea,
     });
-    const canvasAreaPos = AaRect2dTrait.projectPoint(renderingAreaPos, {
-      prevArea: renderingArea,
-      nextArea: canvasArea,
-    });
-    return canvasAreaPos;
+    return renderingAreaPos;
   }
 
   static gameScaleToRenderingScale(

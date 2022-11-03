@@ -62,8 +62,8 @@ export class AaRect2dTrait {
   static fromCenterAndSize(center: Vec2d, size: Vec2d): AaRect2d {
     const sizeHalf = Vec2dTrait.div(size, 2);
     return {
-      nw: Vec2dTrait.add(center, sizeHalf),
-      se: Vec2dTrait.sub(center, sizeHalf),
+      nw: Vec2dTrait.sub(center, sizeHalf),
+      se: Vec2dTrait.add(center, sizeHalf),
     };
   }
 
