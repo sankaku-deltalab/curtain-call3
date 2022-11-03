@@ -1,6 +1,6 @@
 import {Overlaps} from './components/collision';
 import {GameState} from './game-state';
-import {Setting} from './setting';
+import {Representation, Setting} from './setting';
 
 export type DirectorGameState<Stg extends Setting> = GameState<Stg>;
 
@@ -16,6 +16,13 @@ export class DirectorTrait {
     _state: GameState<Stg>
   ): GameState<Stg> {
     return st;
+  }
+
+  static getRepresentation<Stg extends Setting>(
+    state: GameState<Stg>,
+    args: {instances: {director: DirectorBehavior<Stg>}}
+  ): Representation<Stg> {
+    return args.instances.director.represent(state);
   }
 }
 
@@ -33,4 +40,6 @@ export interface DirectorBehavior<Stg extends Setting> {
       overlaps: Overlaps;
     }
   ): DirectorGameState<Stg>;
+
+  represent(state: GameState<Stg>): Representation<Stg>;
 }

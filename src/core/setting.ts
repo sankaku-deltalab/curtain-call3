@@ -5,6 +5,7 @@ export type Setting = {
   bodies: Record<string, Rec>;
   minds: Record<string, Rec>;
   events: Record<string, Rec>;
+  representation: Rec;
 };
 
 export type BodyTypes<Stg extends Setting> = keyof Stg['bodies'] & string;
@@ -17,6 +18,7 @@ export type EventPayload<
 > = Setting['events'][Type];
 
 export type LevelState<Stg extends Setting> = Stg['level'];
+export type Representation<Stg extends Setting> = Stg['representation'];
 
 export const bodyTypes = <Stg extends Setting>(
   setting: Stg

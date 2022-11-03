@@ -11,7 +11,7 @@ import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState, GameStateTrait, StateInitializer} from './game-state';
 import {CanvasInput, InputTrait} from './components/inputs/input';
 import {Res, Result} from './utils/result';
-import {Setting} from './setting';
+import {Representation, Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
 import {AaRect2d, Im} from './utils/util';
 import {
@@ -79,6 +79,7 @@ export class GameProcessing {
       renSt: args.renderingState,
     });
   }
+
   static getRenderingArea<Stg extends Setting>(
     state: GameState<Stg>,
     args: {
@@ -89,6 +90,13 @@ export class GameProcessing {
       camSt: state.camera,
       renSt: args.renSt,
     });
+  }
+
+  static getRepresentation<Stg extends Setting>(
+    state: GameState<Stg>,
+    args: {instances: GameInstances<Stg>}
+  ): Representation<Stg> {
+    return DirectorTrait.getRepresentation(state, args);
   }
 }
 
