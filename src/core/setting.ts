@@ -18,12 +18,12 @@ export type NotificationTypes<Stg extends Setting> =
 export type EventPayload<
   Stg extends Setting,
   Type extends EventTypes<Stg>
-> = Setting['events'][Type];
+> = Stg['events'][Type];
 
 export type NotificationPayload<
   Stg extends Setting,
   Type extends NotificationTypes<Stg>
-> = Setting['notifications'][Type];
+> = Stg['notifications'][Type];
 
 export type LevelState<Stg extends Setting> = Stg['level'];
 export type Representation<Stg extends Setting> = Stg['representation'];
