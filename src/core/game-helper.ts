@@ -17,7 +17,15 @@ import {
 } from './components';
 import {GameState} from './game-state';
 import {AnyEvent, SceneTrait} from './scene';
-import {BodyTypes, MindTypes, Setting} from './setting';
+import {
+  BodyTypes,
+  EventPayload,
+  EventTypes,
+  MindTypes,
+  NotificationPayload,
+  NotificationTypes,
+  Setting,
+} from './setting';
 import {Res, Result} from './utils/result';
 import {Im, Vec2d} from './utils/util';
 
@@ -77,6 +85,35 @@ export class GameHelper {
         bodyId,
         mindId,
       })
+    )();
+  }
+
+  static addEvent<Stg extends Setting, EvType extends EventTypes<Stg>>(
+    state: GameState<Stg>,
+    type: EvType,
+    payload: EventPayload<Stg, EvType>
+  ): GameState<Stg> {
+    const originalSt = state;
+    return pipe(
+      () => state.scene,
+      st => SceneTrait.mergeEvents(st, [{type, payload}]),
+      scSt => Im.replace(originalSt, 'scene', () => scSt)
+    )();
+  }
+
+  static addNotification<
+    Stg extends Setting,
+    NoType extends NotificationTypes<Stg>
+  >(
+    state: GameState<Stg>,
+    type: NoType,
+    payload: NotificationPayload<Stg, NoType>
+  ): GameState<Stg> {
+    const originalSt = state;
+    return pipe(
+      () => state.scene,
+      st => SceneTrait.mergeNotifications(st, [{type, payload}]),
+      scSt => Im.replace(originalSt, 'scene', () => scSt)
     )();
   }
 

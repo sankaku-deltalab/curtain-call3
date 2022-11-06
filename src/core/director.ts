@@ -2,17 +2,15 @@ import {Overlaps} from './components/collision';
 import {GameState} from './game-state';
 import {Representation, Setting} from './setting';
 
-export type DirectorGameState<Stg extends Setting> = GameState<Stg>;
-
 export class DirectorTrait {
   static extractDirectorGameState<Stg extends Setting>(
     state: GameState<Stg>
-  ): DirectorGameState<Stg> {
+  ): GameState<Stg> {
     return state;
   }
 
   static mergeDirectorGameState<Stg extends Setting>(
-    st: DirectorGameState<Stg>,
+    st: GameState<Stg>,
     _state: GameState<Stg>
   ): GameState<Stg> {
     return st;
@@ -35,11 +33,11 @@ export interface DirectorBehavior<Stg extends Setting> {
   // ): DirectorGameState<Stg>;
 
   update(
-    st: DirectorGameState<Stg>,
+    st: GameState<Stg>,
     other: {
       overlaps: Overlaps;
     }
-  ): DirectorGameState<Stg>;
+  ): GameState<Stg>;
 
   represent(state: GameState<Stg>): Representation<Stg>;
 }
