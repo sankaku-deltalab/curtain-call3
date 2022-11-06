@@ -123,8 +123,8 @@ export class Im {
 export type RecSet = Record<string, true | undefined>;
 
 export class RecSetTrait {
-  static new(): RecSet {
-    return {};
+  static new(keys: string[] = []): RecSet {
+    return Object.fromEntries(keys.map(k => [k, true]));
   }
 
   static add(set: RecSet, key: string): RecSet {
@@ -136,6 +136,7 @@ export class RecSetTrait {
   }
 
   static has(set: RecSet, key: string): boolean {
+    // or you can use `val in RecSet`
     return set[key] === true;
   }
 
