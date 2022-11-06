@@ -21,6 +21,7 @@ import {
   BodyTypes,
   EventPayload,
   EventTypes,
+  LevelState,
   MindTypes,
   NotificationPayload,
   NotificationTypes,
@@ -115,6 +116,19 @@ export class GameHelper {
       st => SceneTrait.mergeNotifications(st, [{type, payload}]),
       scSt => Im.replace(originalSt, 'scene', () => scSt)
     )();
+  }
+
+  static getLevel<Stg extends Setting>(state: GameState<Stg>): LevelState<Stg> {
+    return SceneTrait.getLevel(state.scene);
+  }
+
+  static updateLevel<Stg extends Setting>(
+    state: GameState<Stg>,
+    updater: (level: LevelState<Stg>) => LevelState<Stg>
+  ): GameState<Stg> {
+    return Im.replace(state, 'scene', scSt =>
+      SceneTrait.updateLevel(scSt, updater)
+    );
   }
 
   static consumeAllEvents<Stg extends Setting>(

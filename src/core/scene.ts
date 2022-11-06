@@ -66,6 +66,19 @@ export class SceneTrait {
     };
   }
 
+  static getLevel<Stg extends Setting>(
+    state: SceneState<Stg>
+  ): LevelState<Stg> {
+    return state.level;
+  }
+
+  static updateLevel<Stg extends Setting>(
+    state: SceneState<Stg>,
+    updater: (level: LevelState<Stg>) => LevelState<Stg>
+  ): SceneState<Stg> {
+    return Im.replace(state, 'level', st => updater(st)); // I didn't use `updater` directly because direct using cause type error
+  }
+
   static consumeAllEvents<Stg extends Setting>(
     state: SceneState<Stg>
   ): {state: SceneState<Stg>; events: AnyEvent<Stg>[]} {
