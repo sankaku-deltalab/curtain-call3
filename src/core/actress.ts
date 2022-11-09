@@ -1,5 +1,5 @@
 import {pipe} from 'rambda';
-import {Collision} from './components/collision';
+import {Collision} from './components/collision/collision';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
 import {Res, Result} from './utils/result';

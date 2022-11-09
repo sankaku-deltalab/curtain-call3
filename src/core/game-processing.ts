@@ -5,7 +5,7 @@ import {
   AnyActressState,
   MindId,
 } from './actress';
-import {Overlaps} from './components/collision';
+import {Overlaps} from './components/collision/collision';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState, GameStateTrait, StateInitializer} from './game-state';

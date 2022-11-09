@@ -1,4 +1,4 @@
-import {Overlaps} from './components/collision';
+import {Overlaps} from './components/collision/collision';
 import {GameState} from './game-state';
 import {Representation, Setting} from './setting';
 
