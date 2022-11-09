@@ -25,12 +25,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/box-intersect": "^1.0.0",
     "@types/node": "^14.11.2",
     "ctix": "^1.5.3",
     "gts": "^3.1.1",
     "typescript": "~4.7.0"
   },
   "dependencies": {
+    "box-intersect": "^1.0.2",
     "rambda": "^7.3.0"
   }
 }
