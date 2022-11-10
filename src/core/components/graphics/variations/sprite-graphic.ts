@@ -20,6 +20,7 @@ export class SpriteGraphicTrait {
   static create(args: {
     key: string;
     pos: Vec2d;
+    zIndex: number;
     imgKey: string;
     scale?: Vec2d;
   }): SpriteGraphic {

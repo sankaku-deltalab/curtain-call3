@@ -23,6 +23,7 @@ export class LineGraphicTrait {
   static create(args: {
     key: string;
     pos: Vec2d;
+    zIndex: number;
     thickness: number;
     color: Color;
     paths: Vec2d[];
@@ -55,6 +56,7 @@ export class LineGraphicTrait {
     return {
       type: 'canvas-line',
       key: graphic.key,
+      zIndex: graphic.zIndex,
       thickness,
       color: graphic.color,
       paths,
