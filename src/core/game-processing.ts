@@ -5,7 +5,7 @@ import {
   AnyActressState,
   MindId,
 } from './actress';
-import {Overlaps} from './components/collision/collision';
+import {Collision, Overlaps} from './components/collision/collision';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState, GameStateTrait, StateInitializer} from './game-state';
@@ -13,9 +13,10 @@ import {CanvasInput, InputTrait} from './components/inputs/input';
 import {Res, Result} from './utils/result';
 import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
-import {Im} from './utils/util';
+import {Enum, Im} from './utils/util';
 import {RenderingState} from './components/camera';
 import {AnyNotification, SceneTrait} from './scene';
+import {OverlapCalculation} from './components/collision/overlap-calculation';
 
 export class GameProcessing {
   static init<Stg extends Setting>(
@@ -41,7 +42,7 @@ export class GameProcessing {
       st => applyInputToActresses(st, args)
     )();
 
-    const overlaps = calcOverlaps(st);
+    const overlaps = calcOverlaps(st, args);
 
     st = pipe(
       () => st,
@@ -127,8 +128,21 @@ const applyInputToActresses = <Stg extends Setting>(
   return mergeActressStates(state, {actStates});
 };
 
-const calcOverlaps = <Stg extends Setting>(state: GameState<Stg>): Overlaps => {
-  return {}; // TODO: impl this
+const calcOverlaps = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {instances: GameInstances<Stg>}
+): Overlaps => {
+  return pipe(
+    () => state,
+    st => collectActInState(st, args),
+    acts =>
+      Enum.map(acts, ([actId, st, beh]): [string, Collision] => {
+        const col = beh.generateCollision(st, {gameState: state});
+        return [actId, col];
+      }),
+    col => Object.fromEntries(col),
+    col => OverlapCalculation.calcOverlaps(col)
+  )();
 };
 
 const updateByDirector = <Stg extends Setting>(
