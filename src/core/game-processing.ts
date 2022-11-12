@@ -19,7 +19,7 @@ import {AnyNotification, SceneTrait} from './scene';
 import {OverlapCalculation} from './components/collision/overlap-calculation';
 
 export class GameProcessing {
-  static init<Stg extends Setting>(
+  static createInitialState<Stg extends Setting>(
     args: StateInitializer<Stg>
   ): GameState<Stg> {
     return GameStateTrait.initialState(args);
