@@ -1,3 +1,5 @@
+import {pipe} from 'rambda';
+
 type Rec = Record<string, unknown>;
 
 export type Vec2d = {x: number; y: number};
@@ -280,5 +282,17 @@ export class RecM2MTrait {
   static merge(a: RecM2M, b: RecM2M): RecM2M {
     const pairs = [...this.toPairs(a), ...this.toPairs(b)];
     return this.fromPairs(pairs);
+  }
+
+  static filter(
+    rel: RecM2M,
+    filter: (from: string, to: string) => boolean
+  ): RecM2M {
+    return pipe(
+      () => rel,
+      r => this.toPairs(r),
+      pairs => pairs.filter(([from, to]) => filter(from, to)),
+      pairs => this.fromPairs(pairs)
+    )();
   }
 }
