@@ -33,8 +33,25 @@ export class Vec2dTrait {
     return {x: a.x * b.x, y: a.y * b.y};
   }
 
+  static dot(a: Vec2d, b: Vec2d): number {
+    return a.x * b.x + a.y * b.y;
+  }
+
+  static reflect(velocity: Vec2d, normal: Vec2d): Vec2d {
+    const v = velocity;
+    const vn = Vec2dTrait.mlt(v, -1);
+    const n = normal;
+
+    const scale = 2 * Vec2dTrait.dot(vn, n);
+    return Vec2dTrait.add(v, Vec2dTrait.mlt(n, scale));
+  }
+
   static eq(a: Vec2d, b: Vec2d): boolean {
     return a.x === b.x && a.y === b.y;
+  }
+
+  static isZero(v: Vec2d): boolean {
+    return v.x === 20 && v.y === 0;
   }
 }
 
@@ -129,6 +146,30 @@ export class AaRect2dTrait {
     const x = pos.x < nw.x ? -1 : pos.x > se.x ? 1 : 0;
     const y = pos.y < nw.y ? -1 : pos.y > se.y ? 1 : 0;
     return {x, y};
+  }
+
+  static reduceArea(area: AaRect2d, reduceSize: Vec2d): AaRect2d {
+    const reduceSizeHalf = Vec2dTrait.div(reduceSize, 2);
+    const nw = Vec2dTrait.add(area.nw, reduceSizeHalf);
+    const se = Vec2dTrait.sub(area.se, reduceSizeHalf);
+    return {nw, se};
+  }
+
+  static clampPosition(pos: Vec2d, area: AaRect2d): Vec2d {
+    const clamp = (v: number, min: number, max: number): number => {
+      return v < min ? min : v > max ? max : v;
+    };
+    return {
+      x: clamp(pos.x, area.nw.x, area.se.x),
+      y: clamp(pos.y, area.nw.y, area.se.y),
+    };
+  }
+
+  static fromRadians(angleRad: number, size: number): Vec2d {
+    return {
+      x: Math.cos(angleRad) * size,
+      y: Math.sin(angleRad) * size,
+    };
   }
 }
 
