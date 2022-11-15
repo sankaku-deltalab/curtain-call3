@@ -13,6 +13,7 @@ import {
   CanvasGraphic,
   CanvasLineGraphic,
   CanvasSpriteGraphic,
+  Overlaps,
   PointerInputTrait,
 } from './components';
 import {GameState} from './game-state';
@@ -28,7 +29,7 @@ import {
   Setting,
 } from './setting';
 import {Res, Result} from './utils/result';
-import {Im, Vec2d} from './utils/util';
+import {Im, RecM2MTrait, Vec2d} from './utils/util';
 
 export type ActressInitializer<
   Stg extends Setting,
@@ -67,6 +68,32 @@ export class GameHelper {
       return Res.err('incorrect body type');
     }
     return Res.ok(body as BodyState<Stg, BT>);
+  }
+
+  static bodyIs<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    state: GameState<Stg>,
+    bodyId: BodyId,
+    bodyType: BT
+  ): boolean {
+    const body = this.getBody(state, bodyId, bodyType);
+    return Res.isOk(body);
+  }
+
+  static filterOverlaps<Stg extends Setting>(
+    overlaps: Overlaps,
+    args: {
+      state: GameState<Stg>;
+      from: BodyTypes<Stg>;
+      to: BodyTypes<Stg>;
+    }
+  ): Overlaps {
+    const st = args.state;
+    return RecM2MTrait.filter(
+      overlaps,
+      (from, to) =>
+        GameHelper.bodyIs(st, from, args.from) &&
+        GameHelper.bodyIs(st, to, args.to)
+    );
   }
 
   static addActress<
