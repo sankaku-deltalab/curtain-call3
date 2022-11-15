@@ -47,7 +47,9 @@ export class GameProcessing {
     st = pipe(
       () => st,
       st => updateByDirector(st, {...args, overlaps}),
-      st => updateByActresses(st, args)
+      st => updateByActresses(st, args),
+      st => deleteActresses(st, args),
+      ({state}) => state
     )();
 
     return consumeNotifications(st);
@@ -189,4 +191,21 @@ const consumeNotifications = <Stg extends Setting>(
       notifications,
     })
   )();
+};
+
+const deleteActresses = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {instances: GameInstances<Stg>}
+): {state: GameState<Stg>} => {
+  const acts = collectActInState(state, args);
+  const delActs = acts.filter(([_mid, st, _beh]) => st.body.meta.del);
+  const delMinds = delActs.map(([mid]) => mid);
+  const delBodies = delActs.map(([_mid, st]) => st.mind.meta.bodyId);
+  const newAct = pipe(
+    () => state.actresses,
+    a => Im.replace(a, 'minds', m => Im.removeMulti(m, delMinds)),
+    a => Im.replace(a, 'bodies', b => Im.removeMulti(b, delBodies))
+  )();
+  const st = Im.replace(state, 'actresses', () => newAct);
+  return {state: st};
 };

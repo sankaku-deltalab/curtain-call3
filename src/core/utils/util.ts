@@ -193,6 +193,28 @@ export class Im {
   >(obj: T, key: Key, val: NewVal): T {
     return {...obj, [key]: val};
   }
+
+  static remove<
+    Key extends string,
+    Val extends unknown,
+    T extends Record<Key, Val>
+  >(obj: T, removeKey: Key): T {
+    const newObj = {...obj};
+    delete newObj[removeKey];
+    return newObj;
+  }
+
+  static removeMulti<
+    Key extends string,
+    Val extends unknown,
+    T extends Record<Key, Val>
+  >(obj: T, removeKeys: Key[]): T {
+    const newObj = {...obj};
+    for (const k of removeKeys) {
+      delete newObj[k];
+    }
+    return newObj;
+  }
 }
 
 export class Enum {

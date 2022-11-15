@@ -21,7 +21,7 @@ export type BodyState<
   Stg extends Setting,
   BT extends BodyTypes<Stg>
 > = BodyStateRaw<Stg, BT> & {
-  meta: {bodyType: BT};
+  meta: {bodyType: BT; del: boolean};
 };
 
 export type AnyBodyState<Stg extends Setting> = BodyState<Stg, BodyTypes<Stg>>;
@@ -161,7 +161,7 @@ export class ActressTrait {
   } {
     const body: BodyState<Stg, BT> = {
       ...args.body,
-      meta: {bodyType: args.bodyType},
+      meta: {bodyType: args.bodyType, del: false},
     };
     const mind: MindState<Stg, MT> = {
       ...args.mind,
