@@ -98,6 +98,38 @@ export class AaRect2dTrait {
     const posInUnit = AaRect2dTrait.projectPointToUnitArea(pos, args);
     return AaRect2dTrait.projectPointFromUnitArea(posInUnit, args);
   }
+
+  /**
+   *
+   * {x, y} is
+   * - {0, 0} if pos in area.
+   * - {-1, -1} if pos in nw of outside.
+   * - {1, 1} if pos in se of outside.
+   * - {-1, 1} if pos in ne of outside.
+   * - {1, -1} if pos in sw of outside.
+   *
+   * ```
+   * {-1, -1} |  {0, -1}   | {1, -1}
+   * ---------nw===========+---------
+   *  {-1, 0} |   {0, 0}   | {1, 0}
+   * ---------+===========se---------
+   *  {-1, 1} |   {0, 1}   | {1, 1}
+   *
+   * A
+   * | y
+   * |     x
+   * +------>
+   * ```
+   * @param pos
+   * @param args
+   * @returns
+   */
+  static calcPointPosition(pos: Vec2d, args: {area: AaRect2d}): Vec2d {
+    const {nw, se} = args.area;
+    const x = pos.x < nw.x ? -1 : pos.x > se.x ? 1 : 0;
+    const y = pos.y < nw.y ? -1 : pos.y > se.y ? 1 : 0;
+    return {x, y};
+  }
 }
 
 export class Im {
