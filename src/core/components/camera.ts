@@ -20,12 +20,7 @@ export class CameraTrait {
   }
 
   static cameraArea<Stg extends Setting>(state: CameraState<Stg>): AaRect2d {
-    const center = state.pos;
-    const sizeHalf = Vec2dTrait.div(state.size, 2);
-    return {
-      nw: Vec2dTrait.add(center, sizeHalf),
-      se: Vec2dTrait.sub(center, sizeHalf),
-    };
+    return AaRect2dTrait.fromCenterAndSize(state.pos, state.size);
   }
 
   static projectCanvasPointToGame<Stg extends Setting>(
