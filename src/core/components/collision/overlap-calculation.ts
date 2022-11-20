@@ -1,6 +1,5 @@
 import boxIntersect = require('box-intersect');
-import {pipe} from 'rambda';
-import {Enum, RecM2M, RecM2MTrait} from '../../utils';
+import {Enum, Im, RecM2M, RecM2MTrait} from '../../utils';
 import {Collision, CollisionShape} from './collision';
 
 export type CollisionKey = string;
@@ -16,7 +15,7 @@ type CollisionForCalc = {
 
 export class OverlapCalculation {
   static calcOverlaps(collisions: Record<CollisionKey, Collision>): RecM2M {
-    const r = pipe(
+    const r = Im.pipe(
       () => collisions,
       getCollisionsForCalc,
       splitCollisionsToExcessAndNonExcess,

@@ -1,4 +1,4 @@
-import {pipe} from 'rambda';
+import {pipe as rambdaPipe} from 'rambda';
 
 type Rec = Record<string, unknown>;
 
@@ -248,6 +248,8 @@ export class Im {
       ...obj2,
     };
   }
+
+  static pipe = rambdaPipe;
 }
 
 export class Enum {
@@ -278,7 +280,7 @@ export class Enum {
     if (iter1.length !== iter2.length)
       throw new Error('iter1 and iter2 length is not equal');
 
-    return pipe(
+    return Im.pipe(
       () => Im.range(0, iter1.length),
       r => Enum.map<number, [T, T2]>(r, i => [iter1[i], iter2[i]])
     )();
@@ -362,7 +364,7 @@ export class RecM2MTrait {
   }
 
   static removeNonDestinations(rel: RecM2M): RecM2M {
-    return pipe(
+    return Im.pipe(
       () => rel,
       r => Object.entries(r),
       r => r.filter(([_from, tos]) => !Object.is(tos, {})),
@@ -374,7 +376,7 @@ export class RecM2MTrait {
     rel: RecM2M,
     filter: (from: string, to: string) => boolean
   ): RecM2M {
-    return pipe(
+    return Im.pipe(
       () => rel,
       r => this.toPairs(r),
       pairs => pairs.filter(([from, to]) => filter(from, to)),

@@ -1,4 +1,3 @@
-import {pipe} from 'rambda';
 import {
   ActressInitializer,
   ActressTrait,
@@ -64,7 +63,7 @@ export class GameHelper {
       return ActressTrait.bodyIsInType(body[1], bodyType);
     };
 
-    return pipe(
+    return Im.pipe(
       () => ActressTrait.getBodies(state.actresses),
       bodies => Object.entries(bodies),
       bodies => bodies.filter(idAndBodyIsInType),
@@ -129,7 +128,7 @@ export class GameHelper {
     act: ActressInitializer<Stg, BT, MT>
   ): {state: GameState<Stg>; bodyId: BodyId; mindId: MindId} {
     const originalSt = state;
-    return pipe(
+    return Im.pipe(
       () => state,
       st => ActressTrait.addActress(st.actresses, act),
       ({state: actSt, bodyId, mindId}) => ({
@@ -149,7 +148,7 @@ export class GameHelper {
     acts: ActressInitializer<Stg, BT, MT>[]
   ): {state: GameState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
     const originalSt = state;
-    return pipe(
+    return Im.pipe(
       () => state,
       st => ActressTrait.addActresses(st.actresses, acts),
       ({state: actSt, ids}) => ({
@@ -218,7 +217,7 @@ export class GameHelper {
     payload: EventPayload<Stg, EvType>
   ): GameState<Stg> {
     const originalSt = state;
-    return pipe(
+    return Im.pipe(
       () => state.scene,
       st => SceneTrait.mergeEvents(st, [{type, payload}]),
       scSt => Im.replace(originalSt, 'scene', () => scSt)
@@ -234,7 +233,7 @@ export class GameHelper {
     payload: NotificationPayload<Stg, NoType>
   ): GameState<Stg> {
     const originalSt = state;
-    return pipe(
+    return Im.pipe(
       () => state.scene,
       st => SceneTrait.mergeNotifications(st, [{type, payload}]),
       scSt => Im.replace(originalSt, 'scene', () => scSt)
@@ -258,7 +257,7 @@ export class GameHelper {
     state: GameState<Stg>
   ): {state: GameState<Stg>; events: AnyEvent<Stg>[]} {
     const originalSt = state;
-    return pipe(
+    return Im.pipe(
       () => state.scene,
       st => SceneTrait.consumeAllEvents(st),
       ({state: sceneSt, events}) => ({

@@ -1,4 +1,3 @@
-import {pipe} from 'rambda';
 import {Setting} from '../../setting';
 import {Im} from '../../utils/util';
 import {CameraState, RenderingState} from '../camera';
@@ -31,7 +30,7 @@ export class InputTrait {
       ...args,
     };
 
-    return pipe(
+    return Im.pipe(
       () => state,
       st =>
         Im.replace(st, 'pointer', s =>

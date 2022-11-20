@@ -1,4 +1,3 @@
-import {pipe} from 'rambda';
 import {
   ActressTrait,
   AnyActressBehavior,
@@ -35,7 +34,7 @@ export class GameProcessing {
     }
   ): {state: GameState<Stg>; notifications: AnyNotification<Stg>[]} {
     let st = state;
-    st = pipe(
+    st = Im.pipe(
       () => state,
       st => updateTime(st, args),
       st => updateInput(st, args),
@@ -44,7 +43,7 @@ export class GameProcessing {
 
     const overlaps = calcOverlaps(st, args);
 
-    st = pipe(
+    st = Im.pipe(
       () => st,
       st => updateByDirector(st, {...args, overlaps}),
       st => updateByActresses(st, args),
@@ -134,7 +133,7 @@ const calcOverlaps = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {instances: GameInstances<Stg>}
 ): Overlaps => {
-  return pipe(
+  return Im.pipe(
     () => state,
     st => collectActInState(st, args),
     acts =>
@@ -183,7 +182,7 @@ const consumeNotifications = <Stg extends Setting>(
   state: GameState<Stg>
 ): {state: GameState<Stg>; notifications: AnyNotification<Stg>[]} => {
   const originalSt = state;
-  return pipe(
+  return Im.pipe(
     () => originalSt,
     st => SceneTrait.consumeAllNotifications(st.scene),
     ({state: scSt, notifications}) => ({
@@ -201,7 +200,7 @@ const deleteActresses = <Stg extends Setting>(
   const delActs = acts.filter(([_mid, st, _beh]) => st.body.meta.del);
   const delMinds = delActs.map(([mid]) => mid);
   const delBodies = delActs.map(([_mid, st]) => st.mind.meta.bodyId);
-  const newAct = pipe(
+  const newAct = Im.pipe(
     () => state.actresses,
     a => Im.replace(a, 'minds', m => Im.removeMulti(m, delMinds)),
     a => Im.replace(a, 'bodies', b => Im.removeMulti(b, delBodies))

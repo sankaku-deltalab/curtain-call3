@@ -1,4 +1,3 @@
-import {pipe} from 'rambda';
 import {Collision} from './components/collision/collision';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
@@ -135,7 +134,7 @@ export class ActressTrait {
   ): {state: ActressesState<Stg>; bodyId: BodyId; mindId: MindId} {
     const {state: st, bodyId, mindId} = this.generateActressId(state);
     const {body, mind} = this.createActress({bodyId, mindId, ...act});
-    const st2 = pipe(
+    const st2 = Im.pipe(
       () => st,
       st => Im.replace(st, 'minds', m => Im.add(m, mindId, mind)),
       st => Im.replace(st, 'bodies', b => Im.add(b, bodyId, body))
@@ -153,7 +152,7 @@ export class ActressTrait {
     acts: ActressInitializer<Stg, BT, MT>[]
   ): {state: ActressesState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
     const {state: st, ids} = this.generateActressIds(state, acts.length);
-    const createdActs = pipe(
+    const createdActs = Im.pipe(
       () => Enum.zip(acts, ids),
       r =>
         Enum.map(r, ([act, {bodyId, mindId}]) =>
@@ -161,7 +160,7 @@ export class ActressTrait {
         )
     )();
 
-    const minds = pipe(
+    const minds = Im.pipe(
       () => createdActs,
       a =>
         Enum.map(a, ({mindId, mind}): [MindId, AnyMindState<Stg>] => [
@@ -170,7 +169,7 @@ export class ActressTrait {
         ]),
       m => Object.fromEntries(m)
     )();
-    const bodies = pipe(
+    const bodies = Im.pipe(
       () => createdActs,
       a =>
         Enum.map(a, ({bodyId, body}): [MindId, AnyBodyState<Stg>] => [
@@ -179,7 +178,7 @@ export class ActressTrait {
         ]),
       m => Object.fromEntries(m)
     )();
-    const st2 = pipe(
+    const st2 = Im.pipe(
       () => st,
       st => Im.replace(st, 'minds', m => Im.merge(m, minds)),
       st => Im.replace(st, 'bodies', b => Im.merge(b, bodies))
@@ -208,7 +207,7 @@ export class ActressTrait {
     const bodyIds = Enum.map(bodyCounts, c => `b${c}`);
     const mindIds = Enum.map(mindCounts, c => `m${c}`);
 
-    const ids = pipe(
+    const ids = Im.pipe(
       () => Enum.zip(bodyIds, mindIds),
       v =>
         Enum.map(v, ([bodyId, mindId]) => ({
@@ -217,7 +216,7 @@ export class ActressTrait {
         }))
     )();
 
-    return pipe(
+    return Im.pipe(
       () => state,
       st => Im.replace(st, 'bodyIdCount', c => c + counts),
       st => Im.replace(st, 'mindIdCount', c => c + counts),
@@ -321,7 +320,7 @@ export class ActressTrait {
     const newEvents = actSts.flatMap(([_, s]) => s.ev);
     const newNotifications = actSts.flatMap(([_, s]) => s.notifications);
 
-    return pipe(
+    return Im.pipe(
       () => state,
       st => Im.replace(st, 'scene', s => SceneTrait.mergeEvents(s, newEvents)),
       st =>

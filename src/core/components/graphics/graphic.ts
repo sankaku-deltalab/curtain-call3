@@ -1,6 +1,5 @@
-import {pipe} from 'rambda';
 import {Setting} from '../../setting';
-import {AaRect2d, Vec2dTrait} from '../../utils';
+import {AaRect2d, Im, Vec2dTrait} from '../../utils';
 import {CameraState, CameraTrait, RenderingState} from '../camera';
 import {
   CanvasLineGraphic,
@@ -35,21 +34,21 @@ export class CanvasGraphicTrait {
     camSt: CameraState<Stg>;
     renSt: RenderingState;
   }): AaRect2d {
-    const gameNw = pipe(
+    const gameNw = Im.pipe(
       () => args.camSt.size,
       s => Vec2dTrait.div(s, 2)
     )();
-    const gameSe = pipe(
+    const gameSe = Im.pipe(
       () => args.camSt.size,
       s => Vec2dTrait.div(s, 2),
       s => Vec2dTrait.mlt(s, -1)
     )();
 
-    const canvasNw = pipe(
+    const canvasNw = Im.pipe(
       () => gameNw,
       p => CameraTrait.projectGamePointToCanvas(p, args)
     )();
-    const canvasSe = pipe(
+    const canvasSe = Im.pipe(
       () => gameSe,
       p => CameraTrait.projectGamePointToCanvas(p, args)
     )();
