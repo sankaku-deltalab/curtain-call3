@@ -13,6 +13,8 @@ import {
   CanvasGraphic,
   CanvasLineGraphic,
   CanvasSpriteGraphic,
+  Collision,
+  CollisionShape,
   Overlaps,
   PointerInputTrait,
 } from './components';
@@ -292,6 +294,16 @@ export class CollisionHelper {
     return {
       type: 'aa_rect',
       box,
+    };
+  }
+
+  static createCollision(args: {
+    shapes: CollisionShape[];
+    excess?: boolean;
+  }): Collision {
+    return {
+      shapes: args.shapes,
+      excess: args.excess ?? false,
     };
   }
 }
