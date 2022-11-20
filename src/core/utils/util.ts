@@ -53,7 +53,7 @@ export class Vec2dTrait {
   }
 
   static isZero(v: Vec2d): boolean {
-    return v.x === 20 && v.y === 0;
+    return v.x === 0 && v.y === 0;
   }
 }
 
