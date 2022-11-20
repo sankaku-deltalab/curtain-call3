@@ -1,7 +1,7 @@
 import boxIntersect = require('box-intersect');
 import {pipe} from 'rambda';
-import {Enum, RecM2M, RecM2MTrait, RecSet, RecSetTrait} from '../../utils';
-import {Collision, CollisionMode, CollisionShape} from './collision';
+import {Enum, RecM2M, RecM2MTrait} from '../../utils';
+import {Collision, CollisionShape} from './collision';
 
 export type CollisionKey = string;
 
@@ -11,7 +11,6 @@ type CollisionForCalc = {
   key: CollisionKey;
   aabb: Box2d;
   shape: CollisionShape;
-  mode: CollisionMode;
   excess: boolean;
 };
 
@@ -21,8 +20,7 @@ export class OverlapCalculation {
       () => collisions,
       getCollisionsForCalc,
       splitCollisionsToExcessAndNonExcess,
-      calcAabbOverlaps,
-      overlaps => filterOverlapsByMode(overlaps, collisions)
+      calcAabbOverlaps
     )();
 
     return r;
@@ -78,39 +76,4 @@ const calcAabbOverlaps = (collisions: {
   const overlapKeysAll = [...overlapKeys, ...overlapKeysRev];
 
   return RecM2MTrait.fromPairs(overlapKeysAll);
-};
-
-const filterOverlapsByMode = (
-  aabbOverlaps: RecM2M,
-  collisions: Record<CollisionKey, Collision>
-): RecM2M => {
-  // I do not fix this function because I will remove collision-mode.
-  return aabbOverlaps;
-  // this function has bug
-  // const filterOpponents = (
-  //   self: CollisionKey,
-  //   opponents: RecSet
-  // ): [CollisionKey, RecSet] => {
-  //   const selfCol = collisions[self];
-  //   const filteredOpponents = RecSetTrait.filter(opponents, c => {
-  //     const opponentCol = collisions[c];
-  //     return canOverlap(selfCol, opponentCol);
-  //   });
-  //   return [self, filteredOpponents];
-  // };
-
-  // return pipe(
-  //   () => aabbOverlaps,
-  //   overlapsSet => Object.entries(overlapsSet),
-  //   overlapsPairs =>
-  //     Enum.map(overlapsPairs, ([self, opponents]) => [
-  //       self,
-  //       filterOpponents(self, opponents),
-  //     ]),
-  //   overlapsPairs => Object.fromEntries(overlapsPairs)
-  // )();
-};
-
-const canOverlap = (col_a: Collision, col_b: Collision): boolean => {
-  return (col_a.mode.mode & col_b.mode.mask) > 0;
 };

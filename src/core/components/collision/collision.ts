@@ -1,15 +1,8 @@
-import {BodyId} from '../../actress';
-import {RecSet, AaRect2d} from '../../utils/util';
+import {AaRect2d, RecM2M} from '../../utils/util';
 
 export type Collision = {
   shapes: CollisionShape[];
-  mode: CollisionMode;
   excess: boolean;
-};
-
-export type CollisionMode = {
-  mode: number;
-  mask: number;
 };
 
 export type CollisionShape = AaRectCollisionShape;
@@ -25,7 +18,9 @@ export type AaRectCollisionShape = {
 };
 
 export const isOverlapped = (col_a: Collision, col_b: Collision): boolean => {
-  return (col_a.mode.mode & col_b.mode.mask) > 0;
+  // given: two aabb is overlapped
+  // Currently, shape is only aabb. So this function is always true.
+  return true;
 };
 
-export type Overlaps = Record<BodyId, RecSet>;
+export type Overlaps = RecM2M; // many to many BodyId
