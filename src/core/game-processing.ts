@@ -138,9 +138,9 @@ const calcOverlaps = <Stg extends Setting>(
     () => state,
     st => collectActInState(st, args),
     acts =>
-      Enum.map(acts, ([actId, st, beh]): [string, Collision] => {
+      Enum.map(acts, ([_mindId, st, beh]): [string, Collision] => {
         const col = beh.generateCollision(st, {gameState: state});
-        return [actId, col];
+        return [st.mind.meta.bodyId, col];
       }),
     col => Object.fromEntries(col),
     col => OverlapCalculation.calcOverlaps(col)
