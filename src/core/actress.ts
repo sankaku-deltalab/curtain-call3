@@ -3,8 +3,9 @@ import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
 import {Res, Result} from './utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
-import {AnyEvent, AnyNotification, SceneTrait} from './scene';
 import {Enum, Im} from './utils/util';
+import {AnyEvent, EventTrait} from './event';
+import {AnyNotification, NotificationTrait} from './notification';
 
 export type ActressesState<Stg extends Setting> = {
   bodyIdCount: number;
@@ -322,10 +323,10 @@ export class ActressTrait {
 
     return Im.pipe(
       () => state,
-      st => Im.replace(st, 'scene', s => SceneTrait.mergeEvents(s, newEvents)),
+      st => Im.replace(st, 'event', s => EventTrait.mergeEvents(s, newEvents)),
       st =>
-        Im.replace(st, 'scene', s =>
-          SceneTrait.mergeNotifications(s, newNotifications)
+        Im.replace(st, 'notification', s =>
+          NotificationTrait.mergeNotifications(s, newNotifications)
         ),
       st =>
         Im.replace(st, 'actresses', s =>

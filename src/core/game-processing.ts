@@ -14,8 +14,8 @@ import {Setting} from './setting';
 import {TimeInput, TimeTrait} from './components/time';
 import {Enum, Im} from './utils/util';
 import {RenderingState} from './components/camera';
-import {AnyNotification, SceneTrait} from './scene';
 import {OverlapCalculation} from './components/collision/overlap-calculation';
+import {AnyNotification, NotificationTrait} from './notification';
 
 export class GameProcessing {
   static createInitialState<Stg extends Setting>(
@@ -181,14 +181,16 @@ const updateByActresses = <Stg extends Setting>(
 const consumeNotifications = <Stg extends Setting>(
   state: GameState<Stg>
 ): {state: GameState<Stg>; notifications: AnyNotification<Stg>[]} => {
-  const originalSt = state;
   return Im.pipe(
-    () => originalSt,
-    st => SceneTrait.consumeAllNotifications(st.scene),
-    ({state: scSt, notifications}) => ({
-      state: Im.replace(originalSt, 'scene', () => scSt),
-      notifications,
-    })
+    () => state,
+    st => {
+      const {state: noSt, notifications} =
+        NotificationTrait.consumeAllNotifications(st.notification);
+      return {
+        state: Im.replace(st, 'notification', () => noSt),
+        notifications,
+      };
+    }
   )();
 };
 

@@ -5,8 +5,8 @@ import {Setting} from './setting';
 import {TimeInput} from './components/time';
 import {Im} from './utils/util';
 import {RenderingState} from './components/camera';
-import {AnyNotification} from './scene';
 import {GameProcessing} from './game-processing';
+import {AnyNotification} from './notification';
 
 export type GameProgressState = {
   mode: 'not-started' | 'active' | 'paused' | 'finished';

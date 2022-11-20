@@ -17,8 +17,10 @@ import {
   Overlaps,
   PointerInputTrait,
 } from './components';
+import {AnyEvent, EventTrait} from './event';
 import {GameState} from './game-state';
-import {AnyEvent, SceneTrait} from './scene';
+import {NotificationTrait} from './notification';
+import {SceneTrait} from './scene';
 import {
   BodyTypes,
   EventPayload,
@@ -218,9 +220,9 @@ export class GameHelper {
   ): GameState<Stg> {
     const originalSt = state;
     return Im.pipe(
-      () => state.scene,
-      st => SceneTrait.mergeEvents(st, [{type, payload}]),
-      scSt => Im.replace(originalSt, 'scene', () => scSt)
+      () => state.event,
+      st => EventTrait.mergeEvents(st, [{type, payload}]),
+      evSt => Im.replace(originalSt, 'event', () => evSt)
     )();
   }
 
@@ -234,9 +236,9 @@ export class GameHelper {
   ): GameState<Stg> {
     const originalSt = state;
     return Im.pipe(
-      () => state.scene,
-      st => SceneTrait.mergeNotifications(st, [{type, payload}]),
-      scSt => Im.replace(originalSt, 'scene', () => scSt)
+      () => state.notification,
+      st => NotificationTrait.mergeNotifications(st, [{type, payload}]),
+      noSt => Im.replace(originalSt, 'notification', () => noSt)
     )();
   }
 
@@ -256,15 +258,17 @@ export class GameHelper {
   static consumeAllEvents<Stg extends Setting>(
     state: GameState<Stg>
   ): {state: GameState<Stg>; events: AnyEvent<Stg>[]} {
-    const originalSt = state;
-    return Im.pipe(
-      () => state.scene,
-      st => SceneTrait.consumeAllEvents(st),
-      ({state: sceneSt, events}) => ({
-        state: Im.replace(originalSt, 'scene', () => sceneSt),
-        events,
-      })
-    )();
+    // TODO: Delete this function later.
+    return {state, events: []};
+    // const originalSt = state;
+    // return Im.pipe(
+    //   () => state.scene,
+    //   st => EventTrait.consumeAllEvents(st),
+    //   ({state: sceneSt, events}) => ({
+    //     state: Im.replace(originalSt, 'scene', () => sceneSt),
+    //     events,
+    //   })
+    // )();
   }
 }
 

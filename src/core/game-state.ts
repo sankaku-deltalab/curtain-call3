@@ -13,6 +13,8 @@ import {
   MindId,
 } from './actress';
 import {SceneState, SceneTrait} from './scene';
+import {EventState, EventTrait} from './event';
+import {NotificationState, NotificationTrait} from './notification';
 
 export type GameState<Stg extends Setting> = {
   time: TimeState<Stg>;
@@ -20,6 +22,8 @@ export type GameState<Stg extends Setting> = {
   input: InputState<Stg>;
   actresses: ActressesState<Stg>;
   scene: SceneState<Stg>;
+  event: EventState<Stg>;
+  notification: NotificationState<Stg>;
 };
 
 export type VisibleGameState<Stg extends Setting> = Exclude<
@@ -44,6 +48,8 @@ export class GameStateTrait {
       input: InputTrait.initialState(),
       actresses: ActressTrait.initialState(),
       scene: SceneTrait.initialState({initialLevel: args.level}),
+      event: EventTrait.initialState(),
+      notification: NotificationTrait.initialState(),
     };
   }
 
