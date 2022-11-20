@@ -82,6 +82,13 @@ export class ActressTrait {
     };
   }
 
+  static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    body: AnyBodyState<Stg>,
+    bodyType: BT
+  ): body is BodyState<Stg, BT> {
+    return body.meta.bodyType === bodyType;
+  }
+
   static getMinds<Stg extends Setting>(
     st: ActressesState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
@@ -174,6 +181,38 @@ export class ActressTrait {
       mindId: args.mindId,
       mind,
     };
+  }
+
+  static updateBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    state: ActressesState<Stg>,
+    bodyId: BodyId,
+    bodyType: BT,
+    updater: (
+      body: BodyState<Stg, BT>,
+      args: {bodyId: BodyId}
+    ) => BodyState<Stg, BT> | undefined
+  ): ActressesState<Stg> {
+    const oldBody = state.bodies[bodyId];
+    if (oldBody.meta.bodyType !== bodyType) throw new Error('');
+
+    const body = updater(oldBody as BodyState<Stg, BT>, {bodyId});
+    if (body === undefined) return state;
+
+    const bodies = {
+      ...state.bodies,
+      [bodyId]: body,
+    };
+    return Im.replace(state, 'bodies', () => bodies);
+  }
+
+  static replaceBodies<Stg extends Setting>(
+    state: ActressesState<Stg>,
+    bodies: Record<BodyId, AnyBodyState<Stg>>
+  ): ActressesState<Stg> {
+    return Im.replace(state, 'bodies', () => ({
+      ...state.bodies,
+      ...bodies,
+    }));
   }
 
   static extractActressState<Stg extends Setting>(

@@ -26,4 +26,8 @@ export class TimeTrait {
       lastDeltaMs: input.deltaMs,
     };
   }
+
+  static lastDeltaMs<Stg extends Setting>(state: TimeState<Stg>): number {
+    return state.lastDeltaMs;
+  }
 }

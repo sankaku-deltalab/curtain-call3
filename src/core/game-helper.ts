@@ -10,6 +10,7 @@ import {
   MindStateRaw,
 } from './actress';
 import {
+  AaRectCollisionShape,
   CanvasGraphic,
   CanvasLineGraphic,
   CanvasSpriteGraphic,
@@ -29,7 +30,7 @@ import {
   Setting,
 } from './setting';
 import {Res, Result} from './utils/result';
-import {Im, RecM2MTrait, Vec2d} from './utils/util';
+import {AaRect2d, Enum, Im, RecM2MTrait, Vec2d} from './utils/util';
 
 export type ActressInitializer<
   Stg extends Setting,
@@ -43,6 +44,13 @@ export type ActressInitializer<
 };
 
 export class GameHelper {
+  static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    body: AnyBodyState<Stg>,
+    bodyType: BT
+  ): body is BodyState<Stg, BT> {
+    return ActressTrait.bodyIsInType(body, bodyType);
+  }
+
   static getMinds<Stg extends Setting>(
     state: GameState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
@@ -114,6 +122,59 @@ export class GameHelper {
         mindId,
       })
     )();
+  }
+
+  static replaceBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    state: GameState<Stg>,
+    args: {
+      bodyId: BodyId;
+      body: BodyState<Stg, BT>;
+    }
+  ): GameState<Stg> {
+    return Im.replace(state, 'actresses', act => {
+      return ActressTrait.updateBody(
+        act,
+        args.bodyId,
+        args.body.meta.bodyType,
+        () => args.body
+      );
+    });
+  }
+
+  static replaceBodies<Stg extends Setting>(
+    state: GameState<Stg>,
+    bodies: Record<BodyId, AnyBodyState<Stg>>
+  ): GameState<Stg> {
+    return Im.replace(state, 'actresses', act => {
+      return ActressTrait.replaceBodies(act, bodies);
+    });
+  }
+
+  static updateBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    state: GameState<Stg>,
+    bodyId: BodyId,
+    bodyType: BT,
+    updater: (
+      body: BodyState<Stg, BT>,
+      args: {bodyId: BodyId}
+    ) => BodyState<Stg, BT> | undefined
+  ): GameState<Stg> {
+    return Im.replace(state, 'actresses', act => {
+      return ActressTrait.updateBody(act, bodyId, bodyType, updater);
+    });
+  }
+
+  static updateBodies<Stg extends Setting>(
+    state: GameState<Stg>,
+    updater: (
+      body: AnyBodyState<Stg>,
+      args: {bodyId: BodyId}
+    ) => AnyBodyState<Stg> | undefined
+  ): GameState<Stg> {
+    const bodies = Object.entries(this.getBodies(state));
+    return Enum.reduce(bodies, state, ([bodyId, body], st: GameState<Stg>) =>
+      this.updateBody(st, bodyId, body.meta.bodyType, updater)
+    );
   }
 
   static addEvent<Stg extends Setting, EvType extends EventTypes<Stg>>(
@@ -190,5 +251,14 @@ export class GraphicHelper {
     graphic: CanvasGraphic<Stg>
   ): graphic is CanvasLineGraphic {
     return graphic.type === 'canvas-line';
+  }
+}
+
+export class CollisionHelper {
+  static createAaRectShape(box: AaRect2d): AaRectCollisionShape {
+    return {
+      type: 'aa_rect',
+      box,
+    };
   }
 }

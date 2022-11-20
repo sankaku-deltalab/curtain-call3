@@ -14,6 +14,19 @@ export class Vec2dTrait {
     return {x: 1, y: 1};
   }
 
+  static sizeSq(a: Vec2d): number {
+    return Math.pow(a.x, 2) + Math.pow(a.y, 2);
+  }
+
+  static size(a: Vec2d): number {
+    return Math.sqrt(Vec2dTrait.sizeSq(a));
+  }
+
+  static uniformed(a: Vec2d): Vec2d {
+    const size = Vec2dTrait.size(a);
+    return Vec2dTrait.div(a, size);
+  }
+
   static add(a: Vec2d, b: Vec2d): Vec2d {
     return {x: a.x + b.x, y: a.y + b.y};
   }
@@ -233,6 +246,18 @@ export class Enum {
   ): T2[] {
     return [...iter].filter(filter);
   }
+
+  static reduce<T, Acc, Init extends Acc = Acc>(
+    values: Iterable<T>,
+    init: Init,
+    updater: (x: T, acc: Acc) => Acc
+  ): Acc {
+    let acc: Acc = init;
+    for (const v of values) {
+      acc = updater(v, acc);
+    }
+    return acc;
+  }
 }
 
 export type RecSet = Record<string, true | undefined>;
@@ -309,6 +334,15 @@ export class RecM2MTrait {
   static merge(a: RecM2M, b: RecM2M): RecM2M {
     const pairs = [...this.toPairs(a), ...this.toPairs(b)];
     return this.fromPairs(pairs);
+  }
+
+  static removeNonDestinations(rel: RecM2M): RecM2M {
+    return pipe(
+      () => rel,
+      r => Object.entries(r),
+      r => r.filter(([_from, tos]) => !Object.is(tos, {})),
+      r => Object.fromEntries(r)
+    )();
   }
 
   static filter(
