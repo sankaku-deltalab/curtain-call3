@@ -39,10 +39,15 @@ export class Vec2dTrait {
     return a.x * b.x + a.y * b.y;
   }
 
-  static reflect(velocity: Vec2d, normal: Vec2d): Vec2d {
+  static reflect(
+    velocity: Vec2d,
+    normal: Vec2d,
+    opt?: {uniformNormal?: boolean}
+  ): Vec2d {
+    const uniformNormal = opt?.uniformNormal ?? true;
     const v = velocity;
     const vn = Vec2dTrait.mlt(v, -1);
-    const n = normal;
+    const n = uniformNormal ? Vec2dTrait.uniformed(normal) : normal;
 
     const scale = 2 * Vec2dTrait.dot(vn, n);
     return Vec2dTrait.add(v, Vec2dTrait.mlt(n, scale));
