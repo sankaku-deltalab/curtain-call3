@@ -59,18 +59,18 @@ const calcAabbOverlaps = (collisions: {
   const neAabb = Enum.map(neCol, c => c.aabb);
 
   const eVsNe = boxIntersect(eAabb, neAabb);
-  const eVsE = boxIntersect(eAabb);
+  const neVsNe = boxIntersect(neAabb);
 
   const eVsNeKeys: [string, string][] = Enum.map(eVsNe, ([i, j]) => [
     eCol[i].key,
     neCol[j].key,
   ]);
-  const eVsEKeys: [string, string][] = Enum.map(eVsE, ([i, j]) => [
-    eCol[i].key,
-    eCol[j].key,
+  const neVsNeKeys: [string, string][] = Enum.map(neVsNe, ([i, j]) => [
+    neCol[i].key,
+    neCol[j].key,
   ]);
 
-  const overlapKeys = [...eVsNeKeys, ...eVsEKeys];
+  const overlapKeys = [...eVsNeKeys, ...neVsNeKeys];
   const overlapKeysRev: [string, string][] = Enum.map(
     overlapKeys,
     ([k1, k2]) => [k2, k1]
@@ -84,28 +84,31 @@ const filterOverlapsByMode = (
   aabbOverlaps: RecM2M,
   collisions: Record<CollisionKey, Collision>
 ): RecM2M => {
-  const filterOpponents = (
-    self: CollisionKey,
-    opponents: RecSet
-  ): [CollisionKey, RecSet] => {
-    const selfCol = collisions[self];
-    const filteredOpponents = RecSetTrait.filter(opponents, c => {
-      const opponentCol = collisions[c];
-      return canOverlap(selfCol, opponentCol);
-    });
-    return [self, filteredOpponents];
-  };
+  // I do not fix this function because I will remove collision-mode.
+  return aabbOverlaps;
+  // this function has bug
+  // const filterOpponents = (
+  //   self: CollisionKey,
+  //   opponents: RecSet
+  // ): [CollisionKey, RecSet] => {
+  //   const selfCol = collisions[self];
+  //   const filteredOpponents = RecSetTrait.filter(opponents, c => {
+  //     const opponentCol = collisions[c];
+  //     return canOverlap(selfCol, opponentCol);
+  //   });
+  //   return [self, filteredOpponents];
+  // };
 
-  return pipe(
-    () => aabbOverlaps,
-    overlapsSet => Object.entries(overlapsSet),
-    overlapsPairs =>
-      Enum.map(overlapsPairs, ([self, opponents]) => [
-        self,
-        filterOpponents(self, opponents),
-      ]),
-    overlapsPairs => Object.fromEntries(overlapsPairs)
-  )();
+  // return pipe(
+  //   () => aabbOverlaps,
+  //   overlapsSet => Object.entries(overlapsSet),
+  //   overlapsPairs =>
+  //     Enum.map(overlapsPairs, ([self, opponents]) => [
+  //       self,
+  //       filterOpponents(self, opponents),
+  //     ]),
+  //   overlapsPairs => Object.fromEntries(overlapsPairs)
+  // )();
 };
 
 const canOverlap = (col_a: Collision, col_b: Collision): boolean => {
