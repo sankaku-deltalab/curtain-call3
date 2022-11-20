@@ -5,7 +5,7 @@ import {Graphic} from './components/graphics/graphic';
 import {Res, Result} from './utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
 import {AnyEvent, AnyNotification, SceneTrait} from './scene';
-import {Im} from './utils/util';
+import {Enum, Im} from './utils/util';
 
 export type ActressesState<Stg extends Setting> = {
   bodyIdCount: number;
@@ -72,6 +72,17 @@ export type AnyActressState<Stg extends Setting> = ActressState<
   MindTypes<Stg>
 >;
 
+export type ActressInitializer<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>,
+  MT extends MindTypes<Stg>
+> = {
+  bodyType: BT;
+  mindType: MT;
+  body: BodyStateRaw<Stg, BT>;
+  mind: MindStateRaw<Stg, MT>;
+};
+
 export class ActressTrait {
   static initialState<Stg extends Setting>(): ActressesState<Stg> {
     return {
@@ -120,12 +131,7 @@ export class ActressTrait {
     MT extends MindTypes<Stg>
   >(
     state: ActressesState<Stg>,
-    act: {
-      bodyType: BT;
-      mindType: MT;
-      body: BodyStateRaw<Stg, BT>;
-      mind: MindStateRaw<Stg, MT>;
-    }
+    act: ActressInitializer<Stg, BT, MT>
   ): {state: ActressesState<Stg>; bodyId: BodyId; mindId: MindId} {
     const {state: st, bodyId, mindId} = this.generateActressId(state);
     const {body, mind} = this.createActress({bodyId, mindId, ...act});
@@ -138,15 +144,85 @@ export class ActressTrait {
     return {state: st2, bodyId, mindId};
   }
 
+  static addActresses<
+    Stg extends Setting,
+    BT extends BodyTypes<Stg>,
+    MT extends MindTypes<Stg>
+  >(
+    state: ActressesState<Stg>,
+    acts: ActressInitializer<Stg, BT, MT>[]
+  ): {state: ActressesState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
+    const {state: st, ids} = this.generateActressIds(state, acts.length);
+    const createdActs = pipe(
+      () => Enum.zip(acts, ids),
+      r =>
+        Enum.map(r, ([act, {bodyId, mindId}]) =>
+          this.createActress({bodyId, mindId, ...act})
+        )
+    )();
+
+    const minds = pipe(
+      () => createdActs,
+      a =>
+        Enum.map(a, ({mindId, mind}): [MindId, AnyMindState<Stg>] => [
+          mindId,
+          mind,
+        ]),
+      m => Object.fromEntries(m)
+    )();
+    const bodies = pipe(
+      () => createdActs,
+      a =>
+        Enum.map(a, ({bodyId, body}): [MindId, AnyBodyState<Stg>] => [
+          bodyId,
+          body,
+        ]),
+      m => Object.fromEntries(m)
+    )();
+    const st2 = pipe(
+      () => st,
+      st => Im.replace(st, 'minds', m => Im.merge(m, minds)),
+      st => Im.replace(st, 'bodies', b => Im.merge(b, bodies))
+    )();
+
+    return {state: st2, ids};
+  }
+
   static generateActressId<Stg extends Setting>(
     state: ActressesState<Stg>
   ): {state: ActressesState<Stg>; bodyId: BodyId; mindId: MindId} {
     const bodyId = `b${state.bodyIdCount}`;
-    const mindId = `b${state.mindIdCount}`;
+    const mindId = `m${state.mindIdCount}`;
     let st = state;
     st = Im.replace(st, 'bodyIdCount', c => c + 1);
     st = Im.replace(st, 'mindIdCount', c => c + 1);
     return {state: st, bodyId, mindId};
+  }
+
+  static generateActressIds<Stg extends Setting>(
+    state: ActressesState<Stg>,
+    counts: number
+  ): {state: ActressesState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
+    const bodyCounts = Im.range(state.bodyIdCount, state.bodyIdCount + counts);
+    const mindCounts = Im.range(state.mindIdCount, state.mindIdCount + counts);
+    const bodyIds = Enum.map(bodyCounts, c => `b${c}`);
+    const mindIds = Enum.map(mindCounts, c => `m${c}`);
+
+    const ids = pipe(
+      () => Enum.zip(bodyIds, mindIds),
+      v =>
+        Enum.map(v, ([bodyId, mindId]) => ({
+          bodyId,
+          mindId,
+        }))
+    )();
+
+    return pipe(
+      () => state,
+      st => Im.replace(st, 'bodyIdCount', c => c + counts),
+      st => Im.replace(st, 'mindIdCount', c => c + counts),
+      st => ({state: st, ids})
+    )();
   }
 
   static createActress<

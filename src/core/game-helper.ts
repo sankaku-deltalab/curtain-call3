@@ -1,5 +1,6 @@
 import {pipe} from 'rambda';
 import {
+  ActressInitializer,
   ActressTrait,
   AnyBodyState,
   AnyMindState,
@@ -31,17 +32,6 @@ import {
 } from './setting';
 import {Res, Result} from './utils/result';
 import {AaRect2d, Enum, Im, RecM2MTrait, Vec2d} from './utils/util';
-
-export type ActressInitializer<
-  Stg extends Setting,
-  BT extends BodyTypes<Stg>,
-  MT extends MindTypes<Stg>
-> = {
-  bodyType: BT;
-  mindType: MT;
-  body: BodyStateRaw<Stg, BT>;
-  mind: MindStateRaw<Stg, MT>;
-};
 
 export class GameHelper {
   static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
@@ -120,6 +110,25 @@ export class GameHelper {
         state: Im.replace(originalSt, 'actresses', () => actSt),
         bodyId,
         mindId,
+      })
+    )();
+  }
+
+  static addActresses<
+    Stg extends Setting,
+    BT extends BodyTypes<Stg>,
+    MT extends MindTypes<Stg>
+  >(
+    state: GameState<Stg>,
+    acts: ActressInitializer<Stg, BT, MT>[]
+  ): {state: GameState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
+    const originalSt = state;
+    return pipe(
+      () => state,
+      st => ActressTrait.addActresses(st.actresses, acts),
+      ({state: actSt, ids}) => ({
+        state: Im.replace(originalSt, 'actresses', () => actSt),
+        ids,
       })
     )();
   }

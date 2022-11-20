@@ -233,6 +233,21 @@ export class Im {
     }
     return newObj;
   }
+
+  static range(start: number, stop: number): number[] {
+    const values: number[] = [];
+    for (let i = start; i < stop; i++) {
+      values.push(i);
+    }
+    return values;
+  }
+
+  static merge<T extends Rec, T2 extends Rec>(obj1: T, obj2: T2): T & T2 {
+    return {
+      ...obj1,
+      ...obj2,
+    };
+  }
 }
 
 export class Enum {
@@ -257,6 +272,16 @@ export class Enum {
       acc = updater(v, acc);
     }
     return acc;
+  }
+
+  static zip<T, T2>(iter1: T[], iter2: T2[]): [T, T2][] {
+    if (iter1.length !== iter2.length)
+      throw new Error('iter1 and iter2 length is not equal');
+
+    return pipe(
+      () => Im.range(0, iter1.length),
+      r => Enum.map<number, [T, T2]>(r, i => [iter1[i], iter2[i]])
+    )();
   }
 }
 
