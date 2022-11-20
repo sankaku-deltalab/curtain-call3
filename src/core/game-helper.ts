@@ -6,9 +6,7 @@ import {
   AnyMindState,
   BodyId,
   BodyState,
-  BodyStateRaw,
   MindId,
-  MindStateRaw,
 } from './actress';
 import {
   AaRectCollisionShape,
@@ -41,10 +39,36 @@ export class GameHelper {
     return ActressTrait.bodyIsInType(body, bodyType);
   }
 
+  static idAndBodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    body: [BodyId, AnyBodyState<Stg>],
+    bodyType: BT
+  ): body is [BodyId, BodyState<Stg, BT>] {
+    return ActressTrait.bodyIsInType(body[1], bodyType);
+  }
+
   static getMinds<Stg extends Setting>(
     state: GameState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
     return ActressTrait.getMinds(state.actresses);
+  }
+
+  static getBodiesOf<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    state: GameState<Stg>,
+    bodyType: BT
+  ): Record<BodyId, BodyState<Stg, BT>> {
+    const idAndBodyIsInType = (
+      body: [BodyId, AnyBodyState<Stg>]
+    ): body is [BodyId, BodyState<Stg, BT>] => {
+      return ActressTrait.bodyIsInType(body[1], bodyType);
+    };
+
+    return pipe(
+      () => ActressTrait.getBodies(state.actresses),
+      bodies => Object.entries(bodies),
+      bodies => bodies.filter(idAndBodyIsInType),
+      bodies => Object.fromEntries(bodies),
+      v => v
+    )();
   }
 
   static getBodies<Stg extends Setting>(
