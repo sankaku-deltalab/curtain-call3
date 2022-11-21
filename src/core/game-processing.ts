@@ -16,6 +16,7 @@ import {Enum, Im} from './utils/util';
 import {RenderingState} from './components/camera';
 import {OverlapCalculation} from './components/collision/overlap-calculation';
 import {AnyNotification, NotificationTrait} from './notification';
+import {AnyEvent, EventTrait} from './event';
 
 export class GameProcessing {
   static createInitialState<Stg extends Setting>(
@@ -45,6 +46,8 @@ export class GameProcessing {
 
     st = Im.pipe(
       () => st,
+      st => generateEvents(st, {...args, overlaps}),
+      st => applyEvents(st, {...args}),
       st => updateByDirector(st, {...args, overlaps}),
       st => updateByActresses(st, args),
       st => deleteActresses(st, args),
@@ -144,6 +147,43 @@ const calcOverlaps = <Stg extends Setting>(
     col => Object.fromEntries(col),
     col => OverlapCalculation.calcOverlaps(col)
   )();
+};
+
+const generateEvents = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {
+    overlaps: Overlaps;
+    instances: GameInstances<Stg>;
+  }
+): GameState<Stg> => {
+  const events = args.instances.director.generateEvents(state, args);
+  return Im.replace(state, 'event', ev => EventTrait.mergeEvents(ev, events));
+};
+
+const applyEvents = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {
+    instances: GameInstances<Stg>;
+  }
+): GameState<Stg> => {
+  let st = state;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const {state: st2, event} = popEvent(st);
+    if (event === undefined) return st;
+    const applier = args.instances.eventAppliers[event.type];
+    st = applier.applyEvent(st2, event.payload);
+  }
+};
+
+const popEvent = <Stg extends Setting>(
+  state: GameState<Stg>
+): {state: GameState<Stg>; event?: AnyEvent<Stg>} => {
+  const {state: evSt, event} = EventTrait.popEvent(state.event);
+  return {
+    state: Im.replace(state, 'event', () => evSt),
+    event,
+  };
 };
 
 const updateByDirector = <Stg extends Setting>(

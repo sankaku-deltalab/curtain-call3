@@ -1,4 +1,5 @@
 import {Overlaps} from './components/collision/collision';
+import {AnyEvent} from './event';
 import {GameState} from './game-state';
 import {Representation, Setting} from './setting';
 
@@ -38,6 +39,13 @@ export interface DirectorBehavior<Stg extends Setting> {
       overlaps: Overlaps;
     }
   ): GameState<Stg>;
+
+  generateEvents(
+    st: GameState<Stg>,
+    other: {
+      overlaps: Overlaps;
+    }
+  ): AnyEvent<Stg>[];
 
   represent(state: GameState<Stg>): Representation<Stg>;
 }
