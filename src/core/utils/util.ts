@@ -257,12 +257,12 @@ export class Enum {
     return [...iter].map(converter);
   }
 
-  static filter<T, T2 extends T>(
+  static filter: Filter = <T, T2 extends T>(
     iter: Iterable<T>,
-    filter: (v: T) => v is T2
-  ): T2[] {
+    filter: ((v: T) => v is T2) | ((v: T) => boolean)
+  ): T[] | T2[] => {
     return [...iter].filter(filter);
-  }
+  };
 
   static reduce<T, Acc, Init extends Acc = Acc>(
     values: Iterable<T>,
@@ -286,6 +286,11 @@ export class Enum {
     )();
   }
 }
+
+type Filter = {
+  <T, T2 extends T>(iter: Iterable<T>, filter: (v: T) => v is T2): T2[];
+  <T>(iter: Iterable<T>, filter: (v: T) => boolean): T[];
+};
 
 export type RecSet = Record<string, true | undefined>;
 
