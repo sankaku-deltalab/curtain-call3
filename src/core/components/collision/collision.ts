@@ -18,7 +18,7 @@ export type AaRectCollisionShape = {
   box: AaRect2d;
 };
 
-export const isOverlapped = (col_a: Collision, col_b: Collision): boolean => {
+export const isOverlapped = (_col_a: Collision, _col_b: Collision): boolean => {
   // given: two aabb is overlapped
   // Currently, shape is only aabb. So this function is always true.
   return true;
