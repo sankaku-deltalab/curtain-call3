@@ -9,7 +9,7 @@ import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState} from './game-state';
 import {Res} from '../utils/result';
 import {Representation, Setting} from './setting';
-import {AaRect2d} from '../utils/util';
+import {AaRect2d} from '../utils/aa-rect2d';
 import {
   CanvasGraphic,
   CanvasGraphicTrait,

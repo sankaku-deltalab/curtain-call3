@@ -1,5 +1,7 @@
 import {Setting} from '../../setting';
-import {AaRect2d, Im, Vec2dTrait} from '../../../utils/util';
+import {Im} from '../../../utils/immutable-manipulation';
+import {Vec2dTrait} from '../../../utils/vec2d';
+import {AaRect2d} from '../../../utils/aa-rect2d';
 import {CameraState, CameraTrait, RenderingState} from '../camera';
 import {
   CanvasLineGraphic,

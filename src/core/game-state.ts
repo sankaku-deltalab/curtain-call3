@@ -3,7 +3,7 @@ import {Res, Result} from '../utils/result';
 import {LevelState, Setting} from './setting';
 import {TimeState, TimeTrait} from './components/time';
 import {InputState, InputTrait} from './components/inputs/input';
-import {Vec2d} from '../utils/util';
+import {Vec2d} from '../utils/vec2d';
 import {
   ActressesState,
   ActressTrait,

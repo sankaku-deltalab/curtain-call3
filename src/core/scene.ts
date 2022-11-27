@@ -1,5 +1,5 @@
 import {LevelState, Setting} from './setting';
-import {Im} from '../utils/util';
+import {Im} from '../utils/immutable-manipulation';
 
 export type SceneState<Stg extends Setting> = {
   level: LevelState<Stg>;

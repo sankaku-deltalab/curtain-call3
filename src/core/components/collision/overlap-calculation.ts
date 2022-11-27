@@ -1,5 +1,7 @@
 import boxIntersect = require('box-intersect');
-import {Enum, Im, RecM2M, RecM2MTrait} from '../../../utils/util';
+import {Im} from '../../../utils/immutable-manipulation';
+import {Enum} from '../../../utils/enum';
+import {RecM2M, RecM2MTrait} from '../../../utils/rec-m2m';
 import {Collision, CollisionShape} from './collision';
 
 export type CollisionKey = string;

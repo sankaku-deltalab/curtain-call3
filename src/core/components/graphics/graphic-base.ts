@@ -1,4 +1,4 @@
-import {Vec2d} from '../../../utils/util';
+import {Vec2d} from '../../../utils/vec2d';
 
 export type Color = number;
 

@@ -1,6 +1,6 @@
 import {GameState} from './game-state';
 import {EventPayload, EventTypes, Setting} from './setting';
-import {Im} from '../utils/util';
+import {Im} from '../utils/immutable-manipulation';
 
 export type EventState<Stg extends Setting> = {
   events?: OrganizedEvents<Stg>;

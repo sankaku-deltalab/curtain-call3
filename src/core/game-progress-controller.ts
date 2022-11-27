@@ -3,7 +3,7 @@ import {GameState} from './game-state';
 import {CanvasInput} from './components/inputs/input';
 import {Setting} from './setting';
 import {TimeInput} from './components/time';
-import {Im} from '../utils/util';
+import {Im} from '../utils/immutable-manipulation';
 import {RenderingState} from './components/camera';
 import {GameProcessing} from './game-processing';
 import {AnyNotification} from './notification';

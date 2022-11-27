@@ -3,7 +3,8 @@ import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
 import {Res, Result} from '../utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
-import {Enum, Im} from '../utils/util';
+import {Im} from '../utils/immutable-manipulation';
+import {Enum} from '../utils/enum';
 import {AnyEvent, EventTrait} from './event';
 import {AnyNotification, NotificationTrait} from './notification';
 

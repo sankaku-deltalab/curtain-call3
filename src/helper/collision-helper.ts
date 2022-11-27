@@ -3,7 +3,7 @@ import {
   Collision,
   CollisionShape,
 } from '../core/components';
-import {AaRect2d} from '../utils/util';
+import {AaRect2d} from '../utils/aa-rect2d';
 
 export class CollisionHelper {
   static createAaRectShape(box: AaRect2d): AaRectCollisionShape {
