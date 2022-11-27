@@ -7,16 +7,7 @@ import {
   BodyState,
   MindId,
 } from '../core/actress';
-import {
-  AaRectCollisionShape,
-  CanvasGraphic,
-  CanvasLineGraphic,
-  CanvasSpriteGraphic,
-  Collision,
-  CollisionShape,
-  Overlaps,
-  PointerInputTrait,
-} from '../core/components';
+import {Overlaps} from '../core/components';
 import {EventTrait} from '../core/event';
 import {GameState} from '../core/game-state';
 import {NotificationTrait} from '../core/notification';
@@ -32,7 +23,7 @@ import {
   Setting,
 } from '../core/setting';
 import {Res, Result} from '../core/utils/result';
-import {AaRect2d, Enum, Im, RecM2MTrait, Vec2d} from '../core/utils/util';
+import {Enum, Im, RecM2MTrait} from '../core/utils/util';
 
 export class GameStateHelper {
   static getMinds<Stg extends Setting>(
@@ -239,60 +230,5 @@ export class GameStateHelper {
     return Im.replace(state, 'scene', scSt =>
       SceneTrait.updateLevel(scSt, updater)
     );
-  }
-}
-
-export class ActressHelper {
-  static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
-    body: AnyBodyState<Stg>,
-    bodyType: BT
-  ): body is BodyState<Stg, BT> {
-    return ActressTrait.bodyIsInType(body, bodyType);
-  }
-
-  static idAndBodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
-    body: [BodyId, AnyBodyState<Stg>],
-    bodyType: BT
-  ): body is [BodyId, BodyState<Stg, BT>] {
-    return ActressTrait.bodyIsInType(body[1], bodyType);
-  }
-}
-
-export class InputHelper {
-  static deltaWhileDown<Stg extends Setting>(state: GameState<Stg>): Vec2d {
-    return PointerInputTrait.deltaWhileDown(state.input.pointer);
-  }
-}
-
-export class GraphicHelper {
-  static isCanvasSpriteGraphic<Stg extends Setting>(
-    graphic: CanvasGraphic<Stg>
-  ): graphic is CanvasSpriteGraphic {
-    return graphic.type === 'canvas-sprite';
-  }
-
-  static isCanvasLineGraphic<Stg extends Setting>(
-    graphic: CanvasGraphic<Stg>
-  ): graphic is CanvasLineGraphic {
-    return graphic.type === 'canvas-line';
-  }
-}
-
-export class CollisionHelper {
-  static createAaRectShape(box: AaRect2d): AaRectCollisionShape {
-    return {
-      type: 'aa_rect',
-      box,
-    };
-  }
-
-  static createCollision(args: {
-    shapes: CollisionShape[];
-    excess?: boolean;
-  }): Collision {
-    return {
-      shapes: args.shapes,
-      excess: args.excess ?? false,
-    };
   }
 }
