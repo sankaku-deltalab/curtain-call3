@@ -17,7 +17,7 @@ import {
   Overlaps,
   PointerInputTrait,
 } from '../core/components';
-import {AnyEvent, EventTrait} from '../core/event';
+import {EventTrait} from '../core/event';
 import {GameState} from '../core/game-state';
 import {NotificationTrait} from '../core/notification';
 import {SceneTrait} from '../core/scene';
@@ -34,21 +34,7 @@ import {
 import {Res, Result} from '../core/utils/result';
 import {AaRect2d, Enum, Im, RecM2MTrait, Vec2d} from '../core/utils/util';
 
-export class GameHelper {
-  static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
-    body: AnyBodyState<Stg>,
-    bodyType: BT
-  ): body is BodyState<Stg, BT> {
-    return ActressTrait.bodyIsInType(body, bodyType);
-  }
-
-  static idAndBodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
-    body: [BodyId, AnyBodyState<Stg>],
-    bodyType: BT
-  ): body is [BodyId, BodyState<Stg, BT>] {
-    return ActressTrait.bodyIsInType(body[1], bodyType);
-  }
-
+export class GameStateHelper {
   static getMinds<Stg extends Setting>(
     state: GameState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
@@ -116,8 +102,8 @@ export class GameHelper {
     return RecM2MTrait.filter(
       overlaps,
       (from, to) =>
-        GameHelper.bodyIs(st, from, args.from) &&
-        GameHelper.bodyIs(st, to, args.to)
+        GameStateHelper.bodyIs(st, from, args.from) &&
+        GameStateHelper.bodyIs(st, to, args.to)
     );
   }
 
@@ -253,6 +239,22 @@ export class GameHelper {
     return Im.replace(state, 'scene', scSt =>
       SceneTrait.updateLevel(scSt, updater)
     );
+  }
+}
+
+export class ActressHelper {
+  static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    body: AnyBodyState<Stg>,
+    bodyType: BT
+  ): body is BodyState<Stg, BT> {
+    return ActressTrait.bodyIsInType(body, bodyType);
+  }
+
+  static idAndBodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    body: [BodyId, AnyBodyState<Stg>],
+    bodyType: BT
+  ): body is [BodyId, BodyState<Stg, BT>] {
+    return ActressTrait.bodyIsInType(body[1], bodyType);
   }
 }
 
