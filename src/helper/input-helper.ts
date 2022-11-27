@@ -1,4 +1,4 @@
-import {Vec2d} from '../core/utils';
+import {Vec2d} from '../utils/util';
 import {PointerInputTrait} from '../core/components';
 import {GameState} from '../core/game-state';
 import {Setting} from '../core/setting';

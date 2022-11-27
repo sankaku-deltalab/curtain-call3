@@ -22,8 +22,8 @@ import {
   NotificationTypes,
   Setting,
 } from '../core/setting';
-import {Res, Result} from '../core/utils/result';
-import {Enum, Im, RecM2MTrait} from '../core/utils/util';
+import {Res, Result} from '../utils/result';
+import {Enum, Im, RecM2MTrait} from '../utils/util';
 
 export class GameStateHelper {
   static getMinds<Stg extends Setting>(

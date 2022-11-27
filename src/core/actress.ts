@@ -1,9 +1,9 @@
 import {Collision} from './components/collision/collision';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {Graphic} from './components/graphics/graphic';
-import {Res, Result} from './utils/result';
+import {Res, Result} from '../utils/result';
 import {BodyTypes, MindTypes, Setting} from './setting';
-import {Enum, Im} from './utils/util';
+import {Enum, Im} from '../utils/util';
 import {AnyEvent, EventTrait} from './event';
 import {AnyNotification, NotificationTrait} from './notification';
 

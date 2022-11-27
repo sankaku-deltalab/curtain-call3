@@ -1,6 +1,6 @@
 import {ActressBehavior} from './actress';
 import {DirectorBehavior} from './director';
-import {Res, Result} from './utils/result';
+import {Res, Result} from '../utils/result';
 import {BodyTypes, EventTypes, MindTypes, Setting} from './setting';
 import {EventApplier} from './event';
 

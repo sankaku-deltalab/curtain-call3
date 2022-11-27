@@ -1,4 +1,4 @@
-import {AaRect2d, RecM2M} from '../../utils/util';
+import {AaRect2d, RecM2M} from '../../../utils/util';
 
 export type Collision = {
   shapes: CollisionShape[];

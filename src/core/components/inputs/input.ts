@@ -1,5 +1,5 @@
 import {Setting} from '../../setting';
-import {Im} from '../../utils/util';
+import {Im} from '../../../utils/util';
 import {CameraState, RenderingState} from '../camera';
 import {
   CanvasInputPointer,

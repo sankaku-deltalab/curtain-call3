@@ -10,4 +10,3 @@ export * from './game-state';
 export * from './notification';
 export * from './scene';
 export * from './setting';
-export * from './utils';

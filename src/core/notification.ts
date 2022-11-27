@@ -1,5 +1,5 @@
 import {NotificationPayload, NotificationTypes, Setting} from './setting';
-import {Im} from './utils/util';
+import {Im} from '../utils/util';
 
 export type NotificationState<Stg extends Setting> = {
   notifications: AnyNotification<Stg>[];
