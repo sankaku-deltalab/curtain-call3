@@ -254,22 +254,6 @@ export class GameHelper {
       SceneTrait.updateLevel(scSt, updater)
     );
   }
-
-  static consumeAllEvents<Stg extends Setting>(
-    state: GameState<Stg>
-  ): {state: GameState<Stg>; events: AnyEvent<Stg>[]} {
-    // TODO: Delete this function later.
-    return {state, events: []};
-    // const originalSt = state;
-    // return Im.pipe(
-    //   () => state.scene,
-    //   st => EventTrait.consumeAllEvents(st),
-    //   ({state: sceneSt, events}) => ({
-    //     state: Im.replace(originalSt, 'scene', () => sceneSt),
-    //     events,
-    //   })
-    // )();
-  }
 }
 
 export class InputHelper {

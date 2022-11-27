@@ -169,7 +169,7 @@ const applyEvents = <Stg extends Setting>(
   let st = state;
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const {state: st2, event} = popEvent(st);
+    const {state: st2, event} = popEvent(st, args);
     if (event === undefined) return st;
     const applier = args.instances.eventAppliers[event.type];
     st = applier.applyEvent(st2, event.payload);
@@ -177,9 +177,13 @@ const applyEvents = <Stg extends Setting>(
 };
 
 const popEvent = <Stg extends Setting>(
-  state: GameState<Stg>
+  state: GameState<Stg>,
+  args: {
+    instances: GameInstances<Stg>;
+  }
 ): {state: GameState<Stg>; event?: AnyEvent<Stg>} => {
-  const {state: evSt, event} = EventTrait.popEvent(state.event);
+  const priority = args.instances.director.getEventTypesOrderedByPriority();
+  const {state: evSt, event} = EventTrait.popEvent(state.event, {priority});
   return {
     state: Im.replace(state, 'event', () => evSt),
     event,
