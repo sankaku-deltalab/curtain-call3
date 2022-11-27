@@ -2,7 +2,6 @@ export * from './actress';
 export * from './components';
 export * from './director';
 export * from './event';
-export * from './game-helper';
 export * from './game-instances';
 export * from './game-processing';
 export * from './game-progress-controller';

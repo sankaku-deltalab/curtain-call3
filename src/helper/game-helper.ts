@@ -6,7 +6,7 @@ import {
   BodyId,
   BodyState,
   MindId,
-} from './actress';
+} from '../core/actress';
 import {
   AaRectCollisionShape,
   CanvasGraphic,
@@ -16,11 +16,11 @@ import {
   CollisionShape,
   Overlaps,
   PointerInputTrait,
-} from './components';
-import {AnyEvent, EventTrait} from './event';
-import {GameState} from './game-state';
-import {NotificationTrait} from './notification';
-import {SceneTrait} from './scene';
+} from '../core/components';
+import {AnyEvent, EventTrait} from '../core/event';
+import {GameState} from '../core/game-state';
+import {NotificationTrait} from '../core/notification';
+import {SceneTrait} from '../core/scene';
 import {
   BodyTypes,
   EventPayload,
@@ -30,9 +30,9 @@ import {
   NotificationPayload,
   NotificationTypes,
   Setting,
-} from './setting';
-import {Res, Result} from './utils/result';
-import {AaRect2d, Enum, Im, RecM2MTrait, Vec2d} from './utils/util';
+} from '../core/setting';
+import {Res, Result} from '../core/utils/result';
+import {AaRect2d, Enum, Im, RecM2MTrait, Vec2d} from '../core/utils/util';
 
 export class GameHelper {
   static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
