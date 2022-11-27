@@ -3,18 +3,20 @@ import {Vec2d, Vec2dTrait} from '../../../../utils/vec2d';
 import {CameraState, CameraTrait, RenderingState} from '../../camera';
 import {CanvasGraphicBase, GraphicBase} from '../graphic-base';
 
-export type SpriteGraphic = GraphicBase & {
-  type: 'sprite';
-  imgKey: string;
-  scale: Vec2d;
-};
+export type SpriteGraphic = GraphicBase &
+  Readonly<{
+    type: 'sprite';
+    imgKey: string;
+    scale: Vec2d;
+  }>;
 
-export type CanvasSpriteGraphic = CanvasGraphicBase & {
-  type: 'canvas-sprite';
-  pos: Vec2d;
-  imgKey: string;
-  scale: Vec2d;
-};
+export type CanvasSpriteGraphic = CanvasGraphicBase &
+  Readonly<{
+    type: 'canvas-sprite';
+    pos: Vec2d;
+    imgKey: string;
+    scale: Vec2d;
+  }>;
 
 export class SpriteGraphicTrait {
   static create(args: {

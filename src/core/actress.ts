@@ -8,12 +8,12 @@ import {Enum} from '../utils/enum';
 import {AnyEvent, EventTrait} from './event';
 import {AnyNotification, NotificationTrait} from './notification';
 
-export type ActressesState<Stg extends Setting> = {
+export type ActressesState<Stg extends Setting> = Readonly<{
   bodyIdCount: number;
   mindIdCount: number;
   bodies: Record<BodyId, AnyBodyState<Stg>>;
   minds: Record<MindId, AnyMindState<Stg>>;
-};
+}>;
 
 export type BodyId = string;
 export type MindId = string;
@@ -22,7 +22,7 @@ export type BodyState<
   Stg extends Setting,
   BT extends BodyTypes<Stg>
 > = BodyStateRaw<Stg, BT> & {
-  meta: {bodyType: BT; del: boolean};
+  readonly meta: {bodyType: BT; del: boolean};
 };
 
 export type AnyBodyState<Stg extends Setting> = BodyState<Stg, BodyTypes<Stg>>;
@@ -31,7 +31,7 @@ export type MindState<
   Stg extends Setting,
   MT extends MindTypes<Stg>
 > = MindStateRaw<Stg, MT> & {
-  meta: {mindType: MT; bodyId: BodyId};
+  readonly meta: {mindType: MT; bodyId: BodyId};
 };
 
 export type AnyMindState<Stg extends Setting> = MindState<Stg, MindTypes<Stg>>;
@@ -60,12 +60,12 @@ export type ActressState<
   Stg extends Setting,
   BT extends BodyTypes<Stg>,
   MT extends MindTypes<Stg>
-> = {
+> = Readonly<{
   body: BodyState<Stg, BT>;
   mind: MindState<Stg, MT>;
   ev: AnyEvent<Stg>[];
   notifications: AnyNotification<Stg>[];
-};
+}>;
 
 export type AnyActressState<Stg extends Setting> = ActressState<
   Stg,

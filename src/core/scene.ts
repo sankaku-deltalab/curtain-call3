@@ -1,9 +1,9 @@
 import {LevelState, Setting} from './setting';
 import {Im} from '../utils/immutable-manipulation';
 
-export type SceneState<Stg extends Setting> = {
+export type SceneState<Stg extends Setting> = Readonly<{
   level: LevelState<Stg>;
-};
+}>;
 
 export class SceneTrait {
   static initialState<Stg extends Setting>(args: {

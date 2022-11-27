@@ -7,8 +7,12 @@ import {
   PointerInputTrait,
 } from './pointer-input';
 
-export type InputState<_Stg extends Setting> = {pointer: PointerInputState};
-export type CanvasInput<_Stg extends Setting> = {pointer: CanvasInputPointer};
+export type InputState<_Stg extends Setting> = Readonly<{
+  pointer: PointerInputState;
+}>;
+export type CanvasInput<_Stg extends Setting> = Readonly<{
+  pointer: CanvasInputPointer;
+}>;
 
 export class InputTrait {
   static initialState<Stg extends Setting>(): InputState<Stg> {

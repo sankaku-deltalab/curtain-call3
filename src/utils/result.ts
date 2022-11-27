@@ -3,8 +3,8 @@
 
 export type Result<T, E = unknown> = Ok<T> | Err<E>;
 
-type Ok<T> = {ok: true; err: false; val: T};
-type Err<E> = {ok: false; err: true; val: E};
+type Ok<T> = Readonly<{ok: true; err: false; val: T}>;
+type Err<E> = Readonly<{ok: false; err: true; val: E}>;
 
 export class Res {
   static ok<T>(val: T): Result<T, never> {

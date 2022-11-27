@@ -1,13 +1,13 @@
 import {Setting} from '../setting';
 
-export type TimeInput<_Stg extends Setting> = {
+export type TimeInput<_Stg extends Setting> = Readonly<{
   deltaMs: number;
-};
+}>;
 
-export type TimeState<_Stg extends Setting> = {
+export type TimeState<_Stg extends Setting> = Readonly<{
   engineTimeMs: number;
   lastDeltaMs: number;
-};
+}>;
 
 export class TimeTrait {
   static initialState<Stg extends Setting>(): TimeState<Stg> {

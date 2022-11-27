@@ -8,7 +8,7 @@ export type NotificationState<Stg extends Setting> = {
 export type Notification<
   Stg extends Setting,
   Type extends NotificationTypes<Stg>
-> = {type: Type; payload: NotificationPayload<Stg, Type>};
+> = Readonly<{type: Type; payload: NotificationPayload<Stg, Type>}>;
 
 export type AnyNotification<Stg extends Setting> = Notification<
   Stg,

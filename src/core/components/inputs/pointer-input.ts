@@ -4,15 +4,15 @@ import {CameraState, CameraTrait, RenderingState} from '../camera';
 
 export type PointerInputState = {current: Pointer; prev: Pointer};
 
-export type Pointer = {
+export type Pointer = Readonly<{
   down: boolean;
   pos: Vec2d;
-};
+}>;
 
-export type CanvasInputPointer = {
+export type CanvasInputPointer = Readonly<{
   down: boolean;
   canvasPos: Vec2d;
-};
+}>;
 
 export class PointerInputTrait {
   static initialState(): PointerInputState {

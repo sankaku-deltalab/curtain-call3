@@ -2,16 +2,16 @@ import {Setting} from '../setting';
 import {Vec2d, Vec2dTrait} from '../../utils/vec2d';
 import {AaRect2d, AaRect2dTrait} from '../../utils/aa-rect2d';
 
-export type CameraState<_Stg extends Setting> = {
+export type CameraState<_Stg extends Setting> = Readonly<{
   pos: Vec2d;
   size: Vec2d;
-};
+}>;
 
-export type RenderingState = {
+export type RenderingState = Readonly<{
   center: Vec2d;
   scale: number;
   canvasSize: Vec2d;
-};
+}>;
 
 export class CameraTrait {
   static initialState<Stg extends Setting>(args: {

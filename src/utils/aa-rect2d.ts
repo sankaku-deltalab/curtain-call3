@@ -3,7 +3,7 @@ import {Vec2d, Vec2dTrait} from './vec2d';
 /**
  * Axis-aligned rectangle in 2d
  */
-export type AaRect2d = {nw: Vec2d; se: Vec2d};
+export type AaRect2d = Readonly<{nw: Vec2d; se: Vec2d}>;
 
 export class AaRect2dTrait {
   static unit(): AaRect2d {

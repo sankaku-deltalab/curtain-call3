@@ -8,9 +8,9 @@ import {RenderingState} from './components/camera';
 import {GameProcessing} from './game-processing';
 import {AnyNotification} from './notification';
 
-export type GameProgressState = {
+export type GameProgressState = Readonly<{
   mode: 'not-started' | 'active' | 'paused' | 'finished';
-};
+}>;
 
 export class GameProgressController {
   static start(state: GameProgressState): GameProgressState {

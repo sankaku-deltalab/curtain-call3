@@ -2,25 +2,23 @@ import {GameState} from './game-state';
 import {EventPayload, EventTypes, Setting} from './setting';
 import {Im} from '../utils/immutable-manipulation';
 
-export type EventState<Stg extends Setting> = {
+export type EventState<Stg extends Setting> = Readonly<{
   events?: OrganizedEvents<Stg>;
-};
+}>;
 
-export type Event<Stg extends Setting, Type extends EventTypes<Stg>> = {
+export type Event<
+  Stg extends Setting,
+  Type extends EventTypes<Stg>
+> = Readonly<{
   type: Type;
   payload: EventPayload<Stg, Type>;
-};
+}>;
 
 export type AnyEvent<Stg extends Setting> = Event<Stg, EventTypes<Stg>>;
 
-export type EventPriorityConfig<Stg extends Setting> = {
-  earlier: EventTypes<Stg>[];
-  later: EventTypes<Stg>[];
-};
-
-type OrganizedEvents<Stg extends Setting> = {
+type OrganizedEvents<Stg extends Setting> = Readonly<{
   [EvType in EventTypes<Stg>]: Event<Stg, EvType>[];
-};
+}>;
 
 export class EventTrait {
   static initialState<Stg extends Setting>(): EventState<Stg> {

@@ -16,7 +16,7 @@ import {SceneState, SceneTrait} from './scene';
 import {EventState, EventTrait} from './event';
 import {NotificationState, NotificationTrait} from './notification';
 
-export type GameState<Stg extends Setting> = {
+export type GameState<Stg extends Setting> = Readonly<{
   time: TimeState<Stg>;
   camera: CameraState<Stg>;
   input: InputState<Stg>;
@@ -24,19 +24,19 @@ export type GameState<Stg extends Setting> = {
   scene: SceneState<Stg>;
   event: EventState<Stg>;
   notification: NotificationState<Stg>;
-};
+}>;
 
 export type VisibleGameState<Stg extends Setting> = Exclude<
   GameState<Stg>,
   'minds' | 'events'
 >;
 
-export type StateInitializer<Stg extends Setting> = {
-  camera: {
+export type StateInitializer<Stg extends Setting> = Readonly<{
+  camera: Readonly<{
     size: Vec2d;
-  };
+  }>;
   level: LevelState<Stg>;
-};
+}>;
 
 export class GameStateTrait {
   static initialState<Stg extends Setting>(

@@ -3,21 +3,23 @@ import {Vec2d, Vec2dTrait} from '../../../../utils/vec2d';
 import {CameraState, CameraTrait, RenderingState} from '../../camera';
 import {CanvasGraphicBase, Color, GraphicBase} from '../graphic-base';
 
-export type LineGraphic = GraphicBase & {
-  type: 'line';
-  thickness: number;
-  color: Color;
-  paths: Vec2d[];
-  closed: boolean;
-};
+export type LineGraphic = GraphicBase &
+  Readonly<{
+    type: 'line';
+    thickness: number;
+    color: Color;
+    paths: Vec2d[];
+    closed: boolean;
+  }>;
 
-export type CanvasLineGraphic = CanvasGraphicBase & {
-  type: 'canvas-line';
-  thickness: number;
-  color: Color;
-  paths: Vec2d[];
-  closed: boolean;
-};
+export type CanvasLineGraphic = CanvasGraphicBase &
+  Readonly<{
+    type: 'canvas-line';
+    thickness: number;
+    color: Color;
+    paths: Vec2d[];
+    closed: boolean;
+  }>;
 
 export class LineGraphicTrait {
   static create(args: {

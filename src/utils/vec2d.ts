@@ -1,6 +1,6 @@
 import {Im} from './immutable-manipulation';
 
-export type Vec2d = {x: number; y: number};
+export type Vec2d = Readonly<{x: number; y: number}>;
 
 export class Vec2dTrait {
   static zero(): Vec2d {

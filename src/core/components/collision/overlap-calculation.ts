@@ -8,12 +8,12 @@ export type CollisionKey = string;
 
 type Box2d = [number, number, number, number]; // [minX, minY, maxX, maxY]
 
-type CollisionForCalc = {
+type CollisionForCalc = Readonly<{
   key: CollisionKey;
   aabb: Box2d;
   shape: CollisionShape;
   excess: boolean;
-};
+}>;
 
 export class OverlapCalculation {
   static calcOverlaps(collisions: Record<CollisionKey, Collision>): RecM2M {
