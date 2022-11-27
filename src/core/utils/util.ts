@@ -63,7 +63,8 @@ export class Vec2dTrait {
     const n = uniformNormal ? Vec2dTrait.uniformed(normal) : normal;
 
     const scale = 2 * Vec2dTrait.dot(vn, n);
-    return Vec2dTrait.add(v, Vec2dTrait.mlt(n, scale));
+    const args = {v, n};
+    return Vec2dTrait.calculate(args, ({v, n}) => v + n * scale);
   }
 
   static eq(a: Vec2d, b: Vec2d): boolean {
@@ -72,6 +73,18 @@ export class Vec2dTrait {
 
   static isZero(v: Vec2d): boolean {
     return v.x === 0 && v.y === 0;
+  }
+
+  static calculate<T extends Record<string, Vec2d>>(
+    args: T,
+    formula: (args: Record<keyof T & string, number>) => number
+  ): Vec2d {
+    const argsX = Im.mapObj(args, v => v.x);
+    const argsY = Im.mapObj(args, v => v.y);
+    return {
+      x: formula(argsX),
+      y: formula(argsY),
+    };
   }
 }
 
@@ -247,6 +260,18 @@ export class Im {
       ...obj1,
       ...obj2,
     };
+  }
+
+  static mapObj<K extends string, V, V2>(
+    obj: Record<K, V>,
+    func: (value: V, key: K) => V2
+  ): Record<K, V2> {
+    return Im.pipe(
+      () => obj,
+      obj => Object.entries(obj) as [K, V][],
+      pairs => pairs.map(([k, v]) => [k, func(v, k)]),
+      pairs => Object.fromEntries(pairs)
+    )();
   }
 
   static pipe = rambdaPipe;
