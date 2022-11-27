@@ -1,7 +1,28 @@
-import {ActressTrait, AnyBodyState, BodyId, BodyState} from '../core/actress';
-import {BodyTypes, Setting} from '../core/setting';
+import {
+  ActressInitializer,
+  ActressTrait,
+  AnyBodyState,
+  BodyId,
+  BodyState,
+  BodyStateRaw,
+  MindStateRaw,
+} from '../core/actress';
+import {BodyTypes, MindTypes, Setting} from '../core/setting';
 
 export class ActressHelper {
+  static createActressInitializer<
+    Stg extends Setting,
+    BT extends BodyTypes<Stg>,
+    MT extends MindTypes<Stg>
+  >(args: {
+    bodyType: BT;
+    mindType: MT;
+    body: BodyStateRaw<Stg, BT>;
+    mind: MindStateRaw<Stg, MT>;
+  }): ActressInitializer<Stg, BT, MT> {
+    return args;
+  }
+
   static bodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
     body: AnyBodyState<Stg>,
     bodyType: BT
