@@ -70,7 +70,7 @@ const collectActInState = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {instances: GameInstances<Stg>}
 ): [MindId, AnyActressState<Stg>, AnyActressBehavior<Stg>][] => {
-  const minds = ActressTrait.getMinds(state.actresses);
+  const minds = ActressTrait.getMinds(state.actressParts);
   const lis = Object.entries(minds).map(([mindId, mind]) => {
     const act = GameInstancesTrait.getActressBehavior(
       mind.meta.mindType,
@@ -248,10 +248,10 @@ const deleteActresses = <Stg extends Setting>(
   const delMinds = delActs.map(([mid]) => mid);
   const delBodies = delActs.map(([_mid, st]) => st.mind.meta.bodyId);
   const newAct = Im.pipe(
-    () => state.actresses,
+    () => state.actressParts,
     a => Im.replace(a, 'minds', m => Im.removeMulti(m, delMinds)),
     a => Im.replace(a, 'bodies', b => Im.removeMulti(b, delBodies))
   )();
-  const st = Im.replace(state, 'actresses', () => newAct);
+  const st = Im.replace(state, 'actressParts', () => newAct);
   return {state: st};
 };

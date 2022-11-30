@@ -66,7 +66,7 @@ const collectActInState = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {instances: GameInstances<Stg>}
 ): [MindId, AnyActressState<Stg>, AnyActressBehavior<Stg>][] => {
-  const minds = ActressTrait.getMinds(state.actresses);
+  const minds = ActressTrait.getMinds(state.actressParts);
   const lis = Object.entries(minds).map(([mindId, mind]) => {
     const act = GameInstancesTrait.getActressBehavior(
       mind.meta.mindType,

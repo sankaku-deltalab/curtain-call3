@@ -5,7 +5,7 @@ import {TimeState, TimeTrait} from './components/time';
 import {InputState, InputTrait} from './components/inputs/input';
 import {Vec2d} from '../utils/vec2d';
 import {
-  ActressesState,
+  ActressPartsState,
   ActressTrait,
   AnyBodyState,
   AnyMindState,
@@ -20,7 +20,7 @@ export type GameState<Stg extends Setting> = Readonly<{
   time: TimeState<Stg>;
   camera: CameraState<Stg>;
   input: InputState<Stg>;
-  actresses: ActressesState<Stg>;
+  actressParts: ActressPartsState<Stg>;
   scene: SceneState<Stg>;
   event: EventState<Stg>;
   notification: NotificationState<Stg>;
@@ -46,7 +46,7 @@ export class GameStateTrait {
       time: TimeTrait.initialState(),
       camera: CameraTrait.initialState(args.camera),
       input: InputTrait.initialState(),
-      actresses: ActressTrait.initialState(),
+      actressParts: ActressTrait.initialState(),
       scene: SceneTrait.initialState({initialLevel: args.level}),
       event: EventTrait.initialState(),
       notification: NotificationTrait.initialState(),
@@ -70,7 +70,7 @@ export class GameStateTrait {
     mindId: MindId,
     st: GameState<Stg>
   ): Result<AnyMindState<Stg>> {
-    const minds = ActressTrait.getMinds(st.actresses);
+    const minds = ActressTrait.getMinds(st.actressParts);
     return Res.errIfUndefined(
       minds[mindId],
       `Mind of id '${mindId}' is not exists`
@@ -81,7 +81,7 @@ export class GameStateTrait {
     bodyId: BodyId,
     st: GameState<Stg>
   ): Result<AnyBodyState<Stg>> {
-    const bodies = ActressTrait.getBodies(st.actresses);
+    const bodies = ActressTrait.getBodies(st.actressParts);
     return Res.errIfUndefined(
       bodies[bodyId],
       `Body of id '${bodyId}' is not exists`

@@ -31,7 +31,7 @@ export class GameStateHelper {
   static getMinds<Stg extends Setting>(
     state: GameState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
-    return ActressTrait.getMinds(state.actresses);
+    return ActressTrait.getMinds(state.actressParts);
   }
 
   static getBodiesOf<Stg extends Setting, BT extends BodyTypes<Stg>>(
@@ -45,7 +45,7 @@ export class GameStateHelper {
     };
 
     return Im.pipe(
-      () => ActressTrait.getBodies(state.actresses),
+      () => ActressTrait.getBodies(state.actressParts),
       bodies => Object.entries(bodies),
       bodies => bodies.filter(idAndBodyIsInType),
       bodies => Object.fromEntries(bodies),
@@ -56,7 +56,7 @@ export class GameStateHelper {
   static getBodies<Stg extends Setting>(
     state: GameState<Stg>
   ): Record<BodyId, AnyBodyState<Stg>> {
-    return ActressTrait.getBodies(state.actresses);
+    return ActressTrait.getBodies(state.actressParts);
   }
 
   static getBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
@@ -64,7 +64,7 @@ export class GameStateHelper {
     bodyId: BodyId,
     bodyType: BT
   ): Result<BodyState<Stg, BT>> {
-    const body = ActressTrait.getBodies(state.actresses)[bodyId];
+    const body = ActressTrait.getBodies(state.actressParts)[bodyId];
     if (body === undefined) {
       return Res.err('not found');
     }
@@ -111,9 +111,9 @@ export class GameStateHelper {
     const originalSt = state;
     return Im.pipe(
       () => state,
-      st => ActressTrait.addActress(st.actresses, act),
+      st => ActressTrait.addActress(st.actressParts, act),
       ({state: actSt, bodyId, mindId}) => ({
-        state: Im.replace(originalSt, 'actresses', () => actSt),
+        state: Im.replace(originalSt, 'actressParts', () => actSt),
         bodyId,
         mindId,
       })
@@ -131,9 +131,9 @@ export class GameStateHelper {
     const originalSt = state;
     return Im.pipe(
       () => state,
-      st => ActressTrait.addActresses(st.actresses, acts),
+      st => ActressTrait.addActresses(st.actressParts, acts),
       ({state: actSt, ids}) => ({
-        state: Im.replace(originalSt, 'actresses', () => actSt),
+        state: Im.replace(originalSt, 'actressParts', () => actSt),
         ids,
       })
     )();
@@ -146,7 +146,7 @@ export class GameStateHelper {
       body: BodyState<Stg, BT>;
     }
   ): GameState<Stg> {
-    return Im.replace(state, 'actresses', act => {
+    return Im.replace(state, 'actressParts', act => {
       return ActressTrait.updateBody(
         act,
         args.bodyId,
@@ -160,7 +160,7 @@ export class GameStateHelper {
     state: GameState<Stg>,
     bodies: Record<BodyId, AnyBodyState<Stg>>
   ): GameState<Stg> {
-    return Im.replace(state, 'actresses', act => {
+    return Im.replace(state, 'actressParts', act => {
       return ActressTrait.replaceBodies(act, bodies);
     });
   }
@@ -174,7 +174,7 @@ export class GameStateHelper {
       args: {bodyId: BodyId}
     ) => BodyState<Stg, BT> | undefined
   ): GameState<Stg> {
-    return Im.replace(state, 'actresses', act => {
+    return Im.replace(state, 'actressParts', act => {
       return ActressTrait.updateBody(act, bodyId, bodyType, updater);
     });
   }

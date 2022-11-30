@@ -8,7 +8,7 @@ import {Enum} from '../utils/enum';
 import {AnyEvent, EventTrait} from './event';
 import {AnyNotification, NotificationTrait} from './notification';
 
-export type ActressesState<Stg extends Setting> = Readonly<{
+export type ActressPartsState<Stg extends Setting> = Readonly<{
   bodyIdCount: number;
   mindIdCount: number;
   bodies: Record<BodyId, AnyBodyState<Stg>>;
@@ -85,7 +85,7 @@ export type ActressInitializer<
 };
 
 export class ActressTrait {
-  static initialState<Stg extends Setting>(): ActressesState<Stg> {
+  static initialState<Stg extends Setting>(): ActressPartsState<Stg> {
     return {
       bodyIdCount: 0,
       mindIdCount: 0,
@@ -102,24 +102,24 @@ export class ActressTrait {
   }
 
   static getMinds<Stg extends Setting>(
-    st: ActressesState<Stg>
+    st: ActressPartsState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
     return st.minds;
   }
 
   static getBodies<Stg extends Setting>(
-    st: ActressesState<Stg>
+    st: ActressPartsState<Stg>
   ): Record<BodyId, AnyBodyState<Stg>> {
     return st.bodies;
   }
 
   static mergeMindsAndBodies<Stg extends Setting>(
-    state: ActressesState<Stg>,
+    state: ActressPartsState<Stg>,
     args: {
       minds: Record<MindId, AnyMindState<Stg>>;
       bodies: Record<BodyId, AnyBodyState<Stg>>;
     }
-  ): ActressesState<Stg> {
+  ): ActressPartsState<Stg> {
     let st = state;
     st = Im.replace(st, 'minds', m => ({...m, ...args.minds}));
     st = Im.replace(st, 'bodies', b => ({...b, ...args.bodies}));
@@ -131,9 +131,9 @@ export class ActressTrait {
     BT extends BodyTypes<Stg>,
     MT extends MindTypes<Stg>
   >(
-    state: ActressesState<Stg>,
+    state: ActressPartsState<Stg>,
     act: ActressInitializer<Stg, BT, MT>
-  ): {state: ActressesState<Stg>; bodyId: BodyId; mindId: MindId} {
+  ): {state: ActressPartsState<Stg>; bodyId: BodyId; mindId: MindId} {
     const {state: st, bodyId, mindId} = this.generateActressId(state);
     const {body, mind} = this.createActress({bodyId, mindId, ...act});
     const st2 = Im.pipe(
@@ -150,9 +150,9 @@ export class ActressTrait {
     BT extends BodyTypes<Stg>,
     MT extends MindTypes<Stg>
   >(
-    state: ActressesState<Stg>,
+    state: ActressPartsState<Stg>,
     acts: ActressInitializer<Stg, BT, MT>[]
-  ): {state: ActressesState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
+  ): {state: ActressPartsState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
     const {state: st, ids} = this.generateActressIds(state, acts.length);
     const createdActs = Im.pipe(
       () => Enum.zip(acts, ids),
@@ -190,8 +190,8 @@ export class ActressTrait {
   }
 
   static generateActressId<Stg extends Setting>(
-    state: ActressesState<Stg>
-  ): {state: ActressesState<Stg>; bodyId: BodyId; mindId: MindId} {
+    state: ActressPartsState<Stg>
+  ): {state: ActressPartsState<Stg>; bodyId: BodyId; mindId: MindId} {
     const bodyId = `b${state.bodyIdCount}`;
     const mindId = `m${state.mindIdCount}`;
     let st = state;
@@ -201,9 +201,9 @@ export class ActressTrait {
   }
 
   static generateActressIds<Stg extends Setting>(
-    state: ActressesState<Stg>,
+    state: ActressPartsState<Stg>,
     counts: number
-  ): {state: ActressesState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
+  ): {state: ActressPartsState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
     const bodyCounts = Im.range(state.bodyIdCount, state.bodyIdCount + counts);
     const mindCounts = Im.range(state.mindIdCount, state.mindIdCount + counts);
     const bodyIds = Enum.map(bodyCounts, c => `b${c}`);
@@ -261,14 +261,14 @@ export class ActressTrait {
   }
 
   static updateBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
-    state: ActressesState<Stg>,
+    state: ActressPartsState<Stg>,
     bodyId: BodyId,
     bodyType: BT,
     updater: (
       body: BodyState<Stg, BT>,
       args: {bodyId: BodyId}
     ) => BodyState<Stg, BT> | undefined
-  ): ActressesState<Stg> {
+  ): ActressPartsState<Stg> {
     const oldBody = state.bodies[bodyId];
     if (oldBody.meta.bodyType !== bodyType) throw new Error('');
 
@@ -283,9 +283,9 @@ export class ActressTrait {
   }
 
   static replaceBodies<Stg extends Setting>(
-    state: ActressesState<Stg>,
+    state: ActressPartsState<Stg>,
     bodies: Record<BodyId, AnyBodyState<Stg>>
-  ): ActressesState<Stg> {
+  ): ActressPartsState<Stg> {
     return Im.replace(state, 'bodies', () => ({
       ...state.bodies,
       ...bodies,
@@ -330,7 +330,7 @@ export class ActressTrait {
           NotificationTrait.mergeNotifications(s, newNotifications)
         ),
       st =>
-        Im.replace(st, 'actresses', s =>
+        Im.replace(st, 'actressParts', s =>
           this.mergeMindsAndBodies(s, {minds, bodies})
         )
     )();
