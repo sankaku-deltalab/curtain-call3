@@ -12,6 +12,39 @@ export class Im {
     return {...obj, [key]: newValue};
   }
 
+  static replace2<
+    Key1 extends string,
+    Key2 extends string,
+    T extends Record<Key1, Record<Key2, unknown>>
+  >(
+    obj: T,
+    [key1, key2]: [Key1, Key2],
+    updater: (prev: T[Key1][Key2]) => T[Key1][Key2]
+  ): T {
+    const newValue = updater(obj[key1][key2]);
+    return Im.replace(obj, key1, nestedObj => ({
+      ...nestedObj,
+      [key2]: newValue,
+    }));
+  }
+
+  static replace3<
+    Key1 extends string,
+    Key2 extends string,
+    Key3 extends string,
+    T extends Record<Key1, Record<Key2, Record<Key3, unknown>>>
+  >(
+    obj: T,
+    [key1, key2, key3]: [Key1, Key2, Key3],
+    updater: (prev: T[Key1][Key2][Key3]) => T[Key1][Key2][Key3]
+  ): T {
+    const newValue = updater(obj[key1][key2][key3]);
+    return Im.replace2(obj, [key1, key2], nestedObj => ({
+      ...nestedObj,
+      [key3]: newValue,
+    }));
+  }
+
   static add<
     Key extends string,
     Val extends unknown,
