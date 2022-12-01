@@ -56,23 +56,6 @@ export type AnyMindStateRaw<Stg extends Setting> = MindStateRaw<
   MindTypes<Stg>
 >;
 
-export type ActressState<
-  Stg extends Setting,
-  BT extends BodyTypes<Stg>,
-  MT extends MindTypes<Stg>
-> = Readonly<{
-  body: BodyState<Stg, BT>;
-  mind: MindState<Stg, MT>;
-  ev: AnyEvent<Stg>[];
-  notifications: AnyNotification<Stg>[];
-}>;
-
-export type AnyActressState<Stg extends Setting> = ActressState<
-  Stg,
-  BodyTypes<Stg>,
-  MindTypes<Stg>
->;
-
 export type ActressInitializer<
   Stg extends Setting,
   BT extends BodyTypes<Stg>,
@@ -292,6 +275,23 @@ export class ActressPartsTrait {
     }));
   }
 }
+
+export type ActressState<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>,
+  MT extends MindTypes<Stg>
+> = Readonly<{
+  body: BodyState<Stg, BT>;
+  mind: MindState<Stg, MT>;
+  ev: AnyEvent<Stg>[];
+  notifications: AnyNotification<Stg>[];
+}>;
+
+export type AnyActressState<Stg extends Setting> = ActressState<
+  Stg,
+  BodyTypes<Stg>,
+  MindTypes<Stg>
+>;
 
 export class ActressTrait {
   static extractActressState<Stg extends Setting>(
