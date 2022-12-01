@@ -84,7 +84,7 @@ export type ActressInitializer<
   mind: MindStateRaw<Stg, MT>;
 };
 
-export class ActressTrait {
+export class ActressPartsTrait {
   static initialState<Stg extends Setting>(): ActressPartsState<Stg> {
     return {
       bodyIdCount: 0,
@@ -291,7 +291,9 @@ export class ActressTrait {
       ...bodies,
     }));
   }
+}
 
+export class ActressTrait {
   static extractActressState<Stg extends Setting>(
     st: GameState<Stg>,
     mindId: MindId
@@ -331,7 +333,7 @@ export class ActressTrait {
         ),
       st =>
         Im.replace(st, 'actressParts', s =>
-          this.mergeMindsAndBodies(s, {minds, bodies})
+          ActressPartsTrait.mergeMindsAndBodies(s, {minds, bodies})
         )
     )();
   }

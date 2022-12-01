@@ -1,6 +1,6 @@
 import {
   ActressInitializer,
-  ActressTrait,
+  ActressPartsTrait,
   AnyBodyState,
   BodyId,
   BodyState,
@@ -27,13 +27,13 @@ export class ActressHelper {
     body: AnyBodyState<Stg>,
     bodyType: BT
   ): body is BodyState<Stg, BT> {
-    return ActressTrait.bodyIsInType(body, bodyType);
+    return ActressPartsTrait.bodyIsInType(body, bodyType);
   }
 
   static idAndBodyIsInType<Stg extends Setting, BT extends BodyTypes<Stg>>(
     body: [BodyId, AnyBodyState<Stg>],
     bodyType: BT
   ): body is [BodyId, BodyState<Stg, BT>] {
-    return ActressTrait.bodyIsInType(body[1], bodyType);
+    return ActressPartsTrait.bodyIsInType(body[1], bodyType);
   }
 }

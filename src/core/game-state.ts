@@ -6,7 +6,7 @@ import {InputState, InputTrait} from './components/inputs/input';
 import {Vec2d} from '../utils/vec2d';
 import {
   ActressPartsState,
-  ActressTrait,
+  ActressPartsTrait,
   AnyBodyState,
   AnyMindState,
   BodyId,
@@ -46,7 +46,7 @@ export class GameStateTrait {
       time: TimeTrait.initialState(),
       camera: CameraTrait.initialState(args.camera),
       input: InputTrait.initialState(),
-      actressParts: ActressTrait.initialState(),
+      actressParts: ActressPartsTrait.initialState(),
       scene: SceneTrait.initialState({initialLevel: args.level}),
       event: EventTrait.initialState(),
       notification: NotificationTrait.initialState(),
@@ -70,7 +70,7 @@ export class GameStateTrait {
     mindId: MindId,
     st: GameState<Stg>
   ): Result<AnyMindState<Stg>> {
-    const minds = ActressTrait.getMinds(st.actressParts);
+    const minds = ActressPartsTrait.getMinds(st.actressParts);
     return Res.errIfUndefined(
       minds[mindId],
       `Mind of id '${mindId}' is not exists`
@@ -81,7 +81,7 @@ export class GameStateTrait {
     bodyId: BodyId,
     st: GameState<Stg>
   ): Result<AnyBodyState<Stg>> {
-    const bodies = ActressTrait.getBodies(st.actressParts);
+    const bodies = ActressPartsTrait.getBodies(st.actressParts);
     return Res.errIfUndefined(
       bodies[bodyId],
       `Body of id '${bodyId}' is not exists`
