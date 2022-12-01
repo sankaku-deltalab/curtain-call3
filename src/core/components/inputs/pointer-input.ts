@@ -33,6 +33,16 @@ export class PointerInputTrait {
     return Vec2dTrait.sub(current.pos, prev.pos);
   }
 
+  static upped(input: PointerInputState): boolean {
+    const {current, prev} = input;
+    return !current.down && prev.down;
+  }
+
+  static downed(input: PointerInputState): boolean {
+    const {current, prev} = input;
+    return current.down && !prev.down;
+  }
+
   static updateState<Stg extends Setting>(
     state: PointerInputState,
     args: {
