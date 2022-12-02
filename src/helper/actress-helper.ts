@@ -6,7 +6,7 @@ import {
   BodyState,
   BodyStateRaw,
   MindStateRaw,
-} from '../core/actress';
+} from '../core/components/actress-parts';
 import {BodyTypes, MindTypes, Setting} from '../core/setting';
 
 export class ActressHelper {

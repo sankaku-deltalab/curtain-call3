@@ -1,10 +1,5 @@
-import {
-  ActressPartsTrait,
-  ActressTrait,
-  AnyActressBehavior,
-  AnyActressState,
-  MindId,
-} from './actress';
+import {ActressPartsTrait, MindId} from './components/actress-parts';
+import {ActressTrait, AnyActressBehavior, AnyActressState} from './actress';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState} from './game-state';

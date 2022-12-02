@@ -1,3 +1,4 @@
+export * from './actress-parts';
 export * from './camera';
 export * from './collision';
 export * from './graphics';

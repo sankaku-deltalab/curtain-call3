@@ -6,7 +6,7 @@ import {
   BodyId,
   BodyState,
   MindId,
-} from '../core/actress';
+} from '../core/components/actress-parts';
 import {Overlaps} from '../core/components';
 import {EventTrait} from '../core/event';
 import {GameState} from '../core/game-state';
@@ -72,6 +72,13 @@ export class GameStateHelper {
       return Res.err('incorrect body type');
     }
     return Res.ok(body as BodyState<Stg, BT>);
+  }
+
+  static getFirstBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
+    state: GameState<Stg>,
+    bodyType: BT
+  ): Result<BodyState<Stg, BT>> {
+    return ActressPartsTrait.getFirstBody(state.actressParts, bodyType);
   }
 
   static bodyIs<Stg extends Setting, BT extends BodyTypes<Stg>>(

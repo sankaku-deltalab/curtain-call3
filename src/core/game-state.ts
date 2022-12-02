@@ -11,7 +11,7 @@ import {
   AnyMindState,
   BodyId,
   MindId,
-} from './actress';
+} from './components/actress-parts';
 import {SceneState, SceneTrait} from './scene';
 import {EventState, EventTrait} from './event';
 import {NotificationState, NotificationTrait} from './notification';
