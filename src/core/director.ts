@@ -49,5 +49,9 @@ export interface DirectorBehavior<Stg extends Setting> {
 
   getEventPriority(): EventPriority<Stg>;
 
+  getTimeScales(state: GameState<Stg>): TimeScaling<Stg>;
+
   represent(state: GameState<Stg>): Representation<Stg>;
 }
+
+export type TimeScaling<_Stg extends Setting> = {base: number};

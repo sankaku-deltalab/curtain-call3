@@ -57,9 +57,12 @@ export class GameProcessing {
 
 const updateTime = <Stg extends Setting>(
   state: GameState<Stg>,
-  args: {time: TimeInput<Stg>}
+  args: {time: TimeInput<Stg>; instances: GameInstances<Stg>}
 ): GameState<Stg> => {
-  return Im.replace(state, 'time', s => TimeTrait.applyInput(s, args.time));
+  const timeScale = args.instances.director.getTimeScales(state);
+  return Im.replace(state, 'time', s =>
+    TimeTrait.applyInput(s, {input: args.time, baseTimeScale: timeScale.base})
+  );
 };
 
 const collectActInState = <Stg extends Setting>(
