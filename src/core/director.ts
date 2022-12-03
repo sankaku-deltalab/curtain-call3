@@ -1,7 +1,7 @@
 import {Overlaps} from './components/collision/collision';
-import {AnyEvent} from './event';
+import {AnyEvent, EventPriority} from './event';
 import {GameState} from './game-state';
-import {EventTypes, Representation, Setting} from './setting';
+import {Representation, Setting} from './setting';
 
 export class DirectorTrait {
   static extractDirectorGameState<Stg extends Setting>(
@@ -47,7 +47,7 @@ export interface DirectorBehavior<Stg extends Setting> {
     }
   ): AnyEvent<Stg>[];
 
-  getEventTypesOrderedByPriority(): EventTypes<Stg>[];
+  getEventPriority(): EventPriority<Stg>;
 
   represent(state: GameState<Stg>): Representation<Stg>;
 }

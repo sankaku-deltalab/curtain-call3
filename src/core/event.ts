@@ -20,6 +20,11 @@ type OrganizedEvents<Stg extends Setting> = Readonly<{
   [EvType in EventTypes<Stg>]: Event<Stg, EvType>[];
 }>;
 
+export type EventPriority<Stg extends Setting> = {
+  earlier: EventTypes<Stg>[];
+  later: EventTypes<Stg>[];
+};
+
 export class EventTrait {
   static initialState<Stg extends Setting>(): EventState<Stg> {
     return {
@@ -59,11 +64,15 @@ export class EventTrait {
 
   static popEvent<Stg extends Setting>(
     state: EventState<Stg>,
-    args: {priority: EventTypes<Stg>[]}
+    args: {priority: EventPriority<Stg>}
   ): {state: EventState<Stg>; event?: AnyEvent<Stg>} {
     if (state.events === undefined) return {state};
 
-    for (const evType of args.priority) {
+    const eventTypesInPriorityOrder = this.getEventPriority(
+      Object.keys(state.events),
+      args
+    );
+    for (const evType of eventTypesInPriorityOrder) {
       const events = state.events[evType];
 
       if (events === undefined) continue;
@@ -85,6 +94,27 @@ export class EventTrait {
     }
 
     return {state};
+  }
+
+  private static getEventPriority<Stg extends Setting>(
+    types: EventTypes<Stg>[],
+    args: {priority: EventPriority<Stg>}
+  ): EventTypes<Stg>[] {
+    const availableTypes = new Set(types);
+    const notDontcareTypes = new Set([
+      ...args.priority.earlier,
+      ...args.priority.later,
+    ]);
+    const earlys = args.priority.earlier.filter(evType =>
+      availableTypes.has(evType)
+    );
+    const laters = args.priority.later.filter(evType =>
+      availableTypes.has(evType)
+    );
+    const dontcares = types
+      .sort((a, b) => a.localeCompare(b))
+      .filter(evType => !notDontcareTypes.has(evType));
+    return [...earlys, ...dontcares, ...laters];
   }
 
   private static organizeEvents<Stg extends Setting>(

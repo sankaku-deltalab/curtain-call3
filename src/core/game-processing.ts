@@ -179,7 +179,7 @@ const popEvent = <Stg extends Setting>(
     instances: GameInstances<Stg>;
   }
 ): {state: GameState<Stg>; event?: AnyEvent<Stg>} => {
-  const priority = args.instances.director.getEventTypesOrderedByPriority();
+  const priority = args.instances.director.getEventPriority();
   const {state: evSt, event} = EventTrait.popEvent(state.event, {priority});
   return {
     state: Im.replace(state, 'event', () => evSt),
