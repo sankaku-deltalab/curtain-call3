@@ -1,3 +1,4 @@
+import {AnyActressState} from '../core';
 import {
   ActressInitializer,
   ActressPartsTrait,
@@ -8,6 +9,7 @@ import {
   MindStateRaw,
 } from '../core/components/actress-parts';
 import {BodyTypes, MindTypes, Setting} from '../core/setting';
+import {Im} from '../utils';
 
 export class ActressHelper {
   static createActressInitializer<
@@ -35,5 +37,11 @@ export class ActressHelper {
     bodyType: BT
   ): body is [BodyId, BodyState<Stg, BT>] {
     return ActressPartsTrait.bodyIsInType(body[1], bodyType);
+  }
+
+  static delActress<Stg extends Setting, Act extends AnyActressState<Stg>>(
+    act: Act
+  ): Act {
+    return Im.replace3(act, ['body', 'meta', 'del'], () => true);
   }
 }
