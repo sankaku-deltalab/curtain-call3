@@ -49,6 +49,20 @@ export class Vec2dTrait {
     return a.x * b.x + a.y * b.y;
   }
 
+  static min(a: Vec2d, b: Vec2d): Vec2d {
+    return {
+      x: Math.min(a.x, b.x),
+      y: Math.min(a.y, b.y),
+    };
+  }
+
+  static max(a: Vec2d, b: Vec2d): Vec2d {
+    return {
+      x: Math.max(a.x, b.x),
+      y: Math.max(a.y, b.y),
+    };
+  }
+
   static reflect(
     velocity: Vec2d,
     normal: Vec2d,

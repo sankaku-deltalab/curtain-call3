@@ -6,6 +6,13 @@ import {Vec2d, Vec2dTrait} from './vec2d';
 export type AaRect2d = Readonly<{nw: Vec2d; se: Vec2d}>;
 
 export class AaRect2dTrait {
+  static zero(): AaRect2d {
+    return {
+      nw: Vec2dTrait.zero(),
+      se: Vec2dTrait.zero(),
+    };
+  }
+
   static unit(): AaRect2d {
     return {
       nw: {x: 0.5, y: 0.5},
@@ -24,6 +31,23 @@ export class AaRect2dTrait {
   static center(rect: AaRect2d): Vec2d {
     const {nw, se} = rect;
     return Vec2dTrait.div(Vec2dTrait.add(nw, se), 2);
+  }
+
+  static isCorrect(rect: AaRect2d): boolean {
+    return rect.nw.x <= rect.se.x && rect.nw.y <= rect.se.y;
+  }
+
+  static eq(area1: AaRect2d, area2: AaRect2d): boolean {
+    return (
+      Vec2dTrait.eq(area1.nw, area2.nw) && Vec2dTrait.eq(area1.se, area2.se)
+    );
+  }
+
+  static move(rect: AaRect2d, delta: Vec2d): AaRect2d {
+    return {
+      nw: Vec2dTrait.add(rect.nw, delta),
+      se: Vec2dTrait.add(rect.se, delta),
+    };
   }
 
   static fromCenterAndSize(center: Vec2d, size: Vec2d): AaRect2d {
@@ -113,5 +137,36 @@ export class AaRect2dTrait {
       x: clamp(pos.x, area.nw.x, area.se.x),
       y: clamp(pos.y, area.nw.y, area.se.y),
     };
+  }
+
+  static intersection(area1: AaRect2d, area2: AaRect2d): AaRect2d {
+    const nw = Vec2dTrait.max(area1.nw, area2.nw);
+    const se = Vec2dTrait.min(area1.se, area2.se);
+    const area = {nw, se};
+    if (!AaRect2dTrait.isCorrect(area)) return AaRect2dTrait.zero();
+    return area;
+  }
+
+  static isIn(smaller: AaRect2d, larger: AaRect2d): boolean {
+    const intersection = AaRect2dTrait.intersection(smaller, larger);
+    return AaRect2dTrait.eq(intersection, smaller);
+  }
+
+  static isOutOf(smaller: AaRect2d, larger: AaRect2d): boolean {
+    const intersection = AaRect2dTrait.intersection(smaller, larger);
+    return AaRect2dTrait.eq(intersection, AaRect2dTrait.zero());
+  }
+
+  static corners(react: AaRect2d): {
+    nw: Vec2d;
+    se: Vec2d;
+    ne: Vec2d;
+    sw: Vec2d;
+  } {
+    const nw = react.nw;
+    const se = react.se;
+    const ne = {x: react.nw.x, y: react.se.y};
+    const sw = {x: react.se.x, y: react.nw.y};
+    return {nw, se, ne, sw};
   }
 }
