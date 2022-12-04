@@ -61,7 +61,7 @@ export class Vec2dTrait {
 
     const scale = 2 * Vec2dTrait.dot(vn, n);
     const args = {v, n};
-    return Vec2dTrait.calculate(args, ({v, n}) => v + n * scale);
+    return Vec2dTrait.broadcast(args, ({v, n}) => v + n * scale);
   }
 
   static eq(a: Vec2d, b: Vec2d): boolean {
@@ -79,7 +79,7 @@ export class Vec2dTrait {
     };
   }
 
-  static calculate<T extends Record<string, Vec2d>>(
+  static broadcast<T extends Record<string, Vec2d>>(
     args: T,
     formula: (args: Record<keyof T & string, number>) => number
   ): Vec2d {
