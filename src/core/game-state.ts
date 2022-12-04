@@ -13,7 +13,7 @@ import {
   MindId,
 } from './components/actress-parts';
 import {SceneState, SceneTrait} from './scene';
-import {EventState, EventTrait} from './event';
+import {EventState, EventTrait} from './components/event';
 import {NotificationState, NotificationTrait} from './notification';
 
 export type GameState<Stg extends Setting> = Readonly<{

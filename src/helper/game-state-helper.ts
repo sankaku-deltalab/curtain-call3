@@ -8,7 +8,7 @@ import {
   MindId,
 } from '../core/components/actress-parts';
 import {Overlaps} from '../core/components';
-import {EventTrait} from '../core/event';
+import {EventTrait} from '../core/components/event';
 import {GameState} from '../core/game-state';
 import {NotificationTrait} from '../core/notification';
 import {SceneTrait} from '../core/scene';

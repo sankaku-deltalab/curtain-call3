@@ -13,7 +13,7 @@ import {Enum} from '../utils/enum';
 import {RenderingState} from './components/camera';
 import {OverlapCalculation} from './components/collision/overlap-calculation';
 import {AnyNotification, NotificationTrait} from './notification';
-import {AnyEvent, EventTrait} from './event';
+import {AnyEvent, EventTrait} from './components/event';
 
 export class GameProcessing {
   static createInitialState<Stg extends Setting>(

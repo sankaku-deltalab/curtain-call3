@@ -7,7 +7,7 @@ import {
   MindId,
   MindState,
 } from './components/actress-parts';
-import {AnyEvent, EventTrait} from './event';
+import {AnyEvent, EventTrait} from './components/event';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {AnyNotification, NotificationTrait} from './notification';
 import {BodyTypes, MindTypes, Setting} from './setting';

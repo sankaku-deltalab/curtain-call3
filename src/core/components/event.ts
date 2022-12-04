@@ -1,6 +1,5 @@
-import {GameState} from './game-state';
-import {EventPayload, EventTypes, Setting} from './setting';
-import {Im} from '../utils/immutable-manipulation';
+import {EventPayload, EventTypes, Setting} from '../setting';
+import {Im} from '../../utils/immutable-manipulation';
 
 export type EventState<Stg extends Setting> = Readonly<{
   events?: OrganizedEvents<Stg>;
@@ -148,14 +147,4 @@ export class EventTrait {
       ev => Object.fromEntries(ev) as OrganizedEvents<Stg>
     )();
   }
-}
-
-export interface EventManipulator<
-  Stg extends Setting,
-  Type extends EventTypes<Stg>
-> {
-  applyEvent(
-    state: GameState<Stg>,
-    payload: EventPayload<Stg, Type>
-  ): GameState<Stg>;
 }

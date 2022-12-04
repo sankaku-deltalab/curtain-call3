@@ -1,5 +1,5 @@
 import {Overlaps} from './components/collision/collision';
-import {AnyEvent, EventPriority} from './event';
+import {AnyEvent, EventPriority} from './components/event';
 import {GameState} from './game-state';
 import {Representation, Setting} from './setting';
 
