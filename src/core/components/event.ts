@@ -67,7 +67,7 @@ export class EventTrait {
   ): {state: EventState<Stg>; event?: AnyEvent<Stg>} {
     if (state.events === undefined) return {state};
 
-    const eventTypesInPriorityOrder = this.getEventPriority(
+    const eventTypesInPriorityOrder = this.sortEventTypesByPriority(
       Object.keys(state.events),
       args
     );
@@ -95,7 +95,7 @@ export class EventTrait {
     return {state};
   }
 
-  private static getEventPriority<Stg extends Setting>(
+  static sortEventTypesByPriority<Stg extends Setting>(
     types: EventTypes<Stg>[],
     args: {priority: EventPriority<Stg>}
   ): EventTypes<Stg>[] {

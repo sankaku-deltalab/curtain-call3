@@ -43,7 +43,8 @@ export class GameProcessing {
 
     st = Im.pipe(
       () => st,
-      st => generateEvents(st, {...args, overlaps}),
+      st => generateEventsByDirector(st, {...args, overlaps}),
+      st => generateEventsByEventManipulators(st, {...args, overlaps}),
       st => applyEvents(st, {...args}),
       st => updateByDirector(st, {...args, overlaps}),
       st => updateByActresses(st, args),
@@ -149,7 +150,7 @@ const calcOverlaps = <Stg extends Setting>(
   )();
 };
 
-const generateEvents = <Stg extends Setting>(
+const generateEventsByDirector = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
     overlaps: Overlaps;
@@ -158,6 +159,30 @@ const generateEvents = <Stg extends Setting>(
 ): GameState<Stg> => {
   const events = args.instances.director.generateEvents(state, args);
   return Im.replace(state, 'event', ev => EventTrait.mergeEvents(ev, events));
+};
+
+const generateEventsByEventManipulators = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {
+    overlaps: Overlaps;
+    instances: GameInstances<Stg>;
+  }
+): GameState<Stg> => {
+  const manKeysUnsorted = Object.keys(args.instances.eventManipulators);
+  const priority = args.instances.director.getEventPriority();
+  const manKeys = EventTrait.sortEventTypesByPriority(manKeysUnsorted, {
+    priority,
+  });
+
+  const nestedEvents = Enum.map(manKeys, evType => {
+    const man = args.instances.eventManipulators[evType];
+    const payloads = man.createEventsAtUpdate(state, {overlaps: args.overlaps});
+    return payloads.map(payload => ({type: evType, payload}));
+  });
+
+  return Im.replace(state, 'event', ev =>
+    EventTrait.mergeEvents(ev, nestedEvents.flat())
+  );
 };
 
 const applyEvents = <Stg extends Setting>(
