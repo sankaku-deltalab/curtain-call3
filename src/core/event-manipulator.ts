@@ -6,7 +6,7 @@ export interface EventManipulator<
   Stg extends Setting,
   Type extends EventTypes<Stg>
 > {
-  createEventsAtUpdate(
+  generateEventsAtUpdate(
     state: GameState<Stg>,
     args: {
       overlaps: Overlaps;

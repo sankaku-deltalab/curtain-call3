@@ -40,7 +40,7 @@ export interface DirectorBehavior<Stg extends Setting> {
     }
   ): GameState<Stg>;
 
-  generateEvents(
+  generateEventsAtUpdate(
     st: GameState<Stg>,
     other: {
       overlaps: Overlaps;

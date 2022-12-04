@@ -157,7 +157,7 @@ const generateEventsByDirector = <Stg extends Setting>(
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
-  const events = args.instances.director.generateEvents(state, args);
+  const events = args.instances.director.generateEventsAtUpdate(state, args);
   return Im.replace(state, 'event', ev => EventTrait.mergeEvents(ev, events));
 };
 
@@ -176,7 +176,9 @@ const generateEventsByEventManipulators = <Stg extends Setting>(
 
   const nestedEvents = Enum.map(manKeys, evType => {
     const man = args.instances.eventManipulators[evType];
-    const payloads = man.createEventsAtUpdate(state, {overlaps: args.overlaps});
+    const payloads = man.generateEventsAtUpdate(state, {
+      overlaps: args.overlaps,
+    });
     return payloads.map(payload => ({type: evType, payload}));
   });
 
