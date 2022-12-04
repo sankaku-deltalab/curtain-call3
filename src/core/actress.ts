@@ -17,6 +17,7 @@ export type ActressState<
   BT extends BodyTypes<Stg>,
   MT extends MindTypes<Stg>
 > = Readonly<{
+  mindId: MindId;
   body: BodyState<Stg, BT>;
   mind: MindState<Stg, MT>;
   ev: AnyEvent<Stg>[];
@@ -44,7 +45,13 @@ export class ActressTrait {
       return body;
     }
 
-    return Res.ok({mind: mind.val, body: body.val, ev: [], notifications: []});
+    return Res.ok({
+      mindId,
+      mind: mind.val,
+      body: body.val,
+      ev: [],
+      notifications: [],
+    });
   }
 
   static mergeActressStates<Stg extends Setting>(
