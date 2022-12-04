@@ -150,7 +150,7 @@ export class EventTrait {
   }
 }
 
-export interface EventApplier<
+export interface EventManipulator<
   Stg extends Setting,
   Type extends EventTypes<Stg>
 > {

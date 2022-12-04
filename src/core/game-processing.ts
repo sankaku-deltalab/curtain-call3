@@ -171,8 +171,8 @@ const applyEvents = <Stg extends Setting>(
   while (true) {
     const {state: st2, event} = popEvent(st, args);
     if (event === undefined) return st;
-    const applier = args.instances.eventAppliers[event.type];
-    st = applier.applyEvent(st2, event.payload);
+    const manipulator = args.instances.eventManipulators[event.type];
+    st = manipulator.applyEvent(st2, event.payload);
   }
 };
 
