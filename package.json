@@ -1,7 +1,15 @@
 {
   "name": "curtain-call3",
-  "version": "0.1.0",
-  "description": "",
+  "version": "1.0.0-alpha.0",
+  "description": "Functional game engine for js",
+  "author": {
+    "name": "Sankaku",
+    "email": "sankaku_dlt.45631@outlook.jp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sankaku-deltalab/curtain-call3.git"
+  },
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "directories": {
@@ -22,7 +30,6 @@
     "posttest": "npm.cmd run lint",
     "create-index": "ctix create"
   },
-  "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/box-intersect": "^1.0.0",
