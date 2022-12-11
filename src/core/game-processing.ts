@@ -26,6 +26,7 @@ export class GameProcessing {
     state: GameState<Stg>,
     args: {
       input: CanvasInput<Stg>;
+      events: AnyEvent<Stg>[];
       time: TimeInput<Stg>;
       renderingState: RenderingState;
       instances: GameInstances<Stg>;
@@ -36,6 +37,7 @@ export class GameProcessing {
       () => state,
       st => updateTime(st, args),
       st => updateInput(st, args),
+      st => addGivenEvents(st, args),
       st => applyInputToActresses(st, args)
     )();
 
@@ -112,6 +114,15 @@ const updateInput = <Stg extends Setting>(
     renSt: args.renderingState,
   };
   return Im.replace(state, 'input', st => InputTrait.updateState(st, updArgs));
+};
+
+const addGivenEvents = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {events: AnyEvent<Stg>[]}
+): GameState<Stg> => {
+  return Im.replace(state, 'event', ev =>
+    EventTrait.mergeEvents(ev, args.events)
+  );
 };
 
 const applyInputToActresses = <Stg extends Setting>(

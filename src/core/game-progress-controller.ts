@@ -7,6 +7,7 @@ import {Im} from '../utils/immutable-manipulation';
 import {RenderingState} from './components/camera';
 import {GameProcessing} from './game-processing';
 import {AnyNotification} from './notification';
+import {AnyEvent} from './components';
 
 export type GameProgressState = Readonly<{
   mode: 'not-started' | 'active' | 'paused' | 'finished';
@@ -46,6 +47,7 @@ export class GameProgressController {
     args: {
       progress: GameProgressState;
       input: CanvasInput<Stg>;
+      events: AnyEvent<Stg>[];
       time: TimeInput<Stg>;
       renderingState: RenderingState;
       instances: GameInstances<Stg>;
