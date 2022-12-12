@@ -2,18 +2,7 @@ import boxIntersect = require('box-intersect');
 import {Im} from '../../../utils/immutable-manipulation';
 import {Enum} from '../../../utils/enum';
 import {RecM2M, RecM2MTrait} from '../../../utils/rec-m2m';
-import {Collision, CollisionShape} from './collision';
-
-export type CollisionKey = string;
-
-type Box2d = [number, number, number, number]; // [minX, minY, maxX, maxY]
-
-type CollisionForCalc = Readonly<{
-  key: CollisionKey;
-  aabb: Box2d;
-  shape: CollisionShape;
-  excess: boolean;
-}>;
+import {Box2d, Collision, CollisionKey, FlatCollision} from './collision';
 
 export class OverlapCalculation {
   static calcOverlaps(collisions: Record<CollisionKey, Collision>): RecM2M {
@@ -30,7 +19,7 @@ export class OverlapCalculation {
 
 const getCollisionsForCalc = (
   collisions: Record<CollisionKey, Collision>
-): CollisionForCalc[] => {
+): FlatCollision[] => {
   return Object.entries(collisions).flatMap(([key, col]) => {
     return col.shapes.map(s => {
       const aabb: Box2d = [s.box.nw.x, s.box.nw.y, s.box.se.x, s.box.se.y];
@@ -40,16 +29,16 @@ const getCollisionsForCalc = (
 };
 
 const splitCollisionsToExcessAndNonExcess = (
-  collisions: CollisionForCalc[]
-): {excess: CollisionForCalc[]; nonExcess: CollisionForCalc[]} => {
+  collisions: FlatCollision[]
+): {excess: FlatCollision[]; nonExcess: FlatCollision[]} => {
   const excess = collisions.filter(c => c.excess);
   const nonExcess = collisions.filter(c => !c.excess);
   return {excess, nonExcess};
 };
 
 const calcAabbOverlaps = (collisions: {
-  excess: CollisionForCalc[];
-  nonExcess: CollisionForCalc[];
+  excess: FlatCollision[];
+  nonExcess: FlatCollision[];
 }): RecM2M => {
   const eCol = collisions.excess;
   const neCol = collisions.nonExcess;

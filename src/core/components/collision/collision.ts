@@ -18,6 +18,15 @@ export type AaRectCollisionShape = Readonly<{
   box: AaRect2d;
 }>;
 
+export type CollisionKey = string;
+export type Box2d = [number, number, number, number]; // [minX, minY, maxX, maxY]
+export type FlatCollision = Readonly<{
+  key: CollisionKey;
+  aabb: Box2d;
+  shape: CollisionShape;
+  excess: boolean;
+}>;
+
 export const isOverlapped = (_col_a: Collision, _col_b: Collision): boolean => {
   // given: two aabb is overlapped
   // Currently, shape is only aabb. So this function is always true.
