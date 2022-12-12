@@ -5,14 +5,21 @@ import {RecSet, RecSetTrait} from './rec-set';
  * Record represents many to many relation.
  * If it has A to B relation, rel is {A: {B: true, ...}, ...}.
  */
-export type RecM2M = Record<string, RecSet>;
+export type RecM2M<
+  T1 extends string = string,
+  T2 extends string = string
+> = Record<T1, RecSet<T2>>;
 
 export class RecM2MTrait {
-  static new(): RecM2M {
-    return {};
+  static new<T1 extends string, T2 extends string>(): RecM2M<T1, T2> {
+    return {} as RecM2M<T1, T2>;
   }
 
-  static addRelation(rel: RecM2M, from: string, to: string): RecM2M {
+  static addRelation<T1 extends string, T2 extends string>(
+    rel: RecM2M<T1, T2>,
+    from: T1,
+    to: T2
+  ): RecM2M<T1, T2> {
     if (from in rel) {
       return Im.replace(rel, from, opponents => RecSetTrait.add(opponents, to));
     }
@@ -20,7 +27,11 @@ export class RecM2MTrait {
     return Im.add(rel, from, RecSetTrait.new([to]));
   }
 
-  static hasRelation(rel: RecM2M, from: string, to: string): boolean {
+  static hasRelation<T1 extends string, T2 extends string>(
+    rel: RecM2M<T1, T2>,
+    from: T1,
+    to: T2
+  ): boolean {
     const opponents: RecSet | undefined = rel[from];
     if (opponents === undefined) {
       return false;
@@ -29,37 +40,48 @@ export class RecM2MTrait {
     return to in opponents;
   }
 
-  static fromPairs(pairs: [string, string][]): RecM2M {
+  static fromPairs<T1 extends string, T2 extends string>(
+    pairs: [T1, T2][]
+  ): RecM2M<T1, T2> {
     return pairs.reduce(
       (rel, curr) => RecM2MTrait.addRelation(rel, curr[0], curr[1]),
       RecM2MTrait.new()
     );
   }
 
-  static toPairs(rel: RecM2M): [string, string][] {
-    return Object.entries(rel).flatMap(([from, opponents]) => {
-      return RecSetTrait.iter(opponents).map<[string, string]>(o => [from, o]);
+  static toPairs<T1 extends string, T2 extends string>(
+    rel: RecM2M<T1, T2>
+  ): [T1, T2][] {
+    const entries = Object.entries(rel) as [T1, RecSet<T2>][];
+    return entries.flatMap(([from, opponents]) => {
+      return RecSetTrait.iter(opponents).map<[T1, T2]>(o => [from, o]);
     });
   }
 
-  static merge(a: RecM2M, b: RecM2M): RecM2M {
+  static merge<T1 extends string, T2 extends string>(
+    a: RecM2M<T1, T2>,
+    b: RecM2M<T1, T2>
+  ): RecM2M<T1, T2> {
     const pairs = [...this.toPairs(a), ...this.toPairs(b)];
     return this.fromPairs(pairs);
   }
 
-  static removeNonDestinations(rel: RecM2M): RecM2M {
+  static removeNonDestinations<T1 extends string, T2 extends string>(
+    rel: RecM2M<T1, T2>
+  ): RecM2M<T1, T2> {
     return Im.pipe(
       () => rel,
       r => Object.entries(r),
+      r => r as [T1, RecSet<T2>][],
       r => r.filter(([_from, tos]) => !Object.is(tos, {})),
-      r => Object.fromEntries(r)
+      r => Object.fromEntries(r) as RecM2M<T1, T2>
     )();
   }
 
-  static filter(
-    rel: RecM2M,
-    filter: (from: string, to: string) => boolean
-  ): RecM2M {
+  static filter<T1 extends string, T2 extends string>(
+    rel: RecM2M<T1, T2>,
+    filter: (from: T1, to: T2) => boolean
+  ): RecM2M<T1, T2> {
     return Im.pipe(
       () => rel,
       r => this.toPairs(r),
