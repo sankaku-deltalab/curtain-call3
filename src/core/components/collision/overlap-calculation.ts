@@ -2,32 +2,18 @@ import boxIntersect = require('box-intersect');
 import {Im} from '../../../utils/immutable-manipulation';
 import {Enum} from '../../../utils/enum';
 import {RecM2M, RecM2MTrait} from '../../../utils/rec-m2m';
-import {Box2d, Collision, FlatCollision, Overlaps} from './collision';
+import {FlatCollision, Overlaps} from './collision';
 import {BodyId} from '../actress-parts';
 
 export class OverlapCalculation {
-  static calcOverlaps(collisions: Record<BodyId, Collision>): Overlaps {
-    const r = Im.pipe(
+  static calcOverlaps(collisions: FlatCollision[]): Overlaps {
+    return Im.pipe(
       () => collisions,
-      getCollisionsForCalc,
       splitCollisionsToExcessAndNonExcess,
       calcAabbOverlaps
     )();
-
-    return r;
   }
 }
-
-const getCollisionsForCalc = (
-  collisions: Record<BodyId, Collision>
-): FlatCollision[] => {
-  return Object.entries(collisions).flatMap(([key, col]) => {
-    return col.shapes.map(s => {
-      const aabb: Box2d = [s.box.nw.x, s.box.nw.y, s.box.se.x, s.box.se.y];
-      return {...col, key, shape: s, aabb};
-    });
-  });
-};
 
 const splitCollisionsToExcessAndNonExcess = (
   collisions: FlatCollision[]
