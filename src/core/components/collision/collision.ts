@@ -1,5 +1,6 @@
 import {AaRect2d} from '../../../utils/aa-rect2d';
 import {RecM2M} from '../../../utils/rec-m2m';
+import {BodyId} from '../actress-parts';
 
 export type Collision = Readonly<{
   shapes: CollisionShape[];
@@ -18,10 +19,9 @@ export type AaRectCollisionShape = Readonly<{
   box: AaRect2d;
 }>;
 
-export type CollisionKey = string;
 export type Box2d = [number, number, number, number]; // [minX, minY, maxX, maxY]
 export type FlatCollision = Readonly<{
-  key: CollisionKey;
+  key: BodyId;
   aabb: Box2d;
   shape: CollisionShape;
   excess: boolean;
@@ -33,4 +33,4 @@ export const isOverlapped = (_col_a: Collision, _col_b: Collision): boolean => {
   return true;
 };
 
-export type Overlaps = RecM2M; // many to many BodyId
+export type Overlaps = RecM2M<BodyId>;
