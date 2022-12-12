@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- RecSet and RecM2M become generic.
+
 ## [1.0.0-alpha.1] - 2022-12-11
 
 ### Added
