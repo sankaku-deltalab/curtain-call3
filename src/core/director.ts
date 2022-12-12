@@ -1,7 +1,7 @@
 import {Overlaps} from './components/collision/collision';
 import {AnyEvent, EventPriority} from './components/event';
 import {GameState} from './game-state';
-import {Representation, Setting} from './setting';
+import {Setting} from './setting';
 
 export class DirectorTrait {
   static extractDirectorGameState<Stg extends Setting>(
@@ -15,13 +15,6 @@ export class DirectorTrait {
     _state: GameState<Stg>
   ): GameState<Stg> {
     return st;
-  }
-
-  static getRepresentation<Stg extends Setting>(
-    state: GameState<Stg>,
-    args: {instances: {director: DirectorBehavior<Stg>}}
-  ): Representation<Stg> {
-    return args.instances.director.represent(state);
   }
 }
 
@@ -50,8 +43,6 @@ export interface DirectorBehavior<Stg extends Setting> {
   getEventPriority(): EventPriority<Stg>;
 
   getTimeScales(state: GameState<Stg>): TimeScaling<Stg>;
-
-  represent(state: GameState<Stg>): Representation<Stg>;
 }
 
 export type TimeScaling<_Stg extends Setting> = {base: number};

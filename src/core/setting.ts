@@ -26,7 +26,6 @@ export type NotificationPayload<
 > = Stg['notifications'][Type];
 
 export type LevelState<Stg extends Setting> = Stg['level'];
-export type Representation<Stg extends Setting> = Stg['representation'];
 
 export const bodyTypes = <Stg extends Setting>(
   setting: Stg

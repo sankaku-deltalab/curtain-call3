@@ -1,10 +1,9 @@
 import {ActressPartsTrait, MindId} from './components/actress-parts';
 import {ActressTrait, AnyActressBehavior, AnyActressState} from './actress';
-import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState} from './game-state';
 import {Res} from '../utils/result';
-import {Representation, Setting} from './setting';
+import {Setting} from './setting';
 import {AaRect2d} from '../utils/aa-rect2d';
 import {
   CanvasGraphic,
@@ -48,13 +47,6 @@ export class GameRepresentation {
       camSt: state.camera,
       renSt: args.renSt,
     });
-  }
-
-  static getRepresentation<Stg extends Setting>(
-    state: GameState<Stg>,
-    args: {instances: GameInstances<Stg>}
-  ): Representation<Stg> {
-    return DirectorTrait.getRepresentation(state, args);
   }
 }
 
