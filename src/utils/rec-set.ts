@@ -1,28 +1,32 @@
-export type RecSet = Record<string, true | undefined>;
+export type RecSet<T extends string = string> = Record<T, true | undefined>;
 
 export class RecSetTrait {
-  static new(keys: string[] = []): RecSet {
-    return Object.fromEntries(keys.map(k => [k, true]));
+  static new<T extends string>(keys: T[] = []): RecSet<T> {
+    return Object.fromEntries(keys.map(k => [k, true])) as RecSet<T>;
   }
 
-  static add(set: RecSet, key: string): RecSet {
+  static add<T extends string>(set: RecSet<T>, key: string): RecSet<T> {
     return {...set, [key]: true};
   }
 
-  static remove(set: RecSet, key: string): RecSet {
+  static remove<T extends string>(set: RecSet<T>, key: string): RecSet<T> {
     return {...set, [key]: undefined};
   }
 
-  static has(set: RecSet, key: string): boolean {
-    // or you can use `val in RecSet`
+  static has<T extends string>(set: RecSet<T>, key: T): boolean {
     return set[key] === true;
   }
 
-  static iter(set: RecSet): string[] {
-    return Object.keys(set).filter(key => RecSetTrait.has(set, key));
+  static iter<T extends string>(set: RecSet<T>): T[] {
+    return Object.keys(set).filter(key =>
+      RecSetTrait.has(set, key as T)
+    ) as T[];
   }
 
-  static filter(set: RecSet, filter: (key: string) => boolean): RecSet {
+  static filter<T extends string>(
+    set: RecSet<T>,
+    filter: (key: T) => boolean
+  ): RecSet {
     const items = this.iter(set).filter(filter);
     return RecSetTrait.new(items);
   }
