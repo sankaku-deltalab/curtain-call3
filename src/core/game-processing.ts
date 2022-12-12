@@ -1,6 +1,10 @@
 import {ActressPartsTrait, MindId} from './components/actress-parts';
 import {ActressTrait, AnyActressBehavior, AnyActressState} from './actress';
-import {Collision, Overlaps} from './components/collision/collision';
+import {
+  Collision,
+  FlatCollision,
+  Overlaps,
+} from './components/collision/collision';
 import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState, GameStateTrait, StateInitializer} from './game-state';
@@ -14,6 +18,7 @@ import {RenderingState} from './components/camera';
 import {OverlapCalculation} from './components/collision/overlap-calculation';
 import {AnyNotification, NotificationTrait} from './notification';
 import {AnyEvent, EventTrait} from './components/event';
+import {CollisionTrait} from './components/collision/collision-state';
 
 export class GameProcessing {
   static createInitialState<Stg extends Setting>(
@@ -38,17 +43,16 @@ export class GameProcessing {
       st => updateTime(st, args),
       st => updateInput(st, args),
       st => addGivenEvents(st, args),
-      st => applyInputToActresses(st, args)
+      st => applyInputToActresses(st, args),
+      st => updateCollision(st, args)
     )();
-
-    const overlaps = calcOverlaps(st, args);
 
     st = Im.pipe(
       () => st,
-      st => generateEventsByDirector(st, {...args, overlaps}),
-      st => generateEventsByEventManipulators(st, {...args, overlaps}),
-      st => applyEvents(st, {...args}),
-      st => updateByDirector(st, {...args, overlaps}),
+      st => generateEventsByDirector(st, args),
+      st => generateEventsByEventManipulators(st, args),
+      st => applyEvents(st, args),
+      st => updateByDirector(st, args),
       st => updateByActresses(st, args),
       st => deleteActresses(st, args),
       ({state}) => state
@@ -144,10 +148,20 @@ const applyInputToActresses = <Stg extends Setting>(
   return mergeActressStates(state, {actStates});
 };
 
-const calcOverlaps = <Stg extends Setting>(
+const updateCollision = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {time: TimeInput<Stg>; instances: GameInstances<Stg>}
+): GameState<Stg> => {
+  const flatCollisions = calcFlatCollisions(state, args);
+  const overlaps = calcOverlaps(flatCollisions);
+
+  return Im.replace(state, 'collision', () => ({flatCollisions, overlaps}));
+};
+
+const calcFlatCollisions = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {instances: GameInstances<Stg>}
-): Overlaps => {
+): FlatCollision[] => {
   return Im.pipe(
     () => state,
     st => collectActInState(st, args),
@@ -157,25 +171,30 @@ const calcOverlaps = <Stg extends Setting>(
         return [st.mind.meta.bodyId, col];
       }),
     col => Object.fromEntries(col),
-    col => OverlapCalculation.calcOverlaps(col)
+    col => CollisionTrait.calcFlatCollisions(col)
   )();
+};
+
+const calcOverlaps = (collisions: FlatCollision[]): Overlaps => {
+  return OverlapCalculation.calcOverlaps(collisions);
 };
 
 const generateEventsByDirector = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
-    overlaps: Overlaps;
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
-  const events = args.instances.director.generateEventsAtUpdate(state, args);
+  const overlaps = state.collision.overlaps;
+  const events = args.instances.director.generateEventsAtUpdate(state, {
+    overlaps,
+  });
   return Im.replace(state, 'event', ev => EventTrait.mergeEvents(ev, events));
 };
 
 const generateEventsByEventManipulators = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
-    overlaps: Overlaps;
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
@@ -187,9 +206,8 @@ const generateEventsByEventManipulators = <Stg extends Setting>(
 
   const nestedEvents = Enum.map(manKeys, evType => {
     const man = args.instances.eventManipulators[evType];
-    const payloads = man.generateEventsAtUpdate(state, {
-      overlaps: args.overlaps,
-    });
+    const overlaps = state.collision.overlaps;
+    const payloads = man.generateEventsAtUpdate(state, {overlaps});
     return payloads.map(payload => ({type: evType, payload}));
   });
 
@@ -231,22 +249,21 @@ const popEvent = <Stg extends Setting>(
 const updateByDirector = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
-    time: TimeInput<Stg>;
-    overlaps: Overlaps;
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
   const director = GameInstancesTrait.getDirectorBehavior(args.instances);
+  const overlaps = state.collision.overlaps;
 
   let st = DirectorTrait.extractDirectorGameState(state);
-  st = director.update(st, {overlaps: args.overlaps});
+  st = director.update(st, {overlaps});
 
   return DirectorTrait.mergeDirectorGameState(st, state);
 };
 
 const updateByActresses = <Stg extends Setting>(
   state: GameState<Stg>,
-  args: {time: TimeInput<Stg>; instances: GameInstances<Stg>}
+  args: {instances: GameInstances<Stg>}
 ): GameState<Stg> => {
   const instances = args.instances;
   const actresses = collectActInState(state, {instances});

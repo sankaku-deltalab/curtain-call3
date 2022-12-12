@@ -15,12 +15,17 @@ import {
 import {SceneState, SceneTrait} from './scene';
 import {EventState, EventTrait} from './components/event';
 import {NotificationState, NotificationTrait} from './notification';
+import {
+  CollisionState,
+  CollisionTrait,
+} from './components/collision/collision-state';
 
 export type GameState<Stg extends Setting> = Readonly<{
   time: TimeState<Stg>;
   camera: CameraState<Stg>;
   input: InputState<Stg>;
   actressParts: ActressPartsState<Stg>;
+  collision: CollisionState;
   scene: SceneState<Stg>;
   event: EventState<Stg>;
   notification: NotificationState<Stg>;
@@ -46,6 +51,7 @@ export class GameStateTrait {
       time: TimeTrait.initialState(),
       camera: CameraTrait.initialState(args.camera),
       input: InputTrait.initialState(),
+      collision: CollisionTrait.initialState(),
       actressParts: ActressPartsTrait.initialState(),
       scene: SceneTrait.initialState({initialLevel: args.level}),
       event: EventTrait.initialState(),
