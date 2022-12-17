@@ -183,10 +183,7 @@ const generateCuesByDirector = <Stg extends Setting>(
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
-  const overlaps = state.collision.overlaps;
-  const cues = args.instances.director.generateCuesAtUpdate(state, {
-    overlaps,
-  });
+  const cues = args.instances.director.generateCuesAtUpdate(state);
   return Im.replace(state, 'cue', cue => CueTrait.mergeCues(cue, cues));
 };
 
@@ -204,8 +201,7 @@ const generateCuesByCueHandlers = <Stg extends Setting>(
 
   const nestedCues = Enum.map(manKeys, cueType => {
     const man = args.instances.cueHandlers[cueType];
-    const overlaps = state.collision.overlaps;
-    const payloads = man.generateCuesAtUpdate(state, {overlaps});
+    const payloads = man.generateCuesAtUpdate(state, {});
     return payloads.map(payload => ({type: cueType, payload}));
   });
 
@@ -251,10 +247,9 @@ const updateByDirector = <Stg extends Setting>(
   }
 ): GameState<Stg> => {
   const director = GameInstancesTrait.getDirectorBehavior(args.instances);
-  const overlaps = state.collision.overlaps;
 
   let st = DirectorTrait.extractDirectorGameState(state);
-  st = director.update(st, {overlaps});
+  st = director.update(st);
 
   return DirectorTrait.mergeDirectorGameState(st, state);
 };

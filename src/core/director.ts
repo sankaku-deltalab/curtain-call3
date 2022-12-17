@@ -1,4 +1,3 @@
-import {Overlaps} from './components/collision/collision';
 import {AnyCue, CuePriority} from './components/cue';
 import {GameState} from './game-state';
 import {Setting} from './setting';
@@ -26,19 +25,9 @@ export interface DirectorBehavior<Stg extends Setting> {
   //   }
   // ): DirectorGameState<Stg>;
 
-  update(
-    st: GameState<Stg>,
-    other: {
-      overlaps: Overlaps;
-    }
-  ): GameState<Stg>;
+  update(st: GameState<Stg>): GameState<Stg>;
 
-  generateCuesAtUpdate(
-    st: GameState<Stg>,
-    other: {
-      overlaps: Overlaps;
-    }
-  ): AnyCue<Stg>[];
+  generateCuesAtUpdate(st: GameState<Stg>): AnyCue<Stg>[];
 
   getCuePriority(): CuePriority<Stg>;
 
