@@ -13,7 +13,7 @@ import {
   MindId,
 } from './components/actress-parts';
 import {SceneState, SceneTrait} from './scene';
-import {EventState, EventTrait} from './components/event';
+import {CueState, CueTrait} from './components/event';
 import {NotificationState, NotificationTrait} from './notification';
 import {
   CollisionState,
@@ -27,7 +27,7 @@ export type GameState<Stg extends Setting> = Readonly<{
   actressParts: ActressPartsState<Stg>;
   collision: CollisionState;
   scene: SceneState<Stg>;
-  event: EventState<Stg>;
+  event: CueState<Stg>;
   notification: NotificationState<Stg>;
 }>;
 
@@ -54,7 +54,7 @@ export class GameStateTrait {
       collision: CollisionTrait.initialState(),
       actressParts: ActressPartsTrait.initialState(),
       scene: SceneTrait.initialState({initialLevel: args.level}),
-      event: EventTrait.initialState(),
+      event: CueTrait.initialState(),
       notification: NotificationTrait.initialState(),
     };
   }

@@ -7,7 +7,7 @@ import {
   MindId,
   MindState,
 } from './components/actress-parts';
-import {AnyEvent, EventTrait} from './components/event';
+import {AnyCue, CueTrait} from './components/event';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {AnyNotification, NotificationTrait} from './notification';
 import {BodyTypes, MindTypes, Setting} from './setting';
@@ -20,7 +20,7 @@ export type ActressState<
   mindId: MindId;
   body: BodyState<Stg, BT>;
   mind: MindState<Stg, MT>;
-  ev: AnyEvent<Stg>[];
+  ev: AnyCue<Stg>[];
   notifications: AnyNotification<Stg>[];
 }>;
 
@@ -69,7 +69,7 @@ export class ActressTrait {
 
     return Im.pipe(
       () => state,
-      st => Im.replace(st, 'event', s => EventTrait.mergeEvents(s, newEvents)),
+      st => Im.replace(st, 'event', s => CueTrait.mergeCues(s, newEvents)),
       st =>
         Im.replace(st, 'notification', s =>
           NotificationTrait.mergeNotifications(s, newNotifications)

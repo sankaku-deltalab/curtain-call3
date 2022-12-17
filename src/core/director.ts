@@ -1,5 +1,5 @@
 import {Overlaps} from './components/collision/collision';
-import {AnyEvent, EventPriority} from './components/event';
+import {AnyCue, CuePriority} from './components/event';
 import {GameState} from './game-state';
 import {Setting} from './setting';
 
@@ -38,9 +38,9 @@ export interface DirectorBehavior<Stg extends Setting> {
     other: {
       overlaps: Overlaps;
     }
-  ): AnyEvent<Stg>[];
+  ): AnyCue<Stg>[];
 
-  getEventPriority(): EventPriority<Stg>;
+  getEventPriority(): CuePriority<Stg>;
 
   getTimeScales(state: GameState<Stg>): TimeScaling<Stg>;
 }

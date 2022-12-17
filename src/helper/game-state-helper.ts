@@ -8,7 +8,7 @@ import {
   MindId,
 } from '../core/components/actress-parts';
 import {Overlaps} from '../core/components';
-import {EventTrait} from '../core/components/event';
+import {CueTrait} from '../core/components/event';
 import {GameState} from '../core/game-state';
 import {NotificationTrait} from '../core/notification';
 import {SceneTrait} from '../core/scene';
@@ -207,7 +207,7 @@ export class GameStateHelper {
     const originalSt = state;
     return Im.pipe(
       () => state.event,
-      st => EventTrait.mergeEvents(st, [{type, payload}]),
+      st => CueTrait.mergeCues(st, [{type, payload}]),
       evSt => Im.replace(originalSt, 'event', () => evSt)
     )();
   }

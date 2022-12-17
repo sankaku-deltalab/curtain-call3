@@ -1,147 +1,147 @@
 import {CuePayload, CueTypes, Setting} from '../setting';
 import {Im} from '../../utils/immutable-manipulation';
 
-export type EventState<Stg extends Setting> = Readonly<{
-  events?: OrganizedEvents<Stg>;
+export type CueState<Stg extends Setting> = Readonly<{
+  cues?: OrganizedCues<Stg>;
 }>;
 
-export type Event<Stg extends Setting, Type extends CueTypes<Stg>> = Readonly<{
+export type Cue<Stg extends Setting, Type extends CueTypes<Stg>> = Readonly<{
   type: Type;
   payload: CuePayload<Stg, Type>;
 }>;
 
-export type AnyEvent<Stg extends Setting> = Event<Stg, CueTypes<Stg>>;
+export type AnyCue<Stg extends Setting> = Cue<Stg, CueTypes<Stg>>;
 
-type OrganizedEvents<Stg extends Setting> = Readonly<{
-  [EvType in CueTypes<Stg>]: Event<Stg, EvType>[];
+type OrganizedCues<Stg extends Setting> = Readonly<{
+  [CueType in CueTypes<Stg>]: Cue<Stg, CueType>[];
 }>;
 
-export type EventPriority<Stg extends Setting> = {
+export type CuePriority<Stg extends Setting> = {
   earlier: CueTypes<Stg>[];
   later: CueTypes<Stg>[];
 };
 
-export class EventTrait {
-  static initialState<Stg extends Setting>(): EventState<Stg> {
+export class CueTrait {
+  static initialState<Stg extends Setting>(): CueState<Stg> {
     return {
-      events: undefined,
+      cues: undefined,
     };
   }
 
-  static mergeEvents<Stg extends Setting>(
-    st: EventState<Stg>,
-    events: AnyEvent<Stg>[]
-  ): EventState<Stg> {
-    if (events.length === 0) return st;
+  static mergeCues<Stg extends Setting>(
+    st: CueState<Stg>,
+    cues: AnyCue<Stg>[]
+  ): CueState<Stg> {
+    if (cues.length === 0) return st;
 
-    const types1: CueTypes<Stg>[] = st.events ? Object.keys(st.events) : [];
-    const types2: CueTypes<Stg>[] = events.map(e => e.type);
+    const types1: CueTypes<Stg>[] = st.cues ? Object.keys(st.cues) : [];
+    const types2: CueTypes<Stg>[] = cues.map(e => e.type);
     const types: CueTypes<Stg>[] = [...new Set([...types1, ...types2])];
 
-    const newEv = Im.pipe(
-      () => events,
-      ev => EventTrait.organizeEvents(ev, types)
+    const newCue = Im.pipe(
+      () => cues,
+      cue => CueTrait.organizeCues(cue, types)
     )();
-    return Im.replace(st, 'events', oldEv => {
-      if (oldEv === undefined) return newEv;
-      return EventTrait.mergeOrganizedEvents(oldEv, newEv, types);
+    return Im.replace(st, 'cues', oldCue => {
+      if (oldCue === undefined) return newCue;
+      return CueTrait.mergeOrganizedCues(oldCue, newCue, types);
     });
   }
 
-  static createEvent<Stg extends Setting, Type extends CueTypes<Stg>>(
+  static createCue<Stg extends Setting, Type extends CueTypes<Stg>>(
     type: Type,
     payload: CuePayload<Stg, Type>
-  ): Event<Stg, Type> {
+  ): Cue<Stg, Type> {
     return {
       type,
       payload,
     };
   }
 
-  static popEvent<Stg extends Setting>(
-    state: EventState<Stg>,
-    args: {priority: EventPriority<Stg>}
-  ): {state: EventState<Stg>; event?: AnyEvent<Stg>} {
-    if (state.events === undefined) return {state};
+  static popCue<Stg extends Setting>(
+    state: CueState<Stg>,
+    args: {priority: CuePriority<Stg>}
+  ): {state: CueState<Stg>; cue?: AnyCue<Stg>} {
+    if (state.cues === undefined) return {state};
 
-    const eventTypesInPriorityOrder = this.sortEventTypesByPriority(
-      Object.keys(state.events),
+    const cueTypesInPriorityOrder = this.sortCueTypesByPriority(
+      Object.keys(state.cues),
       args
     );
-    for (const evType of eventTypesInPriorityOrder) {
-      const events = state.events[evType];
+    for (const cueType of cueTypesInPriorityOrder) {
+      const cues = state.cues[cueType];
 
-      if (events === undefined) continue;
-      if (events.length === 0) continue;
+      if (cues === undefined) continue;
+      if (cues.length === 0) continue;
 
-      const event = events[events.length - 1];
-      const st = Im.replace(state, 'events', eventsObj => {
-        if (eventsObj === undefined) throw new Error('code bug');
-        return Im.replace(eventsObj, evType, eventsArray => {
-          const evArrayClone = [...eventsArray];
-          evArrayClone.pop();
-          return evArrayClone;
+      const cue = cues[cues.length - 1];
+      const st = Im.replace(state, 'cues', cuesObj => {
+        if (cuesObj === undefined) throw new Error('code bug');
+        return Im.replace(cuesObj, cueType, cuesArray => {
+          const cueArrayClone = [...cuesArray];
+          cueArrayClone.pop();
+          return cueArrayClone;
         });
       });
       return {
         state: st,
-        event,
+        cue: cue,
       };
     }
 
     return {state};
   }
 
-  static sortEventTypesByPriority<Stg extends Setting>(
+  static sortCueTypesByPriority<Stg extends Setting>(
     types: CueTypes<Stg>[],
-    args: {priority: EventPriority<Stg>}
+    args: {priority: CuePriority<Stg>}
   ): CueTypes<Stg>[] {
     const availableTypes = new Set(types);
     const notDontcareTypes = new Set([
       ...args.priority.earlier,
       ...args.priority.later,
     ]);
-    const earlys = args.priority.earlier.filter(evType =>
-      availableTypes.has(evType)
+    const earlys = args.priority.earlier.filter(cueType =>
+      availableTypes.has(cueType)
     );
-    const laters = args.priority.later.filter(evType =>
-      availableTypes.has(evType)
+    const laters = args.priority.later.filter(cueType =>
+      availableTypes.has(cueType)
     );
     const dontcares = types
       .sort((a, b) => a.localeCompare(b))
-      .filter(evType => !notDontcareTypes.has(evType));
+      .filter(cueType => !notDontcareTypes.has(cueType));
     return [...earlys, ...dontcares, ...laters];
   }
 
-  private static organizeEvents<Stg extends Setting>(
-    events: AnyEvent<Stg>[],
+  private static organizeCues<Stg extends Setting>(
+    cues: AnyCue<Stg>[],
     types: CueTypes<Stg>[]
-  ): OrganizedEvents<Stg> {
-    const mutEvents: OrganizedEvents<Stg> = Im.pipe(
+  ): OrganizedCues<Stg> {
+    const mutCues: OrganizedCues<Stg> = Im.pipe(
       () => types,
       types => types.map<[CueTypes<Stg>, []]>(t => [t, []]),
-      ev => Object.fromEntries<[]>(ev) as unknown as OrganizedEvents<Stg>
+      cue => Object.fromEntries<[]>(cue) as unknown as OrganizedCues<Stg>
     )();
 
-    for (const ev of events) {
-      mutEvents[ev.type].push(ev);
+    for (const cue of cues) {
+      mutCues[cue.type].push(cue);
     }
-    return mutEvents;
+    return mutCues;
   }
 
-  private static mergeOrganizedEvents<Stg extends Setting>(
-    original: OrganizedEvents<Stg>,
-    other: OrganizedEvents<Stg>,
+  private static mergeOrganizedCues<Stg extends Setting>(
+    original: OrganizedCues<Stg>,
+    other: OrganizedCues<Stg>,
     types: CueTypes<Stg>[]
-  ): OrganizedEvents<Stg> {
+  ): OrganizedCues<Stg> {
     return Im.pipe(
       () => types,
       types =>
-        types.map<[CueTypes<Stg>, AnyEvent<Stg>[]]>(t => [
+        types.map<[CueTypes<Stg>, AnyCue<Stg>[]]>(t => [
           t,
           [...(original[t] ?? []), ...(other[t] ?? [])],
         ]),
-      ev => Object.fromEntries(ev) as OrganizedEvents<Stg>
+      cue => Object.fromEntries(cue) as OrganizedCues<Stg>
     )();
   }
 }

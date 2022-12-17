@@ -17,7 +17,7 @@ import {Enum} from '../utils/enum';
 import {RenderingState} from './components/camera';
 import {OverlapCalculation} from './components/collision/overlap-calculation';
 import {AnyNotification, NotificationTrait} from './notification';
-import {AnyEvent, EventTrait} from './components/event';
+import {AnyCue, CueTrait} from './components/event';
 import {CollisionTrait} from './components/collision/collision-state';
 
 export class GameProcessing {
@@ -31,7 +31,7 @@ export class GameProcessing {
     state: GameState<Stg>,
     args: {
       input: CanvasInput<Stg>;
-      events: AnyEvent<Stg>[];
+      events: AnyCue<Stg>[];
       time: TimeInput<Stg>;
       renderingState: RenderingState;
       instances: GameInstances<Stg>;
@@ -122,11 +122,9 @@ const updateInput = <Stg extends Setting>(
 
 const addGivenEvents = <Stg extends Setting>(
   state: GameState<Stg>,
-  args: {events: AnyEvent<Stg>[]}
+  args: {events: AnyCue<Stg>[]}
 ): GameState<Stg> => {
-  return Im.replace(state, 'event', ev =>
-    EventTrait.mergeEvents(ev, args.events)
-  );
+  return Im.replace(state, 'event', ev => CueTrait.mergeCues(ev, args.events));
 };
 
 const applyInputToActresses = <Stg extends Setting>(
@@ -189,7 +187,7 @@ const generateEventsByDirector = <Stg extends Setting>(
   const events = args.instances.director.generateEventsAtUpdate(state, {
     overlaps,
   });
-  return Im.replace(state, 'event', ev => EventTrait.mergeEvents(ev, events));
+  return Im.replace(state, 'event', ev => CueTrait.mergeCues(ev, events));
 };
 
 const generateEventsByEventManipulators = <Stg extends Setting>(
@@ -200,7 +198,7 @@ const generateEventsByEventManipulators = <Stg extends Setting>(
 ): GameState<Stg> => {
   const manKeysUnsorted = Object.keys(args.instances.eventManipulators);
   const priority = args.instances.director.getEventPriority();
-  const manKeys = EventTrait.sortEventTypesByPriority(manKeysUnsorted, {
+  const manKeys = CueTrait.sortCueTypesByPriority(manKeysUnsorted, {
     priority,
   });
 
@@ -212,7 +210,7 @@ const generateEventsByEventManipulators = <Stg extends Setting>(
   });
 
   return Im.replace(state, 'event', ev =>
-    EventTrait.mergeEvents(ev, nestedEvents.flat())
+    CueTrait.mergeCues(ev, nestedEvents.flat())
   );
 };
 
@@ -237,9 +235,9 @@ const popEvent = <Stg extends Setting>(
   args: {
     instances: GameInstances<Stg>;
   }
-): {state: GameState<Stg>; event?: AnyEvent<Stg>} => {
+): {state: GameState<Stg>; event?: AnyCue<Stg>} => {
   const priority = args.instances.director.getEventPriority();
-  const {state: evSt, event} = EventTrait.popEvent(state.event, {priority});
+  const {state: evSt, cue: event} = CueTrait.popCue(state.event, {priority});
   return {
     state: Im.replace(state, 'event', () => evSt),
     event,
