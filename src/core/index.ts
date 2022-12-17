@@ -1,6 +1,6 @@
 export * from './actress';
 export * from './components';
-export * from './cue-manipulator';
+export * from './cue-handler';
 export * from './director';
 export * from './game-instances';
 export * from './game-processing';

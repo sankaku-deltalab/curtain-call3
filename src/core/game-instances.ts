@@ -2,7 +2,7 @@ import {ActressBehavior} from './actress';
 import {DirectorBehavior} from './director';
 import {Res, Result} from '../utils/result';
 import {BodyTypes, CueTypes, MindTypes, Setting} from './setting';
-import {CueHandler} from './cue-manipulator';
+import {CueHandler} from './cue-handler';
 
 export type GameInstances<Stg extends Setting> = {
   director: DirectorBehavior<Stg>;
