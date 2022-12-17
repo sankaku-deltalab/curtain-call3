@@ -7,7 +7,7 @@ import {
   MindId,
   MindState,
 } from './components/actress-parts';
-import {AnyCue, CueTrait} from './components/event';
+import {AnyCue, CueTrait} from './components/cue';
 import {GameState, GameStateTrait, VisibleGameState} from './game-state';
 import {AnyNotification, NotificationTrait} from './notification';
 import {BodyTypes, MindTypes, Setting} from './setting';

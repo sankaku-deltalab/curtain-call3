@@ -17,7 +17,7 @@ import {Enum} from '../utils/enum';
 import {RenderingState} from './components/camera';
 import {OverlapCalculation} from './components/collision/overlap-calculation';
 import {AnyNotification, NotificationTrait} from './notification';
-import {AnyCue, CueTrait} from './components/event';
+import {AnyCue, CueTrait} from './components/cue';
 import {CollisionTrait} from './components/collision/collision-state';
 
 export class GameProcessing {

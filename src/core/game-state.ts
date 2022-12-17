@@ -13,7 +13,7 @@ import {
   MindId,
 } from './components/actress-parts';
 import {SceneState, SceneTrait} from './scene';
-import {CueState, CueTrait} from './components/event';
+import {CueState, CueTrait} from './components/cue';
 import {NotificationState, NotificationTrait} from './notification';
 import {
   CollisionState,
