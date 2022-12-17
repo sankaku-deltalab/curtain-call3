@@ -31,11 +31,6 @@ export type GameState<Stg extends Setting> = Readonly<{
   notification: NotificationState<Stg>;
 }>;
 
-export type VisibleGameState<Stg extends Setting> = Exclude<
-  GameState<Stg>,
-  'minds' | 'cue'
->;
-
 export type StateInitializer<Stg extends Setting> = Readonly<{
   camera: Readonly<{
     size: Vec2d;
@@ -57,19 +52,6 @@ export class GameStateTrait {
       cue: CueTrait.initialState(),
       notification: NotificationTrait.initialState(),
     };
-  }
-
-  static extractVisibleState<Stg extends Setting>(
-    st: GameState<Stg>
-  ): VisibleGameState<Stg> {
-    return st; // TODO: impl this
-  }
-
-  static mergeVisibleState<Stg extends Setting>(
-    st: GameState<Stg>,
-    vst: VisibleGameState<Stg>
-  ): GameState<Stg> {
-    return {...st, ...vst};
   }
 
   static extractMind<Stg extends Setting>(

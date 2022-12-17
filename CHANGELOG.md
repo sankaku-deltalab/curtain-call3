@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - RecSet and RecM2M become generic.
 - Rename event to cue because name `Event` of curtain-call conflict `Event` of browser js.
 
+### Removed
+
+- Delete VisibleGameState because it's useless.
+
 ## [1.0.0-alpha.1] - 2022-12-11
 
 ### Added

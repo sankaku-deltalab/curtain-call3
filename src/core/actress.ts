@@ -8,7 +8,7 @@ import {
   MindState,
 } from './components/actress-parts';
 import {AnyCue, CueTrait} from './components/cue';
-import {GameState, GameStateTrait, VisibleGameState} from './game-state';
+import {GameState, GameStateTrait} from './game-state';
 import {AnyNotification, NotificationTrait} from './notification';
 import {BodyTypes, MindTypes, Setting} from './setting';
 
@@ -93,28 +93,28 @@ export interface ActressBehavior<
   applyInput(
     st: ActressState<Stg, BT, MT>,
     args: {
-      gameState: VisibleGameState<Stg>;
+      gameState: GameState<Stg>;
     }
   ): ActressState<Stg, BT, MT>;
 
   update(
     st: ActressState<Stg, BT, MT>,
     args: {
-      gameState: VisibleGameState<Stg>;
+      gameState: GameState<Stg>;
     }
   ): ActressState<Stg, BT, MT>;
 
   generateGraphics(
     st: ActressState<Stg, BT, MT>,
     args: {
-      gameState: VisibleGameState<Stg>;
+      gameState: GameState<Stg>;
     }
   ): Graphic<Stg>[];
 
   generateCollision(
     st: ActressState<Stg, BT, MT>,
     args: {
-      gameState: VisibleGameState<Stg>;
+      gameState: GameState<Stg>;
     }
   ): Collision;
 }
