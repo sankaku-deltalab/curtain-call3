@@ -69,13 +69,13 @@ export class ActressTrait {
 
     return Im.pipe(
       () => state,
-      st => Im.replace(st, 'cue', s => CueTrait.mergeCues(s, newCues)),
+      st => Im.update(st, 'cue', s => CueTrait.mergeCues(s, newCues)),
       st =>
-        Im.replace(st, 'notification', s =>
+        Im.update(st, 'notification', s =>
           NotificationTrait.mergeNotifications(s, newNotifications)
         ),
       st =>
-        Im.replace(st, 'actressParts', s =>
+        Im.update(st, 'actressParts', s =>
           ActressPartsTrait.mergeMindsAndBodies(s, {minds, bodies})
         )
     )();

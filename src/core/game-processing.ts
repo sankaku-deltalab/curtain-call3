@@ -66,7 +66,7 @@ const updateTime = <Stg extends Setting>(
   args: {time: TimeInput<Stg>; instances: GameInstances<Stg>}
 ): GameState<Stg> => {
   const timeScale = args.instances.director.getTimeScales(state);
-  return Im.replace(state, 'time', s =>
+  return Im.update(state, 'time', s =>
     TimeTrait.applyInput(s, {input: args.time, baseTimeScale: timeScale.base})
   );
 };
@@ -116,14 +116,14 @@ const updateInput = <Stg extends Setting>(
     camSt: state.camera,
     renSt: args.renderingState,
   };
-  return Im.replace(state, 'input', st => InputTrait.updateState(st, updArgs));
+  return Im.update(state, 'input', st => InputTrait.updateState(st, updArgs));
 };
 
 const addGivenCues = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {cues: AnyCue<Stg>[]}
 ): GameState<Stg> => {
-  return Im.replace(state, 'cue', cue => CueTrait.mergeCues(cue, args.cues));
+  return Im.update(state, 'cue', cue => CueTrait.mergeCues(cue, args.cues));
 };
 
 const applyInputToActresses = <Stg extends Setting>(
@@ -149,7 +149,7 @@ const updateCollision = <Stg extends Setting>(
   const flatCollisions = calcFlatCollisions(state, args);
   const overlaps = calcOverlaps(flatCollisions);
 
-  return Im.replace(state, 'collision', () => ({flatCollisions, overlaps}));
+  return Im.update(state, 'collision', () => ({flatCollisions, overlaps}));
 };
 
 const calcFlatCollisions = <Stg extends Setting>(
@@ -180,7 +180,7 @@ const generateCuesByDirector = <Stg extends Setting>(
   }
 ): GameState<Stg> => {
   const cues = args.instances.director.generateCuesAtUpdate(state);
-  return Im.replace(state, 'cue', cue => CueTrait.mergeCues(cue, cues));
+  return Im.update(state, 'cue', cue => CueTrait.mergeCues(cue, cues));
 };
 
 const generateCuesByCueHandlers = <Stg extends Setting>(
@@ -201,7 +201,7 @@ const generateCuesByCueHandlers = <Stg extends Setting>(
     return payloads.map(payload => ({type: cueType, payload}));
   });
 
-  return Im.replace(state, 'cue', cue =>
+  return Im.update(state, 'cue', cue =>
     CueTrait.mergeCues(cue, nestedCues.flat())
   );
 };
@@ -229,7 +229,7 @@ const popCue = <Stg extends Setting>(
   const priority = args.instances.director.getCuePriority();
   const {state: cueSt, cue} = CueTrait.popCue(state.cue, {priority});
   return {
-    state: Im.replace(state, 'cue', () => cueSt),
+    state: Im.update(state, 'cue', () => cueSt),
     cue,
   };
 };
@@ -267,7 +267,7 @@ const consumeNotifications = <Stg extends Setting>(
       const {noSt: noSt, notifications} =
         NotificationTrait.consumeAllNotifications(st.notification);
       return {
-        state: Im.replace(st, 'notification', () => noSt),
+        state: Im.update(st, 'notification', () => noSt),
         notifications,
       };
     }
@@ -284,9 +284,9 @@ const deleteActresses = <Stg extends Setting>(
   const delBodies = delActs.map(([_mid, st]) => st.mind.meta.bodyId);
   const newAct = Im.pipe(
     () => state.actressParts,
-    a => Im.replace(a, 'minds', m => Im.removeMulti(m, delMinds)),
-    a => Im.replace(a, 'bodies', b => Im.removeMulti(b, delBodies))
+    a => Im.update(a, 'minds', m => Im.removeMulti(m, delMinds)),
+    a => Im.update(a, 'bodies', b => Im.removeMulti(b, delBodies))
   )();
-  const st = Im.replace(state, 'actressParts', () => newAct);
+  const st = Im.update(state, 'actressParts', () => newAct);
   return {state: st};
 };

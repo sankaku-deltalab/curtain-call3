@@ -26,14 +26,14 @@ export class NotificationTrait {
     noSt: NotificationState<Stg>,
     notifications: AnyNotification<Stg>[]
   ): NotificationState<Stg> {
-    return Im.replace(noSt, 'notifications', n => [...n, ...notifications]);
+    return Im.update(noSt, 'notifications', n => [...n, ...notifications]);
   }
 
   static consumeAllNotifications<Stg extends Setting>(
     noSt: NotificationState<Stg>
   ): {noSt: NotificationState<Stg>; notifications: AnyNotification<Stg>[]} {
     const notifications = noSt.notifications;
-    const st = Im.replace(noSt, 'notifications', () => []);
+    const st = Im.update(noSt, 'notifications', () => []);
     return {noSt: st, notifications};
   }
 }

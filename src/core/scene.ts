@@ -24,6 +24,6 @@ export class SceneTrait {
     state: SceneState<Stg>,
     updater: (level: LevelState<Stg>) => LevelState<Stg>
   ): SceneState<Stg> {
-    return Im.replace(state, 'level', st => updater(st)); // I didn't use `updater` directly because direct using cause type error
+    return Im.update(state, 'level', st => updater(st)); // I didn't use `updater` directly because direct using cause type error
   }
 }

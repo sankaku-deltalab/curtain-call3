@@ -21,7 +21,7 @@ export class RecM2MTrait {
     to: T2
   ): RecM2M<T1, T2> {
     if (from in rel) {
-      return Im.replace(rel, from, opponents => RecSetTrait.add(opponents, to));
+      return Im.update(rel, from, opponents => RecSetTrait.add(opponents, to));
     }
 
     return Im.add(rel, from, RecSetTrait.new([to]));

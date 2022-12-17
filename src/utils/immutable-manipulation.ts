@@ -3,7 +3,7 @@ import {pipe as rambdaPipe} from 'rambda';
 type Rec = Record<string, unknown>;
 
 export class Im {
-  static replace<T extends Rec, Key extends keyof T>(
+  static update<T extends Rec, Key extends keyof T>(
     obj: T,
     key: Key,
     updater: (prev: T[Key]) => T[Key]
@@ -12,7 +12,7 @@ export class Im {
     return {...obj, [key]: newValue};
   }
 
-  static replace2<
+  static update_in2<
     Key1 extends string,
     Key2 extends string,
     T extends Record<Key1, Record<Key2, unknown>>
@@ -22,13 +22,13 @@ export class Im {
     updater: (prev: T[Key1][Key2]) => T[Key1][Key2]
   ): T {
     const newValue = updater(obj[key1][key2]);
-    return Im.replace(obj, key1, nestedObj => ({
+    return Im.update(obj, key1, nestedObj => ({
       ...nestedObj,
       [key2]: newValue,
     }));
   }
 
-  static replace3<
+  static update_in3<
     Key1 extends string,
     Key2 extends string,
     Key3 extends string,
@@ -39,7 +39,7 @@ export class Im {
     updater: (prev: T[Key1][Key2][Key3]) => T[Key1][Key2][Key3]
   ): T {
     const newValue = updater(obj[key1][key2][key3]);
-    return Im.replace2(obj, [key1, key2], nestedObj => ({
+    return Im.update_in2(obj, [key1, key2], nestedObj => ({
       ...nestedObj,
       [key3]: newValue,
     }));

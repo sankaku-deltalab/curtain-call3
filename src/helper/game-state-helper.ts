@@ -120,7 +120,7 @@ export class GameStateHelper {
       () => state,
       st => ActressPartsTrait.addActress(st.actressParts, act),
       ({state: actSt, bodyId, mindId}) => ({
-        state: Im.replace(originalSt, 'actressParts', () => actSt),
+        state: Im.update(originalSt, 'actressParts', () => actSt),
         bodyId,
         mindId,
       })
@@ -140,7 +140,7 @@ export class GameStateHelper {
       () => state,
       st => ActressPartsTrait.addActresses(st.actressParts, acts),
       ({state: actSt, ids}) => ({
-        state: Im.replace(originalSt, 'actressParts', () => actSt),
+        state: Im.update(originalSt, 'actressParts', () => actSt),
         ids,
       })
     )();
@@ -153,7 +153,7 @@ export class GameStateHelper {
       body: BodyState<Stg, BT>;
     }
   ): GameState<Stg> {
-    return Im.replace(state, 'actressParts', act => {
+    return Im.update(state, 'actressParts', act => {
       return ActressPartsTrait.updateBody(
         act,
         args.bodyId,
@@ -167,7 +167,7 @@ export class GameStateHelper {
     state: GameState<Stg>,
     bodies: Record<BodyId, AnyBodyState<Stg>>
   ): GameState<Stg> {
-    return Im.replace(state, 'actressParts', act => {
+    return Im.update(state, 'actressParts', act => {
       return ActressPartsTrait.replaceBodies(act, bodies);
     });
   }
@@ -181,7 +181,7 @@ export class GameStateHelper {
       args: {bodyId: BodyId}
     ) => BodyState<Stg, BT> | undefined
   ): GameState<Stg> {
-    return Im.replace(state, 'actressParts', act => {
+    return Im.update(state, 'actressParts', act => {
       return ActressPartsTrait.updateBody(act, bodyId, bodyType, updater);
     });
   }
@@ -208,7 +208,7 @@ export class GameStateHelper {
     return Im.pipe(
       () => state.cue,
       st => CueTrait.mergeCues(st, [{type, payload}]),
-      cueSt => Im.replace(originalSt, 'cue', () => cueSt)
+      cueSt => Im.update(originalSt, 'cue', () => cueSt)
     )();
   }
 
@@ -224,7 +224,7 @@ export class GameStateHelper {
     return Im.pipe(
       () => state.notification,
       st => NotificationTrait.mergeNotifications(st, [{type, payload}]),
-      noSt => Im.replace(originalSt, 'notification', () => noSt)
+      noSt => Im.update(originalSt, 'notification', () => noSt)
     )();
   }
 
@@ -236,7 +236,7 @@ export class GameStateHelper {
     state: GameState<Stg>,
     updater: (level: LevelState<Stg>) => LevelState<Stg>
   ): GameState<Stg> {
-    return Im.replace(state, 'scene', scSt =>
+    return Im.update(state, 'scene', scSt =>
       SceneTrait.updateLevel(scSt, updater)
     );
   }

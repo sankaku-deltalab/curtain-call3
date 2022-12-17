@@ -18,28 +18,28 @@ export class GameProgressController {
     if (progress.mode !== 'not-started') {
       return progress;
     }
-    return Im.replace(progress, 'mode', (): 'active' => 'active');
+    return Im.update(progress, 'mode', (): 'active' => 'active');
   }
 
   static pause(progress: GameProgressState): GameProgressState {
     if (progress.mode !== 'active') {
       return progress;
     }
-    return Im.replace(progress, 'mode', (): 'paused' => 'paused');
+    return Im.update(progress, 'mode', (): 'paused' => 'paused');
   }
 
   static unpause(progress: GameProgressState): GameProgressState {
     if (progress.mode !== 'paused') {
       return progress;
     }
-    return Im.replace(progress, 'mode', (): 'active' => 'active');
+    return Im.update(progress, 'mode', (): 'active' => 'active');
   }
 
   static finish(progress: GameProgressState): GameProgressState {
     if (!(progress.mode in ['not-started', 'finished'])) {
       return progress;
     }
-    return Im.replace(progress, 'mode', (): 'finished' => 'finished');
+    return Im.update(progress, 'mode', (): 'finished' => 'finished');
   }
 
   static updateGame<Stg extends Setting>(

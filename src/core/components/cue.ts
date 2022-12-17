@@ -42,7 +42,7 @@ export class CueTrait {
       () => cues,
       cue => CueTrait.organizeCues(cue, types)
     )();
-    return Im.replace(cueSt, 'cues', oldCue => {
+    return Im.update(cueSt, 'cues', oldCue => {
       if (oldCue === undefined) return newCue;
       return CueTrait.mergeOrganizedCues(oldCue, newCue, types);
     });
@@ -75,9 +75,9 @@ export class CueTrait {
       if (cues.length === 0) continue;
 
       const cue = cues[cues.length - 1];
-      const st = Im.replace(state, 'cues', cuesObj => {
+      const st = Im.update(state, 'cues', cuesObj => {
         if (cuesObj === undefined) throw new Error('code bug');
-        return Im.replace(cuesObj, cueType, cuesArray => {
+        return Im.update(cuesObj, cueType, cuesArray => {
           const cueArrayClone = [...cuesArray];
           cueArrayClone.pop();
           return cueArrayClone;

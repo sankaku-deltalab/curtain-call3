@@ -37,7 +37,7 @@ export class InputTrait {
     return Im.pipe(
       () => state,
       st =>
-        Im.replace(st, 'pointer', s =>
+        Im.update(st, 'pointer', s =>
           PointerInputTrait.updateState(s, pointerArgs)
         )
     )();

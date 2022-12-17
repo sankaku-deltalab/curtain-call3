@@ -110,8 +110,8 @@ export class ActressPartsTrait {
     }
   ): ActressPartsState<Stg> {
     let st = state;
-    st = Im.replace(st, 'minds', m => ({...m, ...args.minds}));
-    st = Im.replace(st, 'bodies', b => ({...b, ...args.bodies}));
+    st = Im.update(st, 'minds', m => ({...m, ...args.minds}));
+    st = Im.update(st, 'bodies', b => ({...b, ...args.bodies}));
     return st;
   }
 
@@ -127,8 +127,8 @@ export class ActressPartsTrait {
     const {body, mind} = this.createActress({bodyId, mindId, ...act});
     const st2 = Im.pipe(
       () => st,
-      st => Im.replace(st, 'minds', m => Im.add(m, mindId, mind)),
-      st => Im.replace(st, 'bodies', b => Im.add(b, bodyId, body))
+      st => Im.update(st, 'minds', m => Im.add(m, mindId, mind)),
+      st => Im.update(st, 'bodies', b => Im.add(b, bodyId, body))
     )();
 
     return {state: st2, bodyId, mindId};
@@ -171,8 +171,8 @@ export class ActressPartsTrait {
     )();
     const st2 = Im.pipe(
       () => st,
-      st => Im.replace(st, 'minds', m => Im.merge(m, minds)),
-      st => Im.replace(st, 'bodies', b => Im.merge(b, bodies))
+      st => Im.update(st, 'minds', m => Im.merge(m, minds)),
+      st => Im.update(st, 'bodies', b => Im.merge(b, bodies))
     )();
 
     return {state: st2, ids};
@@ -184,8 +184,8 @@ export class ActressPartsTrait {
     const bodyId = `b${state.bodyIdCount}`;
     const mindId = `m${state.mindIdCount}`;
     let st = state;
-    st = Im.replace(st, 'bodyIdCount', c => c + 1);
-    st = Im.replace(st, 'mindIdCount', c => c + 1);
+    st = Im.update(st, 'bodyIdCount', c => c + 1);
+    st = Im.update(st, 'mindIdCount', c => c + 1);
     return {state: st, bodyId, mindId};
   }
 
@@ -209,8 +209,8 @@ export class ActressPartsTrait {
 
     return Im.pipe(
       () => state,
-      st => Im.replace(st, 'bodyIdCount', c => c + counts),
-      st => Im.replace(st, 'mindIdCount', c => c + counts),
+      st => Im.update(st, 'bodyIdCount', c => c + counts),
+      st => Im.update(st, 'mindIdCount', c => c + counts),
       st => ({state: st, ids})
     )();
   }
@@ -268,14 +268,14 @@ export class ActressPartsTrait {
       ...state.bodies,
       [bodyId]: body,
     };
-    return Im.replace(state, 'bodies', () => bodies);
+    return Im.update(state, 'bodies', () => bodies);
   }
 
   static replaceBodies<Stg extends Setting>(
     state: ActressPartsState<Stg>,
     bodies: Record<BodyId, AnyBodyState<Stg>>
   ): ActressPartsState<Stg> {
-    return Im.replace(state, 'bodies', () => ({
+    return Im.update(state, 'bodies', () => ({
       ...state.bodies,
       ...bodies,
     }));

@@ -42,6 +42,6 @@ export class ActressHelper {
   static delActress<Stg extends Setting, Act extends AnyActressState<Stg>>(
     act: Act
   ): Act {
-    return Im.replace3(act, ['body', 'meta', 'del'], () => true);
+    return Im.update_in3(act, ['body', 'meta', 'del'], () => true);
   }
 }

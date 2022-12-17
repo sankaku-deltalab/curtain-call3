@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rename event to cue because name `Event` of curtain-call conflict `Event` of browser js.
 - Rename `CueManipulator` (`EventManipulator`) to `CueHandler`.
 - Remove overlaps from arguments without GameState.
+- Rename `Im.replace` to `Im.update`.
 
 ### Removed
 
