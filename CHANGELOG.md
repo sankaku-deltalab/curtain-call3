@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Now GameState contains CollisionState.
 - RecSet and RecM2M become generic.
 - Rename event to cue because name `Event` of curtain-call conflict `Event` of browser js.
+- Rename `CueManipulator` (`EventManipulator`) to `CueHandler`.
 
 ### Removed
 
