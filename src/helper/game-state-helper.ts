@@ -14,8 +14,8 @@ import {NotificationTrait} from '../core/notification';
 import {SceneTrait} from '../core/scene';
 import {
   BodyTypes,
-  EventPayload,
-  EventTypes,
+  CuePayload,
+  CueTypes,
   LevelState,
   MindTypes,
   NotificationPayload,
@@ -199,10 +199,10 @@ export class GameStateHelper {
     );
   }
 
-  static addEvent<Stg extends Setting, EvType extends EventTypes<Stg>>(
+  static addEvent<Stg extends Setting, EvType extends CueTypes<Stg>>(
     state: GameState<Stg>,
     type: EvType,
-    payload: EventPayload<Stg, EvType>
+    payload: CuePayload<Stg, EvType>
   ): GameState<Stg> {
     const originalSt = state;
     return Im.pipe(
