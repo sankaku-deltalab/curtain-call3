@@ -47,7 +47,7 @@ export class GameProgressController {
     args: {
       progress: GameProgressState;
       input: CanvasInput<Stg>;
-      events: AnyCue<Stg>[];
+      cues: AnyCue<Stg>[];
       time: TimeInput<Stg>;
       renderingState: RenderingState;
       instances: GameInstances<Stg>;

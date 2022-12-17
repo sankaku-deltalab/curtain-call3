@@ -31,7 +31,7 @@ export class GameProcessing {
     state: GameState<Stg>,
     args: {
       input: CanvasInput<Stg>;
-      events: AnyCue<Stg>[];
+      cues: AnyCue<Stg>[];
       time: TimeInput<Stg>;
       renderingState: RenderingState;
       instances: GameInstances<Stg>;
@@ -42,16 +42,16 @@ export class GameProcessing {
       () => state,
       st => updateTime(st, args),
       st => updateInput(st, args),
-      st => addGivenEvents(st, args),
+      st => addGivenCues(st, args),
       st => applyInputToActresses(st, args),
       st => updateCollision(st, args)
     )();
 
     st = Im.pipe(
       () => st,
-      st => generateEventsByDirector(st, args),
-      st => generateEventsByEventManipulators(st, args),
-      st => applyEvents(st, args),
+      st => generateCuesByDirector(st, args),
+      st => generateCuesByCueManipulators(st, args),
+      st => applyCues(st, args),
       st => updateByDirector(st, args),
       st => updateByActresses(st, args),
       st => deleteActresses(st, args),
@@ -120,11 +120,11 @@ const updateInput = <Stg extends Setting>(
   return Im.replace(state, 'input', st => InputTrait.updateState(st, updArgs));
 };
 
-const addGivenEvents = <Stg extends Setting>(
+const addGivenCues = <Stg extends Setting>(
   state: GameState<Stg>,
-  args: {events: AnyCue<Stg>[]}
+  args: {cues: AnyCue<Stg>[]}
 ): GameState<Stg> => {
-  return Im.replace(state, 'cue', ev => CueTrait.mergeCues(ev, args.events));
+  return Im.replace(state, 'cue', cue => CueTrait.mergeCues(cue, args.cues));
 };
 
 const applyInputToActresses = <Stg extends Setting>(
@@ -177,44 +177,44 @@ const calcOverlaps = (collisions: FlatCollision[]): Overlaps => {
   return OverlapCalculation.calcOverlaps(collisions);
 };
 
-const generateEventsByDirector = <Stg extends Setting>(
+const generateCuesByDirector = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
   const overlaps = state.collision.overlaps;
-  const events = args.instances.director.generateCuesAtUpdate(state, {
+  const cues = args.instances.director.generateCuesAtUpdate(state, {
     overlaps,
   });
-  return Im.replace(state, 'cue', ev => CueTrait.mergeCues(ev, events));
+  return Im.replace(state, 'cue', cue => CueTrait.mergeCues(cue, cues));
 };
 
-const generateEventsByEventManipulators = <Stg extends Setting>(
+const generateCuesByCueManipulators = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
-  const manKeysUnsorted = Object.keys(args.instances.eventManipulators);
+  const manKeysUnsorted = Object.keys(args.instances.cueManipulators);
   const priority = args.instances.director.getCuePriority();
   const manKeys = CueTrait.sortCueTypesByPriority(manKeysUnsorted, {
     priority,
   });
 
-  const nestedEvents = Enum.map(manKeys, evType => {
-    const man = args.instances.eventManipulators[evType];
+  const nestedCues = Enum.map(manKeys, cueType => {
+    const man = args.instances.cueManipulators[cueType];
     const overlaps = state.collision.overlaps;
     const payloads = man.generateCuesAtUpdate(state, {overlaps});
-    return payloads.map(payload => ({type: evType, payload}));
+    return payloads.map(payload => ({type: cueType, payload}));
   });
 
-  return Im.replace(state, 'cue', ev =>
-    CueTrait.mergeCues(ev, nestedEvents.flat())
+  return Im.replace(state, 'cue', cue =>
+    CueTrait.mergeCues(cue, nestedCues.flat())
   );
 };
 
-const applyEvents = <Stg extends Setting>(
+const applyCues = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
     instances: GameInstances<Stg>;
@@ -223,24 +223,24 @@ const applyEvents = <Stg extends Setting>(
   let st = state;
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const {state: st2, event} = popEvent(st, args);
-    if (event === undefined) return st;
-    const manipulator = args.instances.eventManipulators[event.type];
-    st = manipulator.applyCue(st2, event.payload);
+    const {state: st2, cue} = popCue(st, args);
+    if (cue === undefined) return st;
+    const manipulator = args.instances.cueManipulators[cue.type];
+    st = manipulator.applyCue(st2, cue.payload);
   }
 };
 
-const popEvent = <Stg extends Setting>(
+const popCue = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
     instances: GameInstances<Stg>;
   }
-): {state: GameState<Stg>; event?: AnyCue<Stg>} => {
+): {state: GameState<Stg>; cue?: AnyCue<Stg>} => {
   const priority = args.instances.director.getCuePriority();
-  const {state: evSt, cue: event} = CueTrait.popCue(state.cue, {priority});
+  const {state: cueSt, cue} = CueTrait.popCue(state.cue, {priority});
   return {
-    state: Im.replace(state, 'cue', () => evSt),
-    event,
+    state: Im.replace(state, 'cue', () => cueSt),
+    cue,
   };
 };
 

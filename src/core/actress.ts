@@ -20,7 +20,7 @@ export type ActressState<
   mindId: MindId;
   body: BodyState<Stg, BT>;
   mind: MindState<Stg, MT>;
-  ev: AnyCue<Stg>[];
+  cues: AnyCue<Stg>[];
   notifications: AnyNotification<Stg>[];
 }>;
 
@@ -49,7 +49,7 @@ export class ActressTrait {
       mindId,
       mind: mind.val,
       body: body.val,
-      ev: [],
+      cues: [],
       notifications: [],
     });
   }
@@ -64,12 +64,12 @@ export class ActressTrait {
     const bodies = Object.fromEntries(
       actSts.map(([_, s]) => [s.mind.meta.bodyId, s.body])
     );
-    const newEvents = actSts.flatMap(([_, s]) => s.ev);
+    const newCues = actSts.flatMap(([_, s]) => s.cues);
     const newNotifications = actSts.flatMap(([_, s]) => s.notifications);
 
     return Im.pipe(
       () => state,
-      st => Im.replace(st, 'cue', s => CueTrait.mergeCues(s, newEvents)),
+      st => Im.replace(st, 'cue', s => CueTrait.mergeCues(s, newCues)),
       st =>
         Im.replace(st, 'notification', s =>
           NotificationTrait.mergeNotifications(s, newNotifications)

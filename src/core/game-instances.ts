@@ -6,8 +6,8 @@ import {CueManipulator} from './cue-manipulator';
 
 export type GameInstances<Stg extends Setting> = {
   director: DirectorBehavior<Stg>;
-  eventManipulators: {
-    [EvType in CueTypes<Stg>]: CueManipulator<Stg, EvType>;
+  cueManipulators: {
+    [CueType in CueTypes<Stg>]: CueManipulator<Stg, CueType>;
   };
   actresses: {[MT in MindTypes<Stg>]: ActressBehavior<Stg, BodyTypes<Stg>, MT>};
 };

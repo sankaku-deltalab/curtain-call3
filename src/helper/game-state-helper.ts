@@ -199,16 +199,16 @@ export class GameStateHelper {
     );
   }
 
-  static addEvent<Stg extends Setting, EvType extends CueTypes<Stg>>(
+  static addCue<Stg extends Setting, CueType extends CueTypes<Stg>>(
     state: GameState<Stg>,
-    type: EvType,
-    payload: CuePayload<Stg, EvType>
+    type: CueType,
+    payload: CuePayload<Stg, CueType>
   ): GameState<Stg> {
     const originalSt = state;
     return Im.pipe(
       () => state.cue,
       st => CueTrait.mergeCues(st, [{type, payload}]),
-      evSt => Im.replace(originalSt, 'cue', () => evSt)
+      cueSt => Im.replace(originalSt, 'cue', () => cueSt)
     )();
   }
 
