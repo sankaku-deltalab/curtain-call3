@@ -27,13 +27,13 @@ export type GameState<Stg extends Setting> = Readonly<{
   actressParts: ActressPartsState<Stg>;
   collision: CollisionState;
   scene: SceneState<Stg>;
-  event: CueState<Stg>;
+  cue: CueState<Stg>;
   notification: NotificationState<Stg>;
 }>;
 
 export type VisibleGameState<Stg extends Setting> = Exclude<
   GameState<Stg>,
-  'minds' | 'events'
+  'minds' | 'cue'
 >;
 
 export type StateInitializer<Stg extends Setting> = Readonly<{
@@ -54,7 +54,7 @@ export class GameStateTrait {
       collision: CollisionTrait.initialState(),
       actressParts: ActressPartsTrait.initialState(),
       scene: SceneTrait.initialState({initialLevel: args.level}),
-      event: CueTrait.initialState(),
+      cue: CueTrait.initialState(),
       notification: NotificationTrait.initialState(),
     };
   }

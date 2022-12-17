@@ -124,7 +124,7 @@ const addGivenEvents = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {events: AnyCue<Stg>[]}
 ): GameState<Stg> => {
-  return Im.replace(state, 'event', ev => CueTrait.mergeCues(ev, args.events));
+  return Im.replace(state, 'cue', ev => CueTrait.mergeCues(ev, args.events));
 };
 
 const applyInputToActresses = <Stg extends Setting>(
@@ -187,7 +187,7 @@ const generateEventsByDirector = <Stg extends Setting>(
   const events = args.instances.director.generateCuesAtUpdate(state, {
     overlaps,
   });
-  return Im.replace(state, 'event', ev => CueTrait.mergeCues(ev, events));
+  return Im.replace(state, 'cue', ev => CueTrait.mergeCues(ev, events));
 };
 
 const generateEventsByEventManipulators = <Stg extends Setting>(
@@ -209,7 +209,7 @@ const generateEventsByEventManipulators = <Stg extends Setting>(
     return payloads.map(payload => ({type: evType, payload}));
   });
 
-  return Im.replace(state, 'event', ev =>
+  return Im.replace(state, 'cue', ev =>
     CueTrait.mergeCues(ev, nestedEvents.flat())
   );
 };
@@ -237,9 +237,9 @@ const popEvent = <Stg extends Setting>(
   }
 ): {state: GameState<Stg>; event?: AnyCue<Stg>} => {
   const priority = args.instances.director.getCuePriority();
-  const {state: evSt, cue: event} = CueTrait.popCue(state.event, {priority});
+  const {state: evSt, cue: event} = CueTrait.popCue(state.cue, {priority});
   return {
-    state: Im.replace(state, 'event', () => evSt),
+    state: Im.replace(state, 'cue', () => evSt),
     event,
   };
 };

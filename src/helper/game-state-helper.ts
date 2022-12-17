@@ -206,9 +206,9 @@ export class GameStateHelper {
   ): GameState<Stg> {
     const originalSt = state;
     return Im.pipe(
-      () => state.event,
+      () => state.cue,
       st => CueTrait.mergeCues(st, [{type, payload}]),
-      evSt => Im.replace(originalSt, 'event', () => evSt)
+      evSt => Im.replace(originalSt, 'cue', () => evSt)
     )();
   }
 
