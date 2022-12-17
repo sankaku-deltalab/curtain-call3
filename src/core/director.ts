@@ -33,14 +33,14 @@ export interface DirectorBehavior<Stg extends Setting> {
     }
   ): GameState<Stg>;
 
-  generateEventsAtUpdate(
+  generateCuesAtUpdate(
     st: GameState<Stg>,
     other: {
       overlaps: Overlaps;
     }
   ): AnyCue<Stg>[];
 
-  getEventPriority(): CuePriority<Stg>;
+  getCuePriority(): CuePriority<Stg>;
 
   getTimeScales(state: GameState<Stg>): TimeScaling<Stg>;
 }

@@ -184,7 +184,7 @@ const generateEventsByDirector = <Stg extends Setting>(
   }
 ): GameState<Stg> => {
   const overlaps = state.collision.overlaps;
-  const events = args.instances.director.generateEventsAtUpdate(state, {
+  const events = args.instances.director.generateCuesAtUpdate(state, {
     overlaps,
   });
   return Im.replace(state, 'event', ev => CueTrait.mergeCues(ev, events));
@@ -197,7 +197,7 @@ const generateEventsByEventManipulators = <Stg extends Setting>(
   }
 ): GameState<Stg> => {
   const manKeysUnsorted = Object.keys(args.instances.eventManipulators);
-  const priority = args.instances.director.getEventPriority();
+  const priority = args.instances.director.getCuePriority();
   const manKeys = CueTrait.sortCueTypesByPriority(manKeysUnsorted, {
     priority,
   });
@@ -236,7 +236,7 @@ const popEvent = <Stg extends Setting>(
     instances: GameInstances<Stg>;
   }
 ): {state: GameState<Stg>; event?: AnyCue<Stg>} => {
-  const priority = args.instances.director.getEventPriority();
+  const priority = args.instances.director.getCuePriority();
   const {state: evSt, cue: event} = CueTrait.popCue(state.event, {priority});
   return {
     state: Im.replace(state, 'event', () => evSt),
