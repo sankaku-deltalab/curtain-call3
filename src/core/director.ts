@@ -5,12 +5,7 @@ import {Setting} from './setting';
 export class DirectorTrait {}
 
 export interface DirectorBehavior<Stg extends Setting> {
-  // apply_input(
-  //   state: DirectorGameState<Stg>,
-  //   args: {
-  //     input: Input<Stg>;
-  //   }
-  // ): DirectorGameState<Stg>;
+  applyInput(state: GameState<Stg>): GameState<Stg>;
 
   update(state: GameState<Stg>): GameState<Stg>;
 

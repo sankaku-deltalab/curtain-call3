@@ -42,6 +42,7 @@ export class GameProcessing {
       st => updateTime(st, args),
       st => updateInput(st, args),
       st => addGivenCues(st, args),
+      st => applyInputToDirector(st, args),
       st => applyInputToActresses(st, args),
       st => updateCollision(st, args)
     )();
@@ -124,6 +125,14 @@ const addGivenCues = <Stg extends Setting>(
   args: {cues: AnyCue<Stg>[]}
 ): GameState<Stg> => {
   return Im.update(state, 'cue', cue => CueTrait.mergeCues(cue, args.cues));
+};
+
+const applyInputToDirector = <Stg extends Setting>(
+  state: GameState<Stg>,
+  args: {instances: GameInstances<Stg>}
+): GameState<Stg> => {
+  const director = GameInstancesTrait.getDirectorBehavior(args.instances);
+  return director.applyInput(state);
 };
 
 const applyInputToActresses = <Stg extends Setting>(
