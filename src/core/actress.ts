@@ -32,15 +32,15 @@ export type AnyActressState<Stg extends Setting> = ActressState<
 
 export class ActressTrait {
   static extractActressState<Stg extends Setting>(
-    st: GameState<Stg>,
+    state: GameState<Stg>,
     mindId: MindId
   ): Result<AnyActressState<Stg>> {
-    const mind = GameStateTrait.extractMind(mindId, st);
+    const mind = GameStateTrait.extractMind(mindId, state);
     if (Res.isErr(mind)) {
       return mind;
     }
 
-    const body = GameStateTrait.extractBody(mind.val.meta.bodyId, st);
+    const body = GameStateTrait.extractBody(mind.val.meta.bodyId, state);
     if (Res.isErr(body)) {
       return body;
     }
@@ -91,31 +91,25 @@ export interface ActressBehavior<
   readonly mindType: MT;
 
   applyInput(
-    st: ActressState<Stg, BT, MT>,
+    act: ActressState<Stg, BT, MT>,
     args: {
-      gameState: GameState<Stg>;
+      state: GameState<Stg>;
     }
   ): ActressState<Stg, BT, MT>;
 
   update(
-    st: ActressState<Stg, BT, MT>,
-    args: {
-      gameState: GameState<Stg>;
-    }
+    act: ActressState<Stg, BT, MT>,
+    args: {state: GameState<Stg>}
   ): ActressState<Stg, BT, MT>;
 
   generateGraphics(
-    st: ActressState<Stg, BT, MT>,
-    args: {
-      gameState: GameState<Stg>;
-    }
+    act: ActressState<Stg, BT, MT>,
+    args: {state: GameState<Stg>}
   ): Graphic<Stg>[];
 
   generateCollision(
-    st: ActressState<Stg, BT, MT>,
-    args: {
-      gameState: GameState<Stg>;
-    }
+    act: ActressState<Stg, BT, MT>,
+    args: {state: GameState<Stg>}
   ): Collision;
 }
 

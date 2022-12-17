@@ -56,9 +56,9 @@ export class GameStateTrait {
 
   static extractMind<Stg extends Setting>(
     mindId: MindId,
-    st: GameState<Stg>
+    state: GameState<Stg>
   ): Result<AnyMindState<Stg>> {
-    const minds = ActressPartsTrait.getMinds(st.actressParts);
+    const minds = ActressPartsTrait.getMinds(state.actressParts);
     return Res.errIfUndefined(
       minds[mindId],
       `Mind of id '${mindId}' is not exists`
@@ -67,9 +67,9 @@ export class GameStateTrait {
 
   static extractBody<Stg extends Setting>(
     bodyId: BodyId,
-    st: GameState<Stg>
+    state: GameState<Stg>
   ): Result<AnyBodyState<Stg>> {
-    const bodies = ActressPartsTrait.getBodies(st.actressParts);
+    const bodies = ActressPartsTrait.getBodies(state.actressParts);
     return Res.errIfUndefined(
       bodies[bodyId],
       `Body of id '${bodyId}' is not exists`

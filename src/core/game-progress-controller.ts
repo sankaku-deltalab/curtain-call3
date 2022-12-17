@@ -14,32 +14,32 @@ export type GameProgressState = Readonly<{
 }>;
 
 export class GameProgressController {
-  static start(state: GameProgressState): GameProgressState {
-    if (state.mode !== 'not-started') {
-      return state;
+  static start(progress: GameProgressState): GameProgressState {
+    if (progress.mode !== 'not-started') {
+      return progress;
     }
-    return Im.replace(state, 'mode', (): 'active' => 'active');
+    return Im.replace(progress, 'mode', (): 'active' => 'active');
   }
 
-  static pause(state: GameProgressState): GameProgressState {
-    if (state.mode !== 'active') {
-      return state;
+  static pause(progress: GameProgressState): GameProgressState {
+    if (progress.mode !== 'active') {
+      return progress;
     }
-    return Im.replace(state, 'mode', (): 'paused' => 'paused');
+    return Im.replace(progress, 'mode', (): 'paused' => 'paused');
   }
 
-  static unpause(state: GameProgressState): GameProgressState {
-    if (state.mode !== 'paused') {
-      return state;
+  static unpause(progress: GameProgressState): GameProgressState {
+    if (progress.mode !== 'paused') {
+      return progress;
     }
-    return Im.replace(state, 'mode', (): 'active' => 'active');
+    return Im.replace(progress, 'mode', (): 'active' => 'active');
   }
 
-  static finish(state: GameProgressState): GameProgressState {
-    if (!(state.mode in ['not-started', 'finished'])) {
-      return state;
+  static finish(progress: GameProgressState): GameProgressState {
+    if (!(progress.mode in ['not-started', 'finished'])) {
+      return progress;
     }
-    return Im.replace(state, 'mode', (): 'finished' => 'finished');
+    return Im.replace(progress, 'mode', (): 'finished' => 'finished');
   }
 
   static updateGame<Stg extends Setting>(

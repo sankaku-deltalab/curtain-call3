@@ -10,24 +10,24 @@ export class DirectorTrait {
   }
 
   static mergeDirectorGameState<Stg extends Setting>(
-    st: GameState<Stg>,
+    state: GameState<Stg>,
     _state: GameState<Stg>
   ): GameState<Stg> {
-    return st;
+    return state;
   }
 }
 
 export interface DirectorBehavior<Stg extends Setting> {
   // apply_input(
-  //   st: DirectorGameState<Stg>,
+  //   state: DirectorGameState<Stg>,
   //   args: {
   //     input: Input<Stg>;
   //   }
   // ): DirectorGameState<Stg>;
 
-  update(st: GameState<Stg>): GameState<Stg>;
+  update(state: GameState<Stg>): GameState<Stg>;
 
-  generateCuesAtUpdate(st: GameState<Stg>): AnyCue<Stg>[];
+  generateCuesAtUpdate(state: GameState<Stg>): AnyCue<Stg>[];
 
   getCuePriority(): CuePriority<Stg>;
 

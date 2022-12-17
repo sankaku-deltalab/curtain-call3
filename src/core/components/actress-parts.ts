@@ -80,24 +80,24 @@ export class ActressPartsTrait {
   }
 
   static getMinds<Stg extends Setting>(
-    st: ActressPartsState<Stg>
+    actSt: ActressPartsState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
-    return st.minds;
+    return actSt.minds;
   }
 
   static getBodies<Stg extends Setting>(
-    st: ActressPartsState<Stg>
+    actSt: ActressPartsState<Stg>
   ): Record<BodyId, AnyBodyState<Stg>> {
-    return st.bodies;
+    return actSt.bodies;
   }
 
   static getFirstBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
-    st: ActressPartsState<Stg>,
+    actSt: ActressPartsState<Stg>,
     bodyType: BT
   ): Result<BodyState<Stg, BT>> {
-    for (const bodyId in st.bodies) {
-      if (st.bodies[bodyId].meta.bodyType === bodyType)
-        return Res.ok(st.bodies[bodyId] as BodyState<Stg, BT>);
+    for (const bodyId in actSt.bodies) {
+      if (actSt.bodies[bodyId].meta.bodyType === bodyType)
+        return Res.ok(actSt.bodies[bodyId] as BodyState<Stg, BT>);
     }
     return Res.err(`body of "${bodyType}" is not found`);
   }

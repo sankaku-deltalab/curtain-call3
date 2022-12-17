@@ -136,10 +136,7 @@ const applyInputToActresses = <Stg extends Setting>(
 
   const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
     ([mindId, actSt, beh]) => {
-      return Res.ok([
-        mindId,
-        beh.applyInput(actSt, {...args, gameState: state}),
-      ]);
+      return Res.ok([mindId, beh.applyInput(actSt, {...args, state: state})]);
     }
   );
 
@@ -165,7 +162,7 @@ const calcFlatCollisions = <Stg extends Setting>(
     st => collectActInState(st, args),
     acts =>
       Enum.map(acts, ([_mindId, st, beh]): [string, Collision] => {
-        const col = beh.generateCollision(st, {gameState: state});
+        const col = beh.generateCollision(st, {state: state});
         return [st.mind.meta.bodyId, col];
       }),
     col => Object.fromEntries(col),
@@ -263,7 +260,7 @@ const updateByActresses = <Stg extends Setting>(
 
   const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
     ([mindId, actSt, beh]) => {
-      return Res.ok([mindId, beh.update(actSt, {...args, gameState: state})]);
+      return Res.ok([mindId, beh.update(actSt, {...args, state})]);
     }
   );
 
@@ -276,7 +273,7 @@ const consumeNotifications = <Stg extends Setting>(
   return Im.pipe(
     () => state,
     st => {
-      const {state: noSt, notifications} =
+      const {noSt: noSt, notifications} =
         NotificationTrait.consumeAllNotifications(st.notification);
       return {
         state: Im.replace(st, 'notification', () => noSt),

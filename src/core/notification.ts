@@ -23,17 +23,17 @@ export class NotificationTrait {
   }
 
   static mergeNotifications<Stg extends Setting>(
-    st: NotificationState<Stg>,
+    noSt: NotificationState<Stg>,
     notifications: AnyNotification<Stg>[]
   ): NotificationState<Stg> {
-    return Im.replace(st, 'notifications', n => [...n, ...notifications]);
+    return Im.replace(noSt, 'notifications', n => [...n, ...notifications]);
   }
 
   static consumeAllNotifications<Stg extends Setting>(
-    state: NotificationState<Stg>
-  ): {state: NotificationState<Stg>; notifications: AnyNotification<Stg>[]} {
-    const notifications = state.notifications;
-    const st = Im.replace(state, 'notifications', () => []);
-    return {state: st, notifications};
+    noSt: NotificationState<Stg>
+  ): {noSt: NotificationState<Stg>; notifications: AnyNotification<Stg>[]} {
+    const notifications = noSt.notifications;
+    const st = Im.replace(noSt, 'notifications', () => []);
+    return {noSt: st, notifications};
   }
 }

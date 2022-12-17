@@ -29,12 +29,12 @@ export class CueTrait {
   }
 
   static mergeCues<Stg extends Setting>(
-    st: CueState<Stg>,
+    cueSt: CueState<Stg>,
     cues: AnyCue<Stg>[]
   ): CueState<Stg> {
-    if (cues.length === 0) return st;
+    if (cues.length === 0) return cueSt;
 
-    const types1: CueTypes<Stg>[] = st.cues ? Object.keys(st.cues) : [];
+    const types1: CueTypes<Stg>[] = cueSt.cues ? Object.keys(cueSt.cues) : [];
     const types2: CueTypes<Stg>[] = cues.map(e => e.type);
     const types: CueTypes<Stg>[] = [...new Set([...types1, ...types2])];
 
@@ -42,7 +42,7 @@ export class CueTrait {
       () => cues,
       cue => CueTrait.organizeCues(cue, types)
     )();
-    return Im.replace(st, 'cues', oldCue => {
+    return Im.replace(cueSt, 'cues', oldCue => {
       if (oldCue === undefined) return newCue;
       return CueTrait.mergeOrganizedCues(oldCue, newCue, types);
     });
