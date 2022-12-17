@@ -2,12 +2,12 @@ import {ActressBehavior} from './actress';
 import {DirectorBehavior} from './director';
 import {Res, Result} from '../utils/result';
 import {BodyTypes, CueTypes, MindTypes, Setting} from './setting';
-import {EventManipulator} from './event-manipulator';
+import {CueManipulator} from './event-manipulator';
 
 export type GameInstances<Stg extends Setting> = {
   director: DirectorBehavior<Stg>;
   eventManipulators: {
-    [EvType in CueTypes<Stg>]: EventManipulator<Stg, EvType>;
+    [EvType in CueTypes<Stg>]: CueManipulator<Stg, EvType>;
   };
   actresses: {[MT in MindTypes<Stg>]: ActressBehavior<Stg, BodyTypes<Stg>, MT>};
 };

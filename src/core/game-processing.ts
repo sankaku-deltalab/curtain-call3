@@ -205,7 +205,7 @@ const generateEventsByEventManipulators = <Stg extends Setting>(
   const nestedEvents = Enum.map(manKeys, evType => {
     const man = args.instances.eventManipulators[evType];
     const overlaps = state.collision.overlaps;
-    const payloads = man.generateEventsAtUpdate(state, {overlaps});
+    const payloads = man.generateCuesAtUpdate(state, {overlaps});
     return payloads.map(payload => ({type: evType, payload}));
   });
 
@@ -226,7 +226,7 @@ const applyEvents = <Stg extends Setting>(
     const {state: st2, event} = popEvent(st, args);
     if (event === undefined) return st;
     const manipulator = args.instances.eventManipulators[event.type];
-    st = manipulator.applyEvent(st2, event.payload);
+    st = manipulator.applyCue(st2, event.payload);
   }
 };
 
