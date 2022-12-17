@@ -2,20 +2,7 @@ import {AnyCue, CuePriority} from './components/cue';
 import {GameState} from './game-state';
 import {Setting} from './setting';
 
-export class DirectorTrait {
-  static extractDirectorGameState<Stg extends Setting>(
-    state: GameState<Stg>
-  ): GameState<Stg> {
-    return state;
-  }
-
-  static mergeDirectorGameState<Stg extends Setting>(
-    state: GameState<Stg>,
-    _state: GameState<Stg>
-  ): GameState<Stg> {
-    return state;
-  }
-}
+export class DirectorTrait {}
 
 export interface DirectorBehavior<Stg extends Setting> {
   // apply_input(

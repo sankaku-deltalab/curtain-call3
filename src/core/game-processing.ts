@@ -5,7 +5,6 @@ import {
   FlatCollision,
   Overlaps,
 } from './components/collision/collision';
-import {DirectorTrait} from './director';
 import {GameInstances, GameInstancesTrait} from './game-instances';
 import {GameState, GameStateTrait, StateInitializer} from './game-state';
 import {CanvasInput, InputTrait} from './components/inputs/input';
@@ -209,9 +208,7 @@ const generateCuesByCueHandlers = <Stg extends Setting>(
 
 const applyCues = <Stg extends Setting>(
   state: GameState<Stg>,
-  args: {
-    instances: GameInstances<Stg>;
-  }
+  args: {instances: GameInstances<Stg>}
 ): GameState<Stg> => {
   let st = state;
   // eslint-disable-next-line no-constant-condition
@@ -239,16 +236,10 @@ const popCue = <Stg extends Setting>(
 
 const updateByDirector = <Stg extends Setting>(
   state: GameState<Stg>,
-  args: {
-    instances: GameInstances<Stg>;
-  }
+  args: {instances: GameInstances<Stg>}
 ): GameState<Stg> => {
   const director = GameInstancesTrait.getDirectorBehavior(args.instances);
-
-  let st = DirectorTrait.extractDirectorGameState(state);
-  st = director.update(st);
-
-  return DirectorTrait.mergeDirectorGameState(st, state);
+  return director.update(state);
 };
 
 const updateByActresses = <Stg extends Setting>(
