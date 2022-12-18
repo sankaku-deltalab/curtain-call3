@@ -5,7 +5,6 @@ export type Setting = {
   bodies: Record<string, Rec>;
   minds: Record<string, Rec>;
   cues: Record<string, Rec>;
-  representation: Rec;
   notifications: Record<string, Rec>;
 };
 
