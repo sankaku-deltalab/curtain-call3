@@ -1,7 +1,7 @@
 import {Setting} from '../../setting';
 import {Im} from '../../../utils/immutable-manipulation';
 import {Vec2dTrait} from '../../../utils/vec2d';
-import {AaRect2d} from '../../../utils/aa-rect2d';
+import {AaRect2d, AaRect2dTrait} from '../../../utils/aa-rect2d';
 import {CameraState, CameraTrait, RenderingState} from '../camera';
 import {
   CanvasLineGraphic,
@@ -36,15 +36,10 @@ export class CanvasGraphicTrait {
     camSt: CameraState<Stg>;
     renSt: RenderingState;
   }): AaRect2d {
-    const gameNw = Im.pipe(
-      () => args.camSt.size,
-      s => Vec2dTrait.div(s, 2)
-    )();
-    const gameSe = Im.pipe(
-      () => args.camSt.size,
-      s => Vec2dTrait.div(s, 2),
-      s => Vec2dTrait.mlt(s, -1)
-    )();
+    const {nw: gameNw, se: gameSe} = AaRect2dTrait.fromCenterAndSize(
+      Vec2dTrait.zero(),
+      args.camSt.size
+    );
 
     const canvasNw = Im.pipe(
       () => gameNw,

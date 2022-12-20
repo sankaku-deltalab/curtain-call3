@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Delete `Setting.representation`.
+- Fix `GameRepresentation.getRenderingArea`.
 
 ## [1.0.0-alpha.2] - 2022-12-18
 
