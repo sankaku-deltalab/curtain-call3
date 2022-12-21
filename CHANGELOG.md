@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-alpha.4] - 2022-12-21
+
 ### Added
 
 - Add `GameProcessingHelper`.
@@ -54,7 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial beta release.
 
-[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.3...HEAD
+[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.4...HEAD
+[1.0.0-alpha.4]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.4
 [1.0.0-alpha.3]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.3
 [1.0.0-alpha.2]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.2
 [1.0.0-alpha.1]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.1
