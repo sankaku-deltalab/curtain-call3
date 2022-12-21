@@ -12,6 +12,7 @@
   },
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
+  "files": ["build"],
   "directories": {
     "lib": "build/src",
     "test": "__tests__"
