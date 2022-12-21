@@ -10,7 +10,7 @@ import {
 import {AnyCue, CueTrait} from './components/cue';
 import {GameState, GameStateTrait} from './game-state';
 import {AnyNotification, NotificationTrait} from './notification';
-import {BodyTypes, MindTypes, Setting} from './setting';
+import {BodyTypes, MindProps, MindTypes, Setting} from './setting';
 
 export type ActressState<
   Stg extends Setting,
@@ -82,6 +82,11 @@ export class ActressTrait {
   }
 }
 
+export type ActressProps<
+  Stg extends Setting,
+  MT extends MindTypes<Stg>
+> = MindProps<Stg, MT>;
+
 export interface ActressBehavior<
   Stg extends Setting,
   BT extends BodyTypes<Stg>,
@@ -97,19 +102,24 @@ export interface ActressBehavior<
     }
   ): ActressState<Stg, BT, MT>;
 
-  update(
+  createProps(
     act: ActressState<Stg, BT, MT>,
     args: {state: GameState<Stg>}
+  ): ActressProps<Stg, MT>;
+
+  update(
+    act: ActressState<Stg, BT, MT>,
+    props: ActressProps<Stg, MT>
   ): ActressState<Stg, BT, MT>;
 
   generateGraphics(
     act: ActressState<Stg, BT, MT>,
-    args: {state: GameState<Stg>}
+    props: ActressProps<Stg, MT>
   ): Graphic<Stg>[];
 
   generateCollision(
     act: ActressState<Stg, BT, MT>,
-    args: {state: GameState<Stg>}
+    props: ActressProps<Stg, MT>
   ): Collision;
 }
 

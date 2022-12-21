@@ -51,6 +51,8 @@ export type MindProps<
   MT extends MindTypes<Stg>
 > = Stg['minds'][MT]['props'];
 
+export type AnyMindProps<Stg extends Setting> = MindProps<Stg, MindTypes<Stg>>;
+
 export const bodyTypes = <Stg extends Setting>(
   setting: Stg
 ): BodyTypes<Stg> => {

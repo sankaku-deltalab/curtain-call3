@@ -26,7 +26,8 @@ export class GameRepresentation {
 
     const graphics = actresses
       .map<[string, Graphic<Stg>[]]>(([mindId, actSt, beh]) => {
-        return [mindId, beh.generateGraphics(actSt, {state: state})];
+        const props = beh.createProps(actSt, {state});
+        return [mindId, beh.generateGraphics(actSt, props)];
       })
       .flatMap(([mindId, graphics]) =>
         GraphicTrait.appendKeys(mindId, graphics)

@@ -174,7 +174,8 @@ const calcFlatCollisions = <Stg extends Setting>(
     st => collectActInState(st, args),
     acts =>
       Enum.map(acts, ({state: st, beh}): [string, Collision] => {
-        const col = beh.generateCollision(st, {state: state});
+        const props = beh.createProps(st, {state});
+        const col = beh.generateCollision(st, props);
         return [st.mind.meta.bodyId, col];
       }),
     col => Object.fromEntries(col),
@@ -264,7 +265,8 @@ const updateByActresses = <Stg extends Setting>(
 
   const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
     ({mindId, state: actSt, beh}) => {
-      return Res.ok([mindId, beh.update(actSt, {...args, state})]);
+      const props = beh.createProps(actSt, {state});
+      return Res.ok([mindId, beh.update(actSt, props)]);
     }
   );
 
