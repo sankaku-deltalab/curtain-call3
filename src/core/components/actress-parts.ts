@@ -1,5 +1,11 @@
 import {Res, Result} from '../../utils/result';
-import {BodyTypes, MindTypes, Setting} from '../setting';
+import {
+  BodyStateRaw,
+  BodyTypes,
+  MindStateRaw,
+  MindTypes,
+  Setting,
+} from '../setting';
 import {Im} from '../../utils/immutable-manipulation';
 import {Enum} from '../../utils/enum';
 
@@ -30,26 +36,6 @@ export type MindState<
 };
 
 export type AnyMindState<Stg extends Setting> = MindState<Stg, MindTypes<Stg>>;
-
-export type BodyStateRaw<
-  Stg extends Setting,
-  BT extends BodyTypes<Stg>
-> = Stg['bodies'][BT];
-
-export type AnyBodyStateRaw<Stg extends Setting> = BodyStateRaw<
-  Stg,
-  BodyTypes<Stg>
->;
-
-export type MindStateRaw<
-  Stg extends Setting,
-  MT extends MindTypes<Stg>
-> = Stg['minds'][MT];
-
-export type AnyMindStateRaw<Stg extends Setting> = MindStateRaw<
-  Stg,
-  MindTypes<Stg>
->;
 
 export type ActressInitializer<
   Stg extends Setting,

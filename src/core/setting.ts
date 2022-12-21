@@ -26,6 +26,26 @@ export type NotificationPayload<
 
 export type LevelState<Stg extends Setting> = Stg['level'];
 
+export type BodyStateRaw<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>
+> = Stg['bodies'][BT];
+
+export type AnyBodyStateRaw<Stg extends Setting> = BodyStateRaw<
+  Stg,
+  BodyTypes<Stg>
+>;
+
+export type MindStateRaw<
+  Stg extends Setting,
+  MT extends MindTypes<Stg>
+> = Stg['minds'][MT];
+
+export type AnyMindStateRaw<Stg extends Setting> = MindStateRaw<
+  Stg,
+  MindTypes<Stg>
+>;
+
 export const bodyTypes = <Stg extends Setting>(
   setting: Stg
 ): BodyTypes<Stg> => {

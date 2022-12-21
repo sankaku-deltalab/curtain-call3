@@ -5,10 +5,14 @@ import {
   AnyBodyState,
   BodyId,
   BodyState,
-  BodyStateRaw,
-  MindStateRaw,
 } from '../core/components/actress-parts';
-import {BodyTypes, MindTypes, Setting} from '../core/setting';
+import {
+  BodyStateRaw,
+  BodyTypes,
+  MindStateRaw,
+  MindTypes,
+  Setting,
+} from '../core/setting';
 import {Im} from '../utils';
 
 export class ActressHelper {
