@@ -19,6 +19,14 @@ import {AnyNotification, NotificationTrait} from './notification';
 import {AnyCue, CueTrait} from './components/cue';
 import {CollisionTrait} from './components/collision/collision-state';
 
+export type UpdateArgs<Stg extends Setting> = {
+  input: CanvasInput<Stg>;
+  cues: AnyCue<Stg>[];
+  time: TimeInput<Stg>;
+  renderingState: RenderingState;
+  instances: GameInstances<Stg>;
+};
+
 export class GameProcessing {
   static createInitialState<Stg extends Setting>(
     args: StateInitializer<Stg>
@@ -28,13 +36,7 @@ export class GameProcessing {
 
   static update<Stg extends Setting>(
     state: GameState<Stg>,
-    args: {
-      input: CanvasInput<Stg>;
-      cues: AnyCue<Stg>[];
-      time: TimeInput<Stg>;
-      renderingState: RenderingState;
-      instances: GameInstances<Stg>;
-    }
+    args: UpdateArgs<Stg>
   ): {state: GameState<Stg>; notifications: AnyNotification<Stg>[]} {
     let st = state;
     st = Im.pipe(
