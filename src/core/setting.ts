@@ -3,7 +3,7 @@ type Rec = Record<string, unknown>;
 export type Setting = {
   level: Rec;
   bodies: Record<string, {state: Rec}>;
-  minds: Record<string, {state: Rec}>;
+  minds: Record<string, {state: Rec; props: Rec}>;
   cues: Record<string, Rec>;
   notifications: Record<string, Rec>;
 };
@@ -45,6 +45,11 @@ export type AnyMindStateRaw<Stg extends Setting> = MindStateRaw<
   Stg,
   MindTypes<Stg>
 >;
+
+export type MindProps<
+  Stg extends Setting,
+  MT extends MindTypes<Stg>
+> = Stg['minds'][MT]['props'];
 
 export const bodyTypes = <Stg extends Setting>(
   setting: Stg
