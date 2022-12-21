@@ -75,28 +75,32 @@ const updateTime = <Stg extends Setting>(
 const collectActInState = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {instances: GameInstances<Stg>}
-): [MindId, AnyActressState<Stg>, AnyActressBehavior<Stg>][] => {
+): {
+  mindId: MindId;
+  state: AnyActressState<Stg>;
+  beh: AnyActressBehavior<Stg>;
+}[] => {
   const minds = ActressPartsTrait.getMinds(state.actressParts);
-  const lis = Object.entries(minds).map(([mindId, mind]) => {
-    const act = GameInstancesTrait.getActressBehavior(
+  const acts = Object.entries(minds).map(([mindId, mind]) => {
+    const beh = GameInstancesTrait.getActressBehavior(
       mind.meta.mindType,
       args.instances
     );
-    if (act.err) {
-      return act;
+    if (beh.err) {
+      return beh;
     }
     const actSt = ActressTrait.extractActressState(state, mindId);
     if (actSt.err) {
       return actSt;
     }
 
-    return Res.ok<[MindId, AnyActressState<Stg>, AnyActressBehavior<Stg>]>([
+    return Res.ok({
       mindId,
-      actSt.val,
-      act.val,
-    ]);
+      state: actSt.val,
+      beh: beh.val,
+    });
   });
-  return Res.onlyOk(lis);
+  return Res.onlyOk(acts);
 };
 
 const mergeActressStates = <Stg extends Setting>(
@@ -143,7 +147,7 @@ const applyInputToActresses = <Stg extends Setting>(
   const actresses = collectActInState(state, {instances});
 
   const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
-    ([mindId, actSt, beh]) => {
+    ({mindId, state: actSt, beh}) => {
       return Res.ok([mindId, beh.applyInput(actSt, {...args, state: state})]);
     }
   );
@@ -169,7 +173,7 @@ const calcFlatCollisions = <Stg extends Setting>(
     () => state,
     st => collectActInState(st, args),
     acts =>
-      Enum.map(acts, ([_mindId, st, beh]): [string, Collision] => {
+      Enum.map(acts, ({state: st, beh}): [string, Collision] => {
         const col = beh.generateCollision(st, {state: state});
         return [st.mind.meta.bodyId, col];
       }),
@@ -259,7 +263,7 @@ const updateByActresses = <Stg extends Setting>(
   const actresses = collectActInState(state, {instances});
 
   const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
-    ([mindId, actSt, beh]) => {
+    ({mindId, state: actSt, beh}) => {
       return Res.ok([mindId, beh.update(actSt, {...args, state})]);
     }
   );
@@ -288,9 +292,9 @@ const deleteActresses = <Stg extends Setting>(
   args: {instances: GameInstances<Stg>}
 ): {state: GameState<Stg>} => {
   const acts = collectActInState(state, args);
-  const delActs = acts.filter(([_mid, st, _beh]) => st.body.meta.del);
-  const delMinds = delActs.map(([mid]) => mid);
-  const delBodies = delActs.map(([_mid, st]) => st.mind.meta.bodyId);
+  const delActs = acts.filter(({state: st}) => st.body.meta.del);
+  const delMinds = delActs.map(({mindId}) => mindId);
+  const delBodies = delActs.map(({state: st}) => st.mind.meta.bodyId);
   const newAct = Im.pipe(
     () => state.actressParts,
     a => Im.update(a, 'minds', m => Im.removeMulti(m, delMinds)),
