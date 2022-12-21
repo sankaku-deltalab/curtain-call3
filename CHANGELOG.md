@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `GameProcessingHelper`.
+
+### Changed
+
+- Change `Setting`.
+- Add `ActressBehavior.createProps` and `ActressBehavior` uses props.
+
 ## [1.0.0-alpha.3] - 2022-12-20
 
 ### Fixed
