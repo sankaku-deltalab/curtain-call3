@@ -4,7 +4,10 @@
     "esModuleInterop": true,
     "lib": ["esnext"],
     "rootDir": ".",
-    "outDir": "build"
+    "outDir": "build",
+    "baseUrl": "./",
+    "paths": {"mini-hamt": ["src/types/mini-hamt"]},
+    "typeRoots": ["src/types", "node_modules/@types"]
   },
   "include": [
     "src/**/*.ts",
