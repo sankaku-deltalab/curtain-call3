@@ -13,7 +13,7 @@
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "files": [
-    "build"
+    "build/src"
   ],
   "directories": {
     "lib": "build/src",
@@ -23,7 +23,7 @@
     "node": ">=12.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
