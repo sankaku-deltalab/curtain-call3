@@ -1,7 +1,6 @@
 import * as hamt from 'mini-hamt';
 
 type Key = string;
-type Value = undefined;
 
 export type ImSet<K extends Key> = hamt.HamtNode<K, true>;
 
