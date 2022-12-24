@@ -150,7 +150,7 @@ const applyInputToActresses = <Stg extends Setting>(
 
   const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
     ({mindId, state: actSt, beh}) => {
-      return Res.ok([mindId, beh.applyInput(actSt, {...args, state: state})]);
+      return Res.ok([mindId, beh.applyInput(actSt, {state})]);
     }
   );
 
