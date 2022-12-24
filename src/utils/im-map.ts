@@ -2,7 +2,7 @@ import * as hamt from 'mini-hamt';
 import {collectMiniHamtItems} from './mini-hamt-extension';
 
 type Key = string;
-type Value = undefined;
+type Value = unknown;
 
 export type ImMap<K extends Key, V extends Value> = hamt.HamtNode<K, V>;
 
