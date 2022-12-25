@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `ActressHelper.addCue`.
+- Add `ActressHelper.addNotification`.
+
 ### Changed
 
 - Use `ImList` at cues and notifications.

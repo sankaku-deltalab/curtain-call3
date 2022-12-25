@@ -9,11 +9,15 @@ import {
 import {
   BodyStateRaw,
   BodyTypes,
+  CuePayload,
+  CueTypes,
   MindStateRaw,
   MindTypes,
+  NotificationPayload,
+  NotificationTypes,
   Setting,
 } from '../core/setting';
-import {Im} from '../utils';
+import {Im, ImListTrait} from '../utils';
 
 export class ActressHelper {
   static createActressInitializer<
@@ -41,6 +45,26 @@ export class ActressHelper {
     bodyType: BT
   ): body is [BodyId, BodyState<Stg, BT>] {
     return ActressPartsTrait.bodyIsInType(body[1], bodyType);
+  }
+
+  static addCue<
+    Stg extends Setting,
+    Act extends AnyActressState<Stg>,
+    CT extends CueTypes<Stg>
+  >(act: Act, type: CT, payload: CuePayload<Stg, CT>): Act {
+    const cue = {type, payload};
+    return Im.update(act, 'cues', c => ImListTrait.push(c, cue));
+  }
+
+  static addNotification<
+    Stg extends Setting,
+    Act extends AnyActressState<Stg>,
+    NT extends NotificationTypes<Stg>
+  >(act: Act, type: NT, payload: NotificationPayload<Stg, NT>): Act {
+    const notification = {type, payload};
+    return Im.update(act, 'notifications', n =>
+      ImListTrait.push(n, notification)
+    );
   }
 
   static delActress<Stg extends Setting, Act extends AnyActressState<Stg>>(
