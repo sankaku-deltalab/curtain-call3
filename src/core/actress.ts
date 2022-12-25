@@ -54,31 +54,45 @@ export class ActressTrait {
 
   static mergeActressStates<Stg extends Setting>(
     state: GameState<Stg>,
-    actSts: [MindId, AnyActressState<Stg>][]
+    actSts: AnyActressState<Stg>[]
   ): GameState<Stg> {
-    const minds = actSts.map<[MindId, AnyMindState<Stg>]>(([mid, s]) => [
-      mid,
-      s.mind,
-    ]);
-    const bodies = actSts.map<[BodyId, AnyBodyState<Stg>]>(([_, s]) => [
-      s.mind.meta.bodyId,
-      s.body,
-    ]);
-    const newCues = actSts.flatMap(([_, s]) => s.cues);
-    const newNotifications = actSts.flatMap(([_, s]) => s.notifications);
+    const {minds, bodies, cues, notifications} =
+      ActressTrait.extractItemsFromActressStates(actSts);
 
     return Im.pipe(
       () => state,
-      st => Im.update(st, 'cue', s => CueTrait.mergeCues(s, newCues)),
+      st => Im.update(st, 'cue', s => CueTrait.mergeCues(s, cues)),
       st =>
         Im.update(st, 'notification', s =>
-          NotificationTrait.mergeNotifications(s, newNotifications)
+          NotificationTrait.mergeNotifications(s, notifications)
         ),
       st =>
         Im.update(st, 'actressParts', s =>
           ActressPartsTrait.resetMindsAndBodies(s, {minds, bodies})
         )
     )();
+  }
+
+  static extractItemsFromActressStates<Stg extends Setting>(
+    actSts: AnyActressState<Stg>[]
+  ): {
+    minds: [MindId, AnyMindState<Stg>][];
+    bodies: [BodyId, AnyBodyState<Stg>][];
+    cues: AnyCue<Stg>[];
+    notifications: AnyNotification<Stg>[];
+  } {
+    const minds: [MindId, AnyMindState<Stg>][] = [];
+    const bodies: [BodyId, AnyBodyState<Stg>][] = [];
+    const cues: AnyCue<Stg>[] = [];
+    const notifications: AnyNotification<Stg>[] = [];
+
+    for (const act of actSts) {
+      minds.push([act.mindId, act.mind]);
+      bodies.push([act.mind.meta.bodyId, act.body]);
+      cues.concat(act.cues);
+      notifications.concat(act.notifications);
+    }
+    return {minds, bodies, cues, notifications};
   }
 }
 

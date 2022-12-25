@@ -110,7 +110,6 @@ const collectActInState = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {instances: GameInstances<Stg>}
 ): {
-  mindId: MindId;
   state: AnyActressState<Stg>;
   beh: AnyActressBehavior<Stg>;
 }[] => {
@@ -120,7 +119,7 @@ const collectActInState = <Stg extends Setting>(
 const mergeActressStates = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {
-    actStates: Result<[MindId, AnyActressState<Stg>]>[];
+    actStates: Result<AnyActressState<Stg>>[];
   }
 ): GameState<Stg> => {
   return ActressTrait.mergeActressStates(state, Res.onlyOk(args.actStates));
@@ -160,9 +159,9 @@ const applyInputToActresses = <Stg extends Setting>(
   const instances = args.instances;
   const actresses = collectActInState(state, {instances});
 
-  const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
-    ({mindId, state: actSt, beh}) => {
-      return Res.ok([mindId, beh.applyInput(actSt, {state})]);
+  const actStates: Result<AnyActressState<Stg>>[] = actresses.map(
+    ({state: actSt, beh}) => {
+      return Res.ok(beh.applyInput(actSt, {state}));
     }
   );
 
@@ -276,10 +275,10 @@ const updateByActresses = <Stg extends Setting>(
   const instances = args.instances;
   const actresses = collectActInState(state, {instances});
 
-  const actStates: Result<[MindId, AnyActressState<Stg>]>[] = actresses.map(
-    ({mindId, state: actSt, beh}) => {
+  const actStates: Result<AnyActressState<Stg>>[] = actresses.map(
+    ({state: actSt, beh}) => {
       const props = beh.createProps(actSt, {state});
-      return Res.ok([mindId, beh.update(actSt, props)]);
+      return Res.ok(beh.update(actSt, props));
     }
   );
 
@@ -308,7 +307,7 @@ const deleteActresses = <Stg extends Setting>(
 ): {state: GameState<Stg>} => {
   const acts = collectActInState(state, args);
   const delActs = acts.filter(({state: st}) => st.body.meta.del);
-  const delMinds = delActs.map(({mindId}) => mindId);
+  const delMinds = delActs.map(({state: st}) => st.mindId);
   const delBodies = delActs.map(({state: st}) => st.mind.meta.bodyId);
   const newAct = Im.pipe(
     () => state.actressParts,
