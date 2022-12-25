@@ -33,7 +33,7 @@ export class CueTrait {
     cueSt: CueState<Stg>,
     cues: ImList<AnyCue<Stg>>
   ): CueState<Stg> {
-    if (cues.length === 0) return cueSt;
+    if (cues.size === 0) return cueSt;
 
     const orgCuesMut = {...cueSt.cues};
     for (const c of ImListTrait.toArray(cues)) {
@@ -65,7 +65,7 @@ export class CueTrait {
       const cues = state.cues[cueType];
 
       if (cues === undefined) continue;
-      if (cues.length === 0) continue;
+      if (cues.size === 0) continue;
 
       const [poped, newCuesList] = ImListTrait.pop(cues, undefined);
 

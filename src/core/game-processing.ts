@@ -218,21 +218,22 @@ const generateCuesByCueHandlers = <Stg extends Setting>(
     instances: GameInstances<Stg>;
   }
 ): GameState<Stg> => {
-  const manKeysUnsorted = Object.keys(args.instances.cueHandlers);
+  const cueTypesUnsorted = Object.keys(args.instances.cueHandlers);
   const priority = args.instances.director.getCuePriority();
-  const manKeys = CueTrait.sortCueTypesByPriority(manKeysUnsorted, {
+  const cueTypes = CueTrait.sortCueTypesByPriority(cueTypesUnsorted, {
     priority,
   });
 
-  const nestedCues = Enum.map(manKeys, cueType => {
-    const man = args.instances.cueHandlers[cueType];
-    const payloads = man.generateCuesAtUpdate(state, {});
-    return payloads.map(payload => ({type: cueType, payload}));
-  });
+  let addingCues = ImListTrait.new<AnyCue<Stg>>();
+  for (const cueType of cueTypes) {
+    const handler = args.instances.cueHandlers[cueType];
+    const payloads = handler.generateCuesAtUpdate(state, {});
+    ImListTrait.toArray(payloads).forEach(payload => {
+      addingCues = ImListTrait.push(addingCues, {type: cueType, payload});
+    });
+  }
 
-  return Im.update(state, 'cue', cue =>
-    CueTrait.mergeCues(cue, nestedCues.flat())
-  );
+  return Im.update(state, 'cue', cue => CueTrait.mergeCues(cue, addingCues));
 };
 
 const applyCues = <Stg extends Setting>(

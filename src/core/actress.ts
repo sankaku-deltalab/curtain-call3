@@ -49,7 +49,7 @@ export class ActressTrait {
       mind: mind,
       body: body,
       cues: ImListTrait.new(),
-      notifications: [],
+      notifications: ImListTrait.new(),
     });
   }
 

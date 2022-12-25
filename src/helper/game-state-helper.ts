@@ -26,6 +26,7 @@ import {Res, Result} from '../utils/result';
 import {Im} from '../utils/immutable-manipulation';
 import {Enum} from '../utils/enum';
 import {RecM2MTrait} from '../utils/rec-m2m';
+import {ImListTrait} from '../utils/im-list';
 
 export class GameStateHelper {
   static getMinds<Stg extends Setting>(
@@ -203,7 +204,7 @@ export class GameStateHelper {
     const originalSt = state;
     return Im.pipe(
       () => state.cue,
-      st => CueTrait.mergeCues(st, [{type, payload}]),
+      st => CueTrait.mergeCues(st, ImListTrait.new([{type, payload}])),
       cueSt => Im.update(originalSt, 'cue', () => cueSt)
     )();
   }
@@ -219,7 +220,11 @@ export class GameStateHelper {
     const originalSt = state;
     return Im.pipe(
       () => state.notification,
-      st => NotificationTrait.mergeNotifications(st, [{type, payload}]),
+      st =>
+        NotificationTrait.mergeNotifications(
+          st,
+          ImListTrait.new([{type, payload}])
+        ),
       noSt => Im.update(originalSt, 'notification', () => noSt)
     )();
   }

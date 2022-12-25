@@ -1,3 +1,4 @@
+import {ImList} from 'src/utils/im-list';
 import {AnyCue, CuePriority} from './components/cue';
 import {GameState} from './game-state';
 import {Setting} from './setting';
@@ -9,7 +10,7 @@ export interface DirectorBehavior<Stg extends Setting> {
 
   update(state: GameState<Stg>): GameState<Stg>;
 
-  generateCuesAtUpdate(state: GameState<Stg>): AnyCue<Stg>[];
+  generateCuesAtUpdate(state: GameState<Stg>): ImList<AnyCue<Stg>>;
 
   getCuePriority(): CuePriority<Stg>;
 
