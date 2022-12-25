@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-alpha.8] - 2022-12-25
+
 ### Changed
 
 - Change some function arguments and return for faster processing.
@@ -82,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial beta release.
 
-[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.7...HEAD
+[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.8...HEAD
+[1.0.0-alpha.8]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.8
 [1.0.0-alpha.7]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.7
 [1.0.0-alpha.6]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.6
 [1.0.0-alpha.5]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.5
