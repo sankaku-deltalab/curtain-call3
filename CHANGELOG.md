@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-alpha.12] - 2022-12-25
+
+### Fixed
+
+- Fix `GameProcessingHelper.generateGraphics`.
+
 ## [1.0.0-alpha.11] - 2022-12-25
 
 ### Fixed
@@ -102,7 +108,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial beta release.
 
-[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.11...HEAD
+[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.12...HEAD
+[1.0.0-alpha.12]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.12
 [1.0.0-alpha.11]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.11
 [1.0.0-alpha.10]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.10
 [1.0.0-alpha.9]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.9
