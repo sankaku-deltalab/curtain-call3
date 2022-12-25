@@ -62,6 +62,38 @@ export class GameProcessing {
 
     return consumeNotifications(st);
   }
+
+  static collectActInState<Stg extends Setting>(
+    state: GameState<Stg>,
+    args: {instances: GameInstances<Stg>}
+  ): {
+    mindId: MindId;
+    state: AnyActressState<Stg>;
+    beh: AnyActressBehavior<Stg>;
+  }[] {
+    const minds = ActressPartsTrait.getMinds(state.actressParts);
+    const bodies = ActressPartsTrait.getBodies(state.actressParts);
+    const acts = Object.entries(minds).map(([mindId, mind]) => {
+      const beh = GameInstancesTrait.getActressBehavior(
+        mind.meta.mindType,
+        args.instances
+      );
+      if (beh.err) {
+        return beh;
+      }
+      const actSt = ActressTrait.extractActressState(mindId, mind, bodies);
+      if (actSt.err) {
+        return actSt;
+      }
+
+      return Res.ok({
+        mindId,
+        state: actSt.val,
+        beh: beh.val,
+      });
+    });
+    return Res.onlyOk(acts);
+  }
 }
 
 const updateTime = <Stg extends Setting>(
@@ -82,27 +114,7 @@ const collectActInState = <Stg extends Setting>(
   state: AnyActressState<Stg>;
   beh: AnyActressBehavior<Stg>;
 }[] => {
-  const minds = ActressPartsTrait.getMinds(state.actressParts);
-  const acts = Object.entries(minds).map(([mindId, mind]) => {
-    const beh = GameInstancesTrait.getActressBehavior(
-      mind.meta.mindType,
-      args.instances
-    );
-    if (beh.err) {
-      return beh;
-    }
-    const actSt = ActressTrait.extractActressState(state, mindId);
-    if (actSt.err) {
-      return actSt;
-    }
-
-    return Res.ok({
-      mindId,
-      state: actSt.val,
-      beh: beh.val,
-    });
-  });
-  return Res.onlyOk(acts);
+  return GameProcessing.collectActInState(state, args);
 };
 
 const mergeActressStates = <Stg extends Setting>(

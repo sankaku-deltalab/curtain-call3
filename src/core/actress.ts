@@ -2,13 +2,15 @@ import {Im, Res, Result} from '../utils';
 import {Collision, Graphic} from './components';
 import {
   ActressPartsTrait,
+  AnyBodyState,
   AnyMindState,
+  BodyId,
   BodyState,
   MindId,
   MindState,
 } from './components/actress-parts';
 import {AnyCue, CueTrait} from './components/cue';
-import {GameState, GameStateTrait} from './game-state';
+import {GameState} from './game-state';
 import {AnyNotification, NotificationTrait} from './notification';
 import {BodyTypes, MindProps, MindTypes, Setting} from './setting';
 
@@ -32,23 +34,19 @@ export type AnyActressState<Stg extends Setting> = ActressState<
 
 export class ActressTrait {
   static extractActressState<Stg extends Setting>(
-    state: GameState<Stg>,
-    mindId: MindId
+    mindId: MindId,
+    mind: AnyMindState<Stg>,
+    bodies: Record<BodyId, AnyBodyState<Stg>>
   ): Result<AnyActressState<Stg>> {
-    const mind = GameStateTrait.extractMind(mindId, state);
-    if (Res.isErr(mind)) {
-      return mind;
-    }
-
-    const body = GameStateTrait.extractBody(mind.val.meta.bodyId, state);
-    if (Res.isErr(body)) {
-      return body;
+    const body = bodies[mind.meta.bodyId];
+    if (body === undefined) {
+      return Res.err('body not found');
     }
 
     return Res.ok({
       mindId,
-      mind: mind.val,
-      body: body.val,
+      mind: mind,
+      body: body,
       cues: [],
       notifications: [],
     });
