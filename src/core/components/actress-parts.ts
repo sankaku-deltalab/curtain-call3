@@ -68,16 +68,23 @@ export class ActressPartsTrait {
 
   static getMinds<Stg extends Setting>(
     actSt: ActressPartsState<Stg>
-  ): Record<MindId, AnyMindState<Stg>> {
-    const minds = ImMapTrait.items(actSt.minds);
-    return Object.fromEntries(minds);
+  ): [MindId, AnyMindState<Stg>][] {
+    return ImMapTrait.items(actSt.minds);
   }
 
   static getBodies<Stg extends Setting>(
     actSt: ActressPartsState<Stg>
-  ): Record<BodyId, AnyBodyState<Stg>> {
-    const bodies = ImMapTrait.items(actSt.bodies);
-    return Object.fromEntries(bodies);
+  ): [BodyId, AnyBodyState<Stg>][] {
+    return ImMapTrait.items(actSt.bodies);
+  }
+
+  static getBody<Stg extends Setting>(
+    actSt: ActressPartsState<Stg>,
+    bodyId: BodyId
+  ): Result<AnyBodyState<Stg>> {
+    const r = ImMapTrait.fetch(actSt.bodies, bodyId, undefined);
+    if (r === undefined) return Res.err('body not found');
+    return Res.ok(r);
   }
 
   static getFirstBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
@@ -92,17 +99,15 @@ export class ActressPartsTrait {
     return Res.err(`body of "${bodyType}" is not found`);
   }
 
-  static mergeMindsAndBodies<Stg extends Setting>(
+  static resetMindsAndBodies<Stg extends Setting>(
     state: ActressPartsState<Stg>,
     args: {
-      minds: Record<MindId, AnyMindState<Stg>>;
-      bodies: Record<BodyId, AnyBodyState<Stg>>;
+      minds: [MindId, AnyMindState<Stg>][];
+      bodies: [BodyId, AnyBodyState<Stg>][];
     }
   ): ActressPartsState<Stg> {
-    const mindsAry = Object.entries(args.minds);
-    const bodiesAry = Object.entries(args.bodies);
-    const newMinds = ImMapTrait.new(mindsAry);
-    const newBodies = ImMapTrait.new(bodiesAry);
+    const newMinds = ImMapTrait.new(args.minds);
+    const newBodies = ImMapTrait.new(args.bodies);
     return Im.pipe(
       () => state,
       st => Im.update(st, 'minds', () => newMinds),
@@ -267,11 +272,10 @@ export class ActressPartsTrait {
 
   static replaceBodies<Stg extends Setting>(
     state: ActressPartsState<Stg>,
-    bodies: Record<BodyId, AnyBodyState<Stg>>
+    bodies: [BodyId, AnyBodyState<Stg>][]
   ): ActressPartsState<Stg> {
-    const bs = Object.entries(bodies);
     return Im.update(state, 'bodies', oldBodies =>
-      ImMapTrait.putMulti(oldBodies, bs)
+      ImMapTrait.putMulti(oldBodies, bodies)
     );
   }
 }

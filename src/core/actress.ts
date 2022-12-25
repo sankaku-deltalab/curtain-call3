@@ -36,9 +36,9 @@ export class ActressTrait {
   static extractActressState<Stg extends Setting>(
     mindId: MindId,
     mind: AnyMindState<Stg>,
-    bodies: Record<BodyId, AnyBodyState<Stg>>
+    bodies: ReadonlyMap<BodyId, AnyBodyState<Stg>>
   ): Result<AnyActressState<Stg>> {
-    const body = bodies[mind.meta.bodyId];
+    const body = bodies.get(mind.meta.bodyId);
     if (body === undefined) {
       return Res.err('body not found');
     }
@@ -56,12 +56,14 @@ export class ActressTrait {
     state: GameState<Stg>,
     actSts: [MindId, AnyActressState<Stg>][]
   ): GameState<Stg> {
-    const minds: Record<MindId, AnyMindState<Stg>> = Object.fromEntries(
-      actSts.map(([mid, s]) => [mid, s.mind])
-    );
-    const bodies = Object.fromEntries(
-      actSts.map(([_, s]) => [s.mind.meta.bodyId, s.body])
-    );
+    const minds = actSts.map<[MindId, AnyMindState<Stg>]>(([mid, s]) => [
+      mid,
+      s.mind,
+    ]);
+    const bodies = actSts.map<[BodyId, AnyBodyState<Stg>]>(([_, s]) => [
+      s.mind.meta.bodyId,
+      s.body,
+    ]);
     const newCues = actSts.flatMap(([_, s]) => s.cues);
     const newNotifications = actSts.flatMap(([_, s]) => s.notifications);
 
@@ -74,7 +76,7 @@ export class ActressTrait {
         ),
       st =>
         Im.update(st, 'actressParts', s =>
-          ActressPartsTrait.mergeMindsAndBodies(s, {minds, bodies})
+          ActressPartsTrait.resetMindsAndBodies(s, {minds, bodies})
         )
     )();
   }

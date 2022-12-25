@@ -30,14 +30,14 @@ import {RecM2MTrait} from '../utils/rec-m2m';
 export class GameStateHelper {
   static getMinds<Stg extends Setting>(
     state: GameState<Stg>
-  ): Record<MindId, AnyMindState<Stg>> {
+  ): [MindId, AnyMindState<Stg>][] {
     return ActressPartsTrait.getMinds(state.actressParts);
   }
 
   static getBodiesOf<Stg extends Setting, BT extends BodyTypes<Stg>>(
     state: GameState<Stg>,
     bodyType: BT
-  ): Record<BodyId, BodyState<Stg, BT>> {
+  ): [BodyId, BodyState<Stg, BT>][] {
     const idAndBodyIsInType = (
       body: [BodyId, AnyBodyState<Stg>]
     ): body is [BodyId, BodyState<Stg, BT>] => {
@@ -46,16 +46,13 @@ export class GameStateHelper {
 
     return Im.pipe(
       () => ActressPartsTrait.getBodies(state.actressParts),
-      bodies => Object.entries(bodies),
-      bodies => bodies.filter(idAndBodyIsInType),
-      bodies => Object.fromEntries(bodies),
-      v => v
+      bodies => bodies.filter(idAndBodyIsInType)
     )();
   }
 
   static getBodies<Stg extends Setting>(
     state: GameState<Stg>
-  ): Record<BodyId, AnyBodyState<Stg>> {
+  ): [BodyId, AnyBodyState<Stg>][] {
     return ActressPartsTrait.getBodies(state.actressParts);
   }
 
@@ -64,14 +61,13 @@ export class GameStateHelper {
     bodyId: BodyId,
     bodyType: BT
   ): Result<BodyState<Stg, BT>> {
-    const body = ActressPartsTrait.getBodies(state.actressParts)[bodyId];
-    if (body === undefined) {
-      return Res.err('not found');
-    }
-    if (body.meta.bodyType !== bodyType) {
+    const body = ActressPartsTrait.getBody(state.actressParts, bodyId);
+    if (body.err) return body;
+
+    if (body.val.meta.bodyType !== bodyType) {
       return Res.err('incorrect body type');
     }
-    return Res.ok(body as BodyState<Stg, BT>);
+    return Res.ok(body.val as BodyState<Stg, BT>);
   }
 
   static getFirstBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
@@ -165,7 +161,7 @@ export class GameStateHelper {
 
   static replaceBodies<Stg extends Setting>(
     state: GameState<Stg>,
-    bodies: Record<BodyId, AnyBodyState<Stg>>
+    bodies: [BodyId, AnyBodyState<Stg>][]
   ): GameState<Stg> {
     return Im.update(state, 'actressParts', act => {
       return ActressPartsTrait.replaceBodies(act, bodies);
@@ -193,7 +189,7 @@ export class GameStateHelper {
       args: {bodyId: BodyId}
     ) => AnyBodyState<Stg> | undefined
   ): GameState<Stg> {
-    const bodies = Object.entries(this.getBodies(state));
+    const bodies = ActressPartsTrait.getBodies(state.actressParts);
     return Enum.reduce(bodies, state, ([bodyId, body], st: GameState<Stg>) =>
       this.updateBody(st, bodyId, body.meta.bodyType, updater)
     );

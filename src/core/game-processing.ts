@@ -72,8 +72,8 @@ export class GameProcessing {
     beh: AnyActressBehavior<Stg>;
   }[] {
     const minds = ActressPartsTrait.getMinds(state.actressParts);
-    const bodies = ActressPartsTrait.getBodies(state.actressParts);
-    const acts = Object.entries(minds).map(([mindId, mind]) => {
+    const bodiesMap = new Map(ActressPartsTrait.getBodies(state.actressParts));
+    const acts = minds.map(([mindId, mind]) => {
       const beh = GameInstancesTrait.getActressBehavior(
         mind.meta.mindType,
         args.instances
@@ -81,7 +81,7 @@ export class GameProcessing {
       if (beh.err) {
         return beh;
       }
-      const actSt = ActressTrait.extractActressState(mindId, mind, bodies);
+      const actSt = ActressTrait.extractActressState(mindId, mind, bodiesMap);
       if (actSt.err) {
         return actSt;
       }

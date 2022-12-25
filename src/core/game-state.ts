@@ -1,17 +1,9 @@
 import {CameraState, CameraTrait} from './components/camera';
-import {Res, Result} from '../utils/result';
 import {LevelState, Setting} from './setting';
 import {TimeState, TimeTrait} from './components/time';
 import {InputState, InputTrait} from './components/inputs/input';
 import {Vec2d} from '../utils/vec2d';
-import {
-  ActressPartsState,
-  ActressPartsTrait,
-  AnyBodyState,
-  AnyMindState,
-  BodyId,
-  MindId,
-} from './components/actress-parts';
+import {ActressPartsState, ActressPartsTrait} from './components/actress-parts';
 import {SceneState, SceneTrait} from './scene';
 import {CueState, CueTrait} from './components/cue';
 import {NotificationState, NotificationTrait} from './notification';
@@ -52,27 +44,5 @@ export class GameStateTrait {
       cue: CueTrait.initialState(),
       notification: NotificationTrait.initialState(),
     };
-  }
-
-  static extractMind<Stg extends Setting>(
-    mindId: MindId,
-    state: GameState<Stg>
-  ): Result<AnyMindState<Stg>> {
-    const minds = ActressPartsTrait.getMinds(state.actressParts);
-    return Res.errIfUndefined(
-      minds[mindId],
-      `Mind of id '${mindId}' is not exists`
-    );
-  }
-
-  static extractBody<Stg extends Setting>(
-    bodyId: BodyId,
-    state: GameState<Stg>
-  ): Result<AnyBodyState<Stg>> {
-    const bodies = ActressPartsTrait.getBodies(state.actressParts);
-    return Res.errIfUndefined(
-      bodies[bodyId],
-      `Body of id '${bodyId}' is not exists`
-    );
   }
 }
