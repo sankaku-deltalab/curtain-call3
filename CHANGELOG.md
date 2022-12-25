@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-alpha.6] - 2022-12-25
+
+### Fixed
+
+- Fix importing.
+
 ## [1.0.0-alpha.5] - 2022-12-25
 
 ### Added
@@ -66,7 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial beta release.
 
-[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.5...HEAD
+[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.6...HEAD
+[1.0.0-alpha.6]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.6
 [1.0.0-alpha.5]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.5
 [1.0.0-alpha.4]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.4
 [1.0.0-alpha.3]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.3
