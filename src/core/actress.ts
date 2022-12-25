@@ -24,7 +24,7 @@ export type ActressState<
   body: BodyState<Stg, BT>;
   mind: MindState<Stg, MT>;
   cues: ImList<AnyCue<Stg>>;
-  notifications: AnyNotification<Stg>[];
+  notifications: ImList<AnyNotification<Stg>>;
 }>;
 
 export type AnyActressState<Stg extends Setting> = ActressState<
@@ -80,18 +80,18 @@ export class ActressTrait {
     minds: [MindId, AnyMindState<Stg>][];
     bodies: [BodyId, AnyBodyState<Stg>][];
     cues: ImList<AnyCue<Stg>>;
-    notifications: AnyNotification<Stg>[];
+    notifications: ImList<AnyNotification<Stg>>;
   } {
     const minds: [MindId, AnyMindState<Stg>][] = [];
     const bodies: [BodyId, AnyBodyState<Stg>][] = [];
     let cues: ImList<AnyCue<Stg>> = ImListTrait.new();
-    const notifications: AnyNotification<Stg>[] = [];
+    let notifications: ImList<AnyNotification<Stg>> = ImListTrait.new();
 
     for (const act of actSts) {
       minds.push([act.mindId, act.mind]);
       bodies.push([act.mind.meta.bodyId, act.body]);
       cues = ImListTrait.concat(act.cues, cues);
-      for (const n of notifications) notifications.push(n);
+      notifications = ImListTrait.concat(act.notifications, notifications);
     }
     return {minds, bodies, cues, notifications};
   }
