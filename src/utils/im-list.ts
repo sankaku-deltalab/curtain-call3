@@ -1,7 +1,7 @@
-export type ImList<T> = {length: number; head?: ImListNode<T>};
+export type ImList<T> = {size: number; head?: ImListNode<T>};
 export type ImListNode<T> = {v: T; next?: ImListNode<T>};
 
-const empty: ImList<unknown> = {length: 0};
+const empty: ImList<unknown> = {size: 0};
 
 export class ImListTrait {
   static new<T>(items?: Iterable<T>): ImList<T> {
@@ -13,12 +13,12 @@ export class ImListTrait {
       size += 1;
       head = {v: item, next: head};
     }
-    return {length: size, head};
+    return {size: size, head};
   }
 
   static push<T>(list: ImList<T>, value: T): ImList<T> {
     return {
-      length: list.length + 1,
+      size: list.size + 1,
       head: {v: value, next: list.head},
     };
   }
@@ -30,12 +30,12 @@ export class ImListTrait {
     if (list.head === undefined) return [defaultVal, list];
     const oldHead = list.head;
     const newHead = list.head.next;
-    return [oldHead.v, {length: list.length - 1, head: newHead}];
+    return [oldHead.v, {size: list.size - 1, head: newHead}];
   }
 
   static toArray<T>(list: ImList<T>): T[] {
     if (list.head === undefined) return [];
-    const items: T[] = Array(list.length);
+    const items: T[] = Array(list.size);
     let i = 0;
     let node: ImListNode<T> | undefined = list.head;
     while (node !== undefined) {
@@ -57,9 +57,9 @@ export class ImListTrait {
       head = {v: leftArray[i], next: head};
     }
 
-    const newSize = left.length + right.length;
+    const newSize = left.size + right.size;
     return {
-      length: newSize,
+      size: newSize,
       head,
     };
   }
