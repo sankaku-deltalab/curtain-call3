@@ -27,7 +27,10 @@ export class SpriteGraphicTrait {
     scale?: Vec2d;
   }): SpriteGraphic {
     return {
-      ...args,
+      key: args.key,
+      pos: args.pos,
+      zIndex: args.zIndex,
+      imgKey: args.imgKey,
       type: 'sprite',
       scale: args.scale ?? Vec2dTrait.one(),
     };

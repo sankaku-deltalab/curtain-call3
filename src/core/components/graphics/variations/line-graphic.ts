@@ -32,7 +32,12 @@ export class LineGraphicTrait {
     closed?: boolean;
   }): LineGraphic {
     return {
-      ...args,
+      key: args.key,
+      pos: args.pos,
+      zIndex: args.zIndex,
+      thickness: args.thickness,
+      color: args.color,
+      paths: args.paths,
       type: 'line',
       closed: args.closed ?? false,
     };
