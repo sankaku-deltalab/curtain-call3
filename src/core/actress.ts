@@ -89,8 +89,8 @@ export class ActressTrait {
     for (const act of actSts) {
       minds.push([act.mindId, act.mind]);
       bodies.push([act.mind.meta.bodyId, act.body]);
-      cues.concat(act.cues);
-      notifications.concat(act.notifications);
+      for (const c of cues) cues.push(c);
+      for (const n of notifications) notifications.push(n);
     }
     return {minds, bodies, cues, notifications};
   }
