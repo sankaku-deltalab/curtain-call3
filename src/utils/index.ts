@@ -1,5 +1,6 @@
 export * from './aa-rect2d';
 export * from './enum';
+export * from './im-list';
 export * from './im-map';
 export * from './im-set';
 export * from './immutable-manipulation';
