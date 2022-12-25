@@ -20,6 +20,16 @@ export type CanvasGraphic<_Stg extends Setting> =
   | CanvasLineGraphic;
 
 export class GraphicTrait {
+  static appendKey<Stg extends Setting>(
+    preKey: string,
+    graphic: Graphic<Stg>
+  ): Graphic<Stg> {
+    return {
+      ...graphic,
+      key: `${preKey}-${graphic.key}`,
+    };
+  }
+
   static appendKeys<Stg extends Setting>(
     preKey: string,
     graphics: Graphic<Stg>[]

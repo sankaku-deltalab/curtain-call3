@@ -8,6 +8,7 @@ import {
   CanvasGraphic,
   CanvasGraphicTrait,
   Graphic,
+  GraphicTrait,
 } from './components/graphics/graphic';
 import {RenderingState} from './components/camera';
 import {GameProcessing} from './game-processing';
@@ -24,10 +25,12 @@ export class GameRepresentation {
     const actresses = collectActInState(state, {instances});
 
     const graphics: Graphic<Stg>[] = [];
-    for (const [_mindId, actSt, beh] of actresses) {
+    for (const [mindId, actSt, beh] of actresses) {
       const props = beh.createProps(actSt, {state});
       const gs = beh.generateGraphics(actSt, props);
-      for (const g of gs) graphics.push(g);
+      for (const g of gs) {
+        graphics.push(GraphicTrait.appendKey(mindId, g));
+      }
     }
 
     return CanvasGraphicTrait.convertGraphicsToCanvas(graphics, {
