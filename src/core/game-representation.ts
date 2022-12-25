@@ -27,7 +27,7 @@ export class GameRepresentation {
     for (const [_mindId, actSt, beh] of actresses) {
       const props = beh.createProps(actSt, {state});
       const gs = beh.generateGraphics(actSt, props);
-      for (const g of gs) graphics.concat(g);
+      for (const g of gs) graphics.push(g);
     }
 
     return CanvasGraphicTrait.convertGraphicsToCanvas(graphics, {
