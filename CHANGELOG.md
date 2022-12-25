@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-alpha.15] - 2022-12-25
+
 ### Fixed
 
 - Fix actress deleting.
@@ -124,8 +126,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial beta release.
 
-[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.14...HEAD
-[1.0.0-alpha.4]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.14
+[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.15...HEAD
+[1.0.0-alpha.15]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.15
+[1.0.0-alpha.14]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.14
 [1.0.0-alpha.13]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.13
 [1.0.0-alpha.12]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.12
 [1.0.0-alpha.11]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.11
