@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-alpha.11] - 2022-12-25
+
+### Fixed
+
+- Internally, fix some codes with wrong `Array.concat`.
+
 ## [1.0.0-alpha.10] - 2022-12-25
 
 ### Changed
@@ -96,7 +102,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial beta release.
 
-[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.10...HEAD
+[unreleased]: https://github.com/sankaku-deltalab/curtain-call3/compare/1.0.0-alpha.11...HEAD
+[1.0.0-alpha.11]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.11
 [1.0.0-alpha.10]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.10
 [1.0.0-alpha.9]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.9
 [1.0.0-alpha.8]: https://github.com/sankaku-deltalab/curtain-call3/releases/tag/1.0.0-alpha.8
