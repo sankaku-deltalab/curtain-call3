@@ -270,6 +270,22 @@ export class ActressPartsTrait {
     );
   }
 
+  static delBodies<Stg extends Setting>(
+    state: ActressPartsState<Stg>,
+    targets: BodyId[]
+  ): ActressPartsState<Stg> {
+    const bodiesMut: [BodyId, AnyBodyState<Stg>][] = [];
+    for (const t of targets) {
+      const oldBody = ImMapTrait.fetch(state.bodies, t, undefined);
+      if (oldBody === undefined) throw new Error('body not found');
+
+      const newBody = Im.update(oldBody, 'meta', m => ({...m, del: true}));
+      bodiesMut.push([t, newBody]);
+    }
+
+    return this.replaceBodies(state, bodiesMut);
+  }
+
   static replaceBodies<Stg extends Setting>(
     state: ActressPartsState<Stg>,
     bodies: [BodyId, AnyBodyState<Stg>][]

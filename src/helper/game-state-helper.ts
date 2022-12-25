@@ -229,6 +229,15 @@ export class GameStateHelper {
     )();
   }
 
+  static delBodies<Stg extends Setting>(
+    state: GameState<Stg>,
+    targets: BodyId[]
+  ): GameState<Stg> {
+    return Im.update(state, 'actressParts', a =>
+      ActressPartsTrait.delBodies(a, targets)
+    );
+  }
+
   static getLevel<Stg extends Setting>(state: GameState<Stg>): LevelState<Stg> {
     return SceneTrait.getLevel(state.scene);
   }
