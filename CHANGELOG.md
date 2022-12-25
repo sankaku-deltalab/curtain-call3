@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix actress deleting.
+
 ## [1.0.0-alpha.14] - 2022-12-25
 
 ### Added

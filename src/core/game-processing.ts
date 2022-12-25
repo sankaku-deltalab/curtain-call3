@@ -313,11 +313,8 @@ const deleteActresses = <Stg extends Setting>(
   const delActs = acts.filter(({state: st}) => st.body.meta.del);
   const delMinds = delActs.map(({state: st}) => st.mindId);
   const delBodies = delActs.map(({state: st}) => st.mind.meta.bodyId);
-  const newAct = Im.pipe(
-    () => state.actressParts,
-    a => Im.update(a, 'minds', m => Im.removeMulti(m, delMinds)),
-    a => Im.update(a, 'bodies', b => Im.removeMulti(b, delBodies))
-  )();
-  const st = Im.update(state, 'actressParts', () => newAct);
+  const st = Im.update(state, 'actressParts', actSt =>
+    ActressPartsTrait.deleteMindsAndBodies(actSt, delMinds, delBodies)
+  );
   return {state: st};
 };

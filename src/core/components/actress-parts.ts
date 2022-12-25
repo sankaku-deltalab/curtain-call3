@@ -294,4 +294,18 @@ export class ActressPartsTrait {
       ImMapTrait.putMulti(oldBodies, bodies)
     );
   }
+
+  static deleteMindsAndBodies<Stg extends Setting>(
+    state: ActressPartsState<Stg>,
+    deletingMinds: MindId[],
+    deletingBodies: MindId[]
+  ): ActressPartsState<Stg> {
+    const minds = ImMapTrait.deleteMulti(state.minds, deletingMinds);
+    const bodies = ImMapTrait.deleteMulti(state.bodies, deletingBodies);
+    return Im.pipe(
+      () => state,
+      st => Im.update(st, 'bodies', () => bodies),
+      st => Im.update(st, 'minds', () => minds)
+    )();
+  }
 }
