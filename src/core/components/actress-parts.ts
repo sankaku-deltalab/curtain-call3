@@ -8,12 +8,13 @@ import {
 } from '../setting';
 import {Im} from '../../utils/immutable-manipulation';
 import {Enum} from '../../utils/enum';
+import {ImMap, ImMapTrait} from 'src/utils';
 
 export type ActressPartsState<Stg extends Setting> = Readonly<{
   bodyIdCount: number;
   mindIdCount: number;
-  bodies: Record<BodyId, AnyBodyState<Stg>>;
-  minds: Record<MindId, AnyMindState<Stg>>;
+  bodies: ImMap<BodyId, AnyBodyState<Stg>>;
+  minds: ImMap<MindId, AnyMindState<Stg>>;
 }>;
 
 export type BodyId = string;
@@ -53,8 +54,8 @@ export class ActressPartsTrait {
     return {
       bodyIdCount: 0,
       mindIdCount: 0,
-      bodies: {},
-      minds: {},
+      bodies: ImMapTrait.new(),
+      minds: ImMapTrait.new(),
     };
   }
 
@@ -68,22 +69,25 @@ export class ActressPartsTrait {
   static getMinds<Stg extends Setting>(
     actSt: ActressPartsState<Stg>
   ): Record<MindId, AnyMindState<Stg>> {
-    return actSt.minds;
+    const minds = ImMapTrait.items(actSt.minds);
+    return Object.fromEntries(minds);
   }
 
   static getBodies<Stg extends Setting>(
     actSt: ActressPartsState<Stg>
   ): Record<BodyId, AnyBodyState<Stg>> {
-    return actSt.bodies;
+    const bodies = ImMapTrait.items(actSt.bodies);
+    return Object.fromEntries(bodies);
   }
 
   static getFirstBody<Stg extends Setting, BT extends BodyTypes<Stg>>(
     actSt: ActressPartsState<Stg>,
     bodyType: BT
   ): Result<BodyState<Stg, BT>> {
-    for (const bodyId in actSt.bodies) {
-      if (actSt.bodies[bodyId].meta.bodyType === bodyType)
-        return Res.ok(actSt.bodies[bodyId] as BodyState<Stg, BT>);
+    const bodies = ImMapTrait.items(actSt.bodies);
+    for (const [_bodyId, body] of bodies) {
+      if (body.meta.bodyType === bodyType)
+        return Res.ok(body as BodyState<Stg, BT>);
     }
     return Res.err(`body of "${bodyType}" is not found`);
   }
@@ -95,10 +99,15 @@ export class ActressPartsTrait {
       bodies: Record<BodyId, AnyBodyState<Stg>>;
     }
   ): ActressPartsState<Stg> {
-    let st = state;
-    st = Im.update(st, 'minds', m => ({...m, ...args.minds}));
-    st = Im.update(st, 'bodies', b => ({...b, ...args.bodies}));
-    return st;
+    const mindsAry = Object.entries(args.minds);
+    const bodiesAry = Object.entries(args.bodies);
+    const newMinds = ImMapTrait.new(mindsAry);
+    const newBodies = ImMapTrait.new(bodiesAry);
+    return Im.pipe(
+      () => state,
+      st => Im.update(st, 'minds', () => newMinds),
+      st => Im.update(st, 'bodies', () => newBodies)
+    )();
   }
 
   static addActress<
@@ -113,8 +122,10 @@ export class ActressPartsTrait {
     const {body, mind} = this.createActress({bodyId, mindId, ...act});
     const st2 = Im.pipe(
       () => st,
-      st => Im.update(st, 'minds', m => Im.add(m, mindId, mind)),
-      st => Im.update(st, 'bodies', b => Im.add(b, bodyId, body))
+      st =>
+        Im.update(st, 'minds', minds => ImMapTrait.put(minds, mindId, mind)),
+      st =>
+        Im.update(st, 'bodies', bodies => ImMapTrait.put(bodies, bodyId, body))
     )();
 
     return {state: st2, bodyId, mindId};
@@ -137,28 +148,26 @@ export class ActressPartsTrait {
         )
     )();
 
-    const minds = Im.pipe(
+    const addingMinds = Im.pipe(
       () => createdActs,
       a =>
         Enum.map(a, ({mindId, mind}): [MindId, AnyMindState<Stg>] => [
           mindId,
           mind,
-        ]),
-      m => Object.fromEntries(m)
+        ])
     )();
-    const bodies = Im.pipe(
+    const addingBodies = Im.pipe(
       () => createdActs,
       a =>
         Enum.map(a, ({bodyId, body}): [MindId, AnyBodyState<Stg>] => [
           bodyId,
           body,
-        ]),
-      m => Object.fromEntries(m)
+        ])
     )();
     const st2 = Im.pipe(
       () => st,
-      st => Im.update(st, 'minds', m => Im.merge(m, minds)),
-      st => Im.update(st, 'bodies', b => Im.merge(b, bodies))
+      st => Im.update(st, 'minds', m => ImMapTrait.putMulti(m, addingMinds)),
+      st => Im.update(st, 'bodies', b => ImMapTrait.putMulti(b, addingBodies))
     )();
 
     return {state: st2, ids};
@@ -244,26 +253,25 @@ export class ActressPartsTrait {
       args: {bodyId: BodyId}
     ) => BodyState<Stg, BT> | undefined
   ): ActressPartsState<Stg> {
-    const oldBody = state.bodies[bodyId];
-    if (oldBody.meta.bodyType !== bodyType) throw new Error('');
+    const oldBody = ImMapTrait.fetch(state.bodies, bodyId, undefined);
+    if (oldBody === undefined) throw new Error('body not found');
+    if (oldBody.meta.bodyType !== bodyType)
+      throw new Error('body has wrong type');
 
     const body = updater(oldBody as BodyState<Stg, BT>, {bodyId});
     if (body === undefined) return state;
-
-    const bodies = {
-      ...state.bodies,
-      [bodyId]: body,
-    };
-    return Im.update(state, 'bodies', () => bodies);
+    return Im.update(state, 'bodies', bodies =>
+      ImMapTrait.put(bodies, bodyId, body)
+    );
   }
 
   static replaceBodies<Stg extends Setting>(
     state: ActressPartsState<Stg>,
     bodies: Record<BodyId, AnyBodyState<Stg>>
   ): ActressPartsState<Stg> {
-    return Im.update(state, 'bodies', () => ({
-      ...state.bodies,
-      ...bodies,
-    }));
+    const bs = Object.entries(bodies);
+    return Im.update(state, 'bodies', oldBodies =>
+      ImMapTrait.putMulti(oldBodies, bs)
+    );
   }
 }
