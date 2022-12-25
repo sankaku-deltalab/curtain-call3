@@ -192,7 +192,6 @@ const calcFlatCollisions = <Stg extends Setting>(
         const col = beh.generateCollision(st, props);
         return [st.mind.meta.bodyId, col];
       }),
-    col => Object.fromEntries(col),
     col => CollisionTrait.calcFlatCollisions(col)
   )();
 };

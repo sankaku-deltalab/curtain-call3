@@ -13,13 +13,16 @@ export class CollisionTrait {
   }
 
   static calcFlatCollisions(
-    collisions: Record<BodyId, Collision>
+    collisions: [BodyId, Collision][]
   ): FlatCollision[] {
-    return Object.entries(collisions).flatMap(([key, col]) => {
-      return col.shapes.map(s => {
+    const flatCollisions: FlatCollision[] = [];
+    for (const [bodyId, col] of collisions) {
+      for (const s of col.shapes) {
         const aabb: Box2d = [s.box.nw.x, s.box.nw.y, s.box.se.x, s.box.se.y];
-        return {...col, key, shape: s, aabb};
-      });
-    });
+        const flatCol = {key: bodyId, shape: s, aabb, excess: col.excess};
+        flatCollisions.push(flatCol);
+      }
+    }
+    return flatCollisions;
   }
 }
