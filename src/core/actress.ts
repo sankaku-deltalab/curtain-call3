@@ -1,3 +1,4 @@
+import {ImList, ImListTrait} from 'src/utils/im-list';
 import {Im, Res, Result} from '../utils';
 import {Collision, Graphic} from './components';
 import {
@@ -22,7 +23,7 @@ export type ActressState<
   mindId: MindId;
   body: BodyState<Stg, BT>;
   mind: MindState<Stg, MT>;
-  cues: AnyCue<Stg>[];
+  cues: ImList<AnyCue<Stg>>;
   notifications: AnyNotification<Stg>[];
 }>;
 
@@ -47,7 +48,7 @@ export class ActressTrait {
       mindId,
       mind: mind,
       body: body,
-      cues: [],
+      cues: ImListTrait.new(),
       notifications: [],
     });
   }
@@ -78,18 +79,18 @@ export class ActressTrait {
   ): {
     minds: [MindId, AnyMindState<Stg>][];
     bodies: [BodyId, AnyBodyState<Stg>][];
-    cues: AnyCue<Stg>[];
+    cues: ImList<AnyCue<Stg>>;
     notifications: AnyNotification<Stg>[];
   } {
     const minds: [MindId, AnyMindState<Stg>][] = [];
     const bodies: [BodyId, AnyBodyState<Stg>][] = [];
-    const cues: AnyCue<Stg>[] = [];
+    let cues: ImList<AnyCue<Stg>> = ImListTrait.new();
     const notifications: AnyNotification<Stg>[] = [];
 
     for (const act of actSts) {
       minds.push([act.mindId, act.mind]);
       bodies.push([act.mind.meta.bodyId, act.body]);
-      for (const c of cues) cues.push(c);
+      cues = ImListTrait.concat(act.cues, cues);
       for (const n of notifications) notifications.push(n);
     }
     return {minds, bodies, cues, notifications};

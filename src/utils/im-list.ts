@@ -1,8 +1,12 @@
 export type ImList<T> = {length: number; head?: ImListNode<T>};
-type ImListNode<T> = {v: T; next?: ImListNode<T>};
+export type ImListNode<T> = {v: T; next?: ImListNode<T>};
+
+const empty: ImList<unknown> = {length: 0};
 
 export class ImListTrait {
   static new<T>(items?: Iterable<T>): ImList<T> {
+    if (items === undefined) return empty as ImList<T>;
+
     let head: ImListNode<T> | undefined = undefined;
     let size = 0;
     for (const item of items ?? []) {

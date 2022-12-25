@@ -18,6 +18,7 @@ import {OverlapCalculation} from './components/collision/overlap-calculation';
 import {AnyNotification, NotificationTrait} from './notification';
 import {AnyCue, CueTrait} from './components/cue';
 import {CollisionTrait} from './components/collision/collision-state';
+import {ImListTrait} from 'src/utils/im-list';
 
 export type UpdateArgs<Stg extends Setting> = {
   input: CanvasInput<Stg>;
@@ -141,7 +142,9 @@ const addGivenCues = <Stg extends Setting>(
   state: GameState<Stg>,
   args: {cues: AnyCue<Stg>[]}
 ): GameState<Stg> => {
-  return Im.update(state, 'cue', cue => CueTrait.mergeCues(cue, args.cues));
+  return Im.update(state, 'cue', cue =>
+    CueTrait.mergeCues(cue, ImListTrait.new(args.cues))
+  );
 };
 
 const applyInputToDirector = <Stg extends Setting>(
