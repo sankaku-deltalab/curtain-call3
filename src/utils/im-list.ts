@@ -7,13 +7,17 @@ export class ImListTrait {
   static new<T>(items?: Iterable<T>): ImList<T> {
     if (items === undefined) return empty as ImList<T>;
 
-    let head: ImListNode<T> | undefined = undefined;
+    let headMut: ImListNode<T> | undefined = undefined;
+    let tailMut: ImListNode<T> | undefined = undefined;
     let size = 0;
     for (const item of items ?? []) {
       size += 1;
-      head = {v: item, next: head};
+      const prevTail = tailMut;
+      tailMut = {v: item};
+      if (prevTail !== undefined) prevTail.next = tailMut;
+      if (headMut === undefined) headMut = tailMut;
     }
-    return {size: size, head};
+    return {size: size, head: headMut};
   }
 
   static push<T>(list: ImList<T>, value: T): ImList<T> {
@@ -53,7 +57,7 @@ export class ImListTrait {
     const leftArray = ImListTrait.toArray(left);
     const len = leftArray.length;
     let head = right.head;
-    for (let i = len; i >= 0; i -= 1) {
+    for (let i = len - 1; i >= 0; i -= 1) {
       head = {v: leftArray[i], next: head};
     }
 

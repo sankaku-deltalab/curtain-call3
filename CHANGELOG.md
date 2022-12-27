@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix `ImList.new`.
+- Fix `ImList.concat`.
+
 ## [1.0.0-alpha.15] - 2022-12-25
 
 ### Fixed
