@@ -33,6 +33,11 @@ type BodyStateAdditional<
     bodyType: BT;
     bodyId: BodyId;
     del: boolean;
+    time: Readonly<{
+      spawnedMs: number;
+      elapsedMs: number;
+      lastDeltaMs: number;
+    }>;
   }>;
 }>;
 
@@ -150,7 +155,8 @@ export class ActressPartsTrait {
     MT extends MindTypes<Stg>
   >(
     state: ActressPartsState<Stg>,
-    act: ActressInitializer<Stg, BT, MT>
+    act: ActressInitializer<Stg, BT, MT>,
+    others: {worldTimeMs: number}
   ): {
     state: ActressPartsState<Stg>;
     bodyId: BodyId;
@@ -159,7 +165,12 @@ export class ActressPartsTrait {
     mind: MindState<Stg, MT>;
   } {
     const {state: st, bodyId, mindId} = this.generateActressId(state);
-    const {body, mind} = this.createActress({bodyId, mindId, ...act});
+    const {body, mind} = this.createActress({
+      ...act,
+      bodyId,
+      mindId,
+      worldTimeMs: others.worldTimeMs,
+    });
     const st2 = Im.pipe(
       () => st,
       st =>
@@ -177,14 +188,20 @@ export class ActressPartsTrait {
     MT extends MindTypes<Stg>
   >(
     state: ActressPartsState<Stg>,
-    acts: ActressInitializer<Stg, BT, MT>[]
+    acts: ActressInitializer<Stg, BT, MT>[],
+    others: {worldTimeMs: number}
   ): {state: ActressPartsState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
     const {state: st, ids} = this.generateActressIds(state, acts.length);
     const createdActs = Im.pipe(
       () => Enum.zip(acts, ids),
       r =>
         Enum.map(r, ([act, {bodyId, mindId}]) =>
-          this.createActress({bodyId, mindId, ...act})
+          this.createActress({
+            ...act,
+            bodyId,
+            mindId,
+            worldTimeMs: others.worldTimeMs,
+          })
         )
     )();
 
@@ -255,6 +272,7 @@ export class ActressPartsTrait {
     BT extends BodyTypes<Stg>,
     MT extends MindTypes<Stg>
   >(args: {
+    worldTimeMs: number;
     bodyId: BodyId;
     mindId: MindId;
     bodyType: BT;
@@ -267,9 +285,19 @@ export class ActressPartsTrait {
     body: BodyState<Stg, BT>;
     mind: MindState<Stg, MT>;
   } {
+    const bodyTime = {
+      spawnedMs: args.worldTimeMs,
+      elapsedMs: 0,
+      lastDeltaMs: 0,
+    };
     const body: BodyState<Stg, BT> = {
       ...args.body,
-      meta: {bodyType: args.bodyType, bodyId: args.bodyId, del: false},
+      meta: {
+        bodyType: args.bodyType,
+        bodyId: args.bodyId,
+        del: false,
+        time: bodyTime,
+      },
     };
     const mind: MindState<Stg, MT> = {
       ...args.mind,

@@ -119,16 +119,16 @@ export class GameStateHelper {
     body: BodyState<Stg, BT>;
     mind: MindState<Stg, MT>;
   } {
-    const originalSt = state;
+    const others = {worldTimeMs: state.time.gameTimeMs};
+    const r = ActressPartsTrait.addActress(state.actressParts, act, others);
     return Im.pipe(
       () => state,
-      st => ActressPartsTrait.addActress(st.actressParts, act),
-      ({state: actSt, bodyId, mindId, body, mind}) => ({
-        state: Im.update(originalSt, 'actressParts', () => actSt),
-        bodyId,
-        mindId,
-        body,
-        mind,
+      state => ({
+        state: Im.update(state, 'actressParts', () => r.state),
+        bodyId: r.bodyId,
+        mindId: r.mindId,
+        body: r.body,
+        mind: r.mind,
       })
     )();
   }
@@ -142,9 +142,10 @@ export class GameStateHelper {
     acts: ActressInitializer<Stg, BT, MT>[]
   ): {state: GameState<Stg>; ids: {bodyId: BodyId; mindId: MindId}[]} {
     const originalSt = state;
+    const others = {worldTimeMs: state.time.gameTimeMs};
     return Im.pipe(
       () => state,
-      st => ActressPartsTrait.addActresses(st.actressParts, acts),
+      st => ActressPartsTrait.addActresses(st.actressParts, acts, others),
       ({state: actSt, ids}) => ({
         state: Im.update(originalSt, 'actressParts', () => actSt),
         ids,
