@@ -49,6 +49,17 @@ export type ActressInitializer<
   mind: MindStateRaw<Stg, MT>;
 };
 
+export type AnyActressInitializer<Stg extends Setting> = ActressInitializer<
+  Stg,
+  BodyTypes<Stg>,
+  MindTypes<Stg>
+>;
+
+export type AnyMindActressInitializer<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>
+> = ActressInitializer<Stg, BT, MindTypes<Stg>>;
+
 export class ActressPartsTrait {
   static initialState<Stg extends Setting>(): ActressPartsState<Stg> {
     return {
