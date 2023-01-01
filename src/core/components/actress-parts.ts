@@ -23,18 +23,34 @@ export type MindId = string;
 export type BodyState<
   Stg extends Setting,
   BT extends BodyTypes<Stg>
-> = BodyStateRaw<Stg, BT> & {
-  readonly meta: {bodyType: BT; del: boolean};
-};
+> = BodyStateRaw<Stg, BT> & BodyStateAdditional<Stg, BT>;
+
+type BodyStateAdditional<
+  Stg extends Setting,
+  BT extends BodyTypes<Stg>
+> = Readonly<{
+  meta: Readonly<{
+    bodyType: BT;
+    del: boolean;
+  }>;
+}>;
 
 export type AnyBodyState<Stg extends Setting> = BodyState<Stg, BodyTypes<Stg>>;
 
 export type MindState<
   Stg extends Setting,
   MT extends MindTypes<Stg>
-> = MindStateRaw<Stg, MT> & {
-  readonly meta: {mindType: MT; bodyId: BodyId};
-};
+> = MindStateRaw<Stg, MT> & MindStateAdditional<Stg, MT>;
+
+type MindStateAdditional<
+  Stg extends Setting,
+  MT extends MindTypes<Stg>
+> = Readonly<{
+  meta: Readonly<{
+    mindType: MT;
+    bodyId: BodyId;
+  }>;
+}>;
 
 export type AnyMindState<Stg extends Setting> = MindState<Stg, MindTypes<Stg>>;
 
