@@ -12,12 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add type `AnyActressInitializer`.
 - Add type `AnyMindActressInitializer`.
 
-
 ### Changed
 
 - `BodyState` contain self id in meta.
 - `MindState` contain self id in meta.
 - `GameStateHelper.addActress` return body and mind too.
+- `BodyState` contain time.
 
 ### Fixed
 
