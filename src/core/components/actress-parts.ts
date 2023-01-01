@@ -371,4 +371,33 @@ export class ActressPartsTrait {
       st => Im.update(st, 'minds', () => minds)
     )();
   }
+
+  static updateBodiesTime<Stg extends Setting>(
+    state: ActressPartsState<Stg>,
+    args: {lastDeltaMs: number}
+  ): ActressPartsState<Stg> {
+    // If time scaling is subdivided, body's time was set individually
+    const newBodies = Im.pipe(
+      () => state,
+      state => ImMapTrait.items(state.bodies),
+      bodies =>
+        Enum.map(bodies, ([bid, body]): [BodyId, AnyBodyState<Stg>] => [
+          bid,
+          this.updateBodyTime(body, args),
+        ]),
+      bodies => ImMapTrait.new(bodies)
+    )();
+    return Im.update(state, 'bodies', () => newBodies);
+  }
+
+  private static updateBodyTime<Stg extends Setting>(
+    body: AnyBodyState<Stg>,
+    args: {lastDeltaMs: number}
+  ): AnyBodyState<Stg> {
+    return Im.update_in2(body, ['meta', 'time'], t => ({
+      ...t,
+      lastDeltaMs: args.lastDeltaMs,
+      elapsedMs: t.elapsedMs + args.lastDeltaMs,
+    }));
+  }
 }

@@ -43,6 +43,7 @@ export class GameProcessing {
     st = Im.pipe(
       () => state,
       st => updateTime(st, args),
+      st => updateBodiesTime(st),
       st => updateInput(st, args),
       st => addGivenCues(st, args),
       st => applyInputToDirector(st, args),
@@ -104,6 +105,15 @@ const updateTime = <Stg extends Setting>(
   const timeScale = args.instances.director.getTimeScales(state);
   return Im.update(state, 'time', s =>
     TimeTrait.applyInput(s, {input: args.time, baseTimeScale: timeScale.base})
+  );
+};
+
+const updateBodiesTime = <Stg extends Setting>(
+  state: GameState<Stg>
+): GameState<Stg> => {
+  const lastDeltaMs = state.time.lastDeltaMs;
+  return Im.update(state, 'actressParts', s =>
+    ActressPartsTrait.updateBodiesTime(s, {lastDeltaMs})
   );
 };
 
