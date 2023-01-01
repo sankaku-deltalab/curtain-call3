@@ -6,6 +6,7 @@ import {
   BodyId,
   BodyState,
   MindId,
+  MindState,
 } from '../core/components/actress-parts';
 import {Overlaps} from '../core/components';
 import {CueTrait} from '../core/components/cue';
@@ -111,15 +112,23 @@ export class GameStateHelper {
   >(
     state: GameState<Stg>,
     act: ActressInitializer<Stg, BT, MT>
-  ): {state: GameState<Stg>; bodyId: BodyId; mindId: MindId} {
+  ): {
+    state: GameState<Stg>;
+    bodyId: BodyId;
+    mindId: MindId;
+    body: BodyState<Stg, BT>;
+    mind: MindState<Stg, MT>;
+  } {
     const originalSt = state;
     return Im.pipe(
       () => state,
       st => ActressPartsTrait.addActress(st.actressParts, act),
-      ({state: actSt, bodyId, mindId}) => ({
+      ({state: actSt, bodyId, mindId, body, mind}) => ({
         state: Im.update(originalSt, 'actressParts', () => actSt),
         bodyId,
         mindId,
+        body,
+        mind,
       })
     )();
   }

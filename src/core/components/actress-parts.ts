@@ -151,7 +151,13 @@ export class ActressPartsTrait {
   >(
     state: ActressPartsState<Stg>,
     act: ActressInitializer<Stg, BT, MT>
-  ): {state: ActressPartsState<Stg>; bodyId: BodyId; mindId: MindId} {
+  ): {
+    state: ActressPartsState<Stg>;
+    bodyId: BodyId;
+    mindId: MindId;
+    body: BodyState<Stg, BT>;
+    mind: MindState<Stg, MT>;
+  } {
     const {state: st, bodyId, mindId} = this.generateActressId(state);
     const {body, mind} = this.createActress({bodyId, mindId, ...act});
     const st2 = Im.pipe(
@@ -162,7 +168,7 @@ export class ActressPartsTrait {
         Im.update(st, 'bodies', bodies => ImMapTrait.put(bodies, bodyId, body))
     )();
 
-    return {state: st2, bodyId, mindId};
+    return {state: st2, bodyId, mindId, body, mind};
   }
 
   static addActresses<
