@@ -31,6 +31,7 @@ type BodyStateAdditional<
 > = Readonly<{
   meta: Readonly<{
     bodyType: BT;
+    bodyId: BodyId;
     del: boolean;
   }>;
 }>;
@@ -48,6 +49,7 @@ type MindStateAdditional<
 > = Readonly<{
   meta: Readonly<{
     mindType: MT;
+    mindId: MindId;
     bodyId: BodyId;
   }>;
 }>;
@@ -261,11 +263,11 @@ export class ActressPartsTrait {
   } {
     const body: BodyState<Stg, BT> = {
       ...args.body,
-      meta: {bodyType: args.bodyType, del: false},
+      meta: {bodyType: args.bodyType, bodyId: args.bodyId, del: false},
     };
     const mind: MindState<Stg, MT> = {
       ...args.mind,
-      meta: {bodyId: args.bodyId, mindType: args.mindType},
+      meta: {bodyId: args.bodyId, mindType: args.mindType, mindId: args.mindId},
     };
 
     return {
