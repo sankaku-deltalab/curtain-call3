@@ -9,6 +9,7 @@ type Value = unknown;
 
 export type ImMap<K extends Key, V extends Value> = {
   type: typeof type;
+  size: number;
   root: hamt.HamtNode<K, V>;
 };
 
@@ -20,7 +21,8 @@ export class ImMapTrait {
     for (const [k, v] of items ?? []) {
       map = hamt.set(map, k, v);
     }
-    return {type, root: map};
+    const keysSet = new Set(asArray(items ?? []).map(([k]) => k));
+    return {type, size: keysSet.size, root: map};
   }
 
   static put<K extends Key, V extends Value>(
@@ -28,17 +30,20 @@ export class ImMapTrait {
     key: K,
     value: V
   ): ImMap<K, V> {
-    return {
-      type,
-      root: hamt.set(map.root, key, value),
-    };
+    const mapHasKey = hamt.get(map.root, key) !== undefined;
+    const size = map.size + (mapHasKey ? 0 : 1);
+    return {type, size, root: hamt.set(map.root, key, value)};
   }
 
   static delete<K extends Key, V extends Value>(
     map: ImMap<K, V>,
     key: K
   ): ImMap<K, V> {
-    return {type, root: hamt.del(map.root, key)};
+    const mapHasKey = hamt.get(map.root, key) !== undefined;
+    if (!mapHasKey) return map;
+
+    const size = map.size - 1;
+    return {type, size, root: hamt.del(map.root, key)};
   }
 
   static fetch<K extends Key, V extends Value, DefaultVal = undefined>(
@@ -98,3 +103,8 @@ export class ImMapTrait {
     return m;
   }
 }
+
+const asArray = <T>(ary: Iterable<T>): T[] => {
+  if (Array.isArray(ary)) return ary;
+  return [...ary];
+};
