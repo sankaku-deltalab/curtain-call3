@@ -1,7 +1,15 @@
-export type ImList<T> = {size: number; head?: ImListNode<T>};
+import {collectionTypes} from './collection-types';
+
+const type = collectionTypes.list;
+
+export type ImList<T> = {
+  type: typeof type;
+  size: number;
+  head?: ImListNode<T>;
+};
 export type ImListNode<T> = {v: T; next?: ImListNode<T>};
 
-const empty: ImList<unknown> = {size: 0};
+const empty: ImList<unknown> = {size: 0, type};
 
 export class ImListTrait {
   static new<T>(items?: Iterable<T>): ImList<T> {
@@ -17,13 +25,14 @@ export class ImListTrait {
       if (prevTail !== undefined) prevTail.next = tailMut;
       if (headMut === undefined) headMut = tailMut;
     }
-    return {size: size, head: headMut};
+    return {size: size, head: headMut, type};
   }
 
   static push<T>(list: ImList<T>, value: T): ImList<T> {
     return {
       size: list.size + 1,
       head: {v: value, next: list.head},
+      type,
     };
   }
 
@@ -34,7 +43,7 @@ export class ImListTrait {
     if (list.head === undefined) return [defaultVal, list];
     const oldHead = list.head;
     const newHead = list.head.next;
-    return [oldHead.v, {size: list.size - 1, head: newHead}];
+    return [oldHead.v, {size: list.size - 1, head: newHead, type}];
   }
 
   static toArray<T>(list: ImList<T>): T[] {
@@ -65,6 +74,7 @@ export class ImListTrait {
     return {
       size: newSize,
       head,
+      type,
     };
   }
 

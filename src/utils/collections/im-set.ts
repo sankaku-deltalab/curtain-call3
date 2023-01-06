@@ -1,8 +1,14 @@
 import * as hamt from 'mini-hamt';
+import {collectionTypes} from './collection-types';
+
+const type = collectionTypes.set;
 
 type Key = string;
 
-export type ImSet<K extends Key> = hamt.HamtNode<K, true>;
+export type ImSet<K extends Key> = {
+  type: typeof type;
+  root: hamt.HamtNode<K, true>;
+};
 
 export class ImSetTrait {
   static new<K extends Key>(items?: Iterable<K>): ImSet<K> {
@@ -10,19 +16,19 @@ export class ImSetTrait {
     for (const k of items ?? []) {
       map = hamt.set(map, k, true);
     }
-    return map;
+    return {type, root: map};
   }
 
   static put<K extends Key>(map: ImSet<K>, key: K): ImSet<K> {
-    return hamt.set(map, key, true);
+    return {type, root: hamt.set(map.root, key, true)};
   }
 
   static delete<K extends Key>(map: ImSet<K>, key: K): ImSet<K> {
-    return hamt.del(map, key);
+    return {type, root: hamt.del(map.root, key)};
   }
 
   static has<K extends Key>(map: ImSet<K>, key: K): boolean {
-    const r = hamt.get(map, key);
+    const r = hamt.get(map.root, key);
     return r === true;
   }
 }

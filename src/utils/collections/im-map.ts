@@ -1,10 +1,16 @@
 import * as hamt from 'mini-hamt';
 import {collectMiniHamtItems} from './mini-hamt-extension';
+import {collectionTypes} from './collection-types';
+
+const type = collectionTypes.map;
 
 type Key = string;
 type Value = unknown;
 
-export type ImMap<K extends Key, V extends Value> = hamt.HamtNode<K, V>;
+export type ImMap<K extends Key, V extends Value> = {
+  type: typeof type;
+  root: hamt.HamtNode<K, V>;
+};
 
 export class ImMapTrait {
   static new<K extends Key, V extends Value>(
@@ -14,7 +20,7 @@ export class ImMapTrait {
     for (const [k, v] of items ?? []) {
       map = hamt.set(map, k, v);
     }
-    return map;
+    return {type, root: map};
   }
 
   static put<K extends Key, V extends Value>(
@@ -22,14 +28,17 @@ export class ImMapTrait {
     key: K,
     value: V
   ): ImMap<K, V> {
-    return hamt.set(map, key, value);
+    return {
+      type,
+      root: hamt.set(map.root, key, value),
+    };
   }
 
   static delete<K extends Key, V extends Value>(
     map: ImMap<K, V>,
     key: K
   ): ImMap<K, V> {
-    return hamt.del(map, key);
+    return {type, root: hamt.del(map.root, key)};
   }
 
   static fetch<K extends Key, V extends Value, DefaultVal = undefined>(
@@ -37,7 +46,7 @@ export class ImMapTrait {
     key: K,
     defaultVal: DefaultVal
   ): V | DefaultVal {
-    const r = hamt.get(map, key);
+    const r = hamt.get(map.root, key);
     return r !== undefined ? r : defaultVal;
   }
 
@@ -56,15 +65,15 @@ export class ImMapTrait {
   }
 
   static items<K extends Key, V extends Value>(map: ImMap<K, V>): [K, V][] {
-    return collectMiniHamtItems(map);
+    return collectMiniHamtItems(map.root);
   }
 
   static keys<K extends Key, V extends Value>(map: ImMap<K, V>): K[] {
-    return collectMiniHamtItems(map).map(([k, _v]) => k);
+    return collectMiniHamtItems(map.root).map(([k, _v]) => k);
   }
 
   static values<K extends Key, V extends Value>(map: ImMap<K, V>): V[] {
-    return collectMiniHamtItems(map).map(([_k, v]) => v);
+    return collectMiniHamtItems(map.root).map(([_k, v]) => v);
   }
 
   static putMulti<K extends Key, V extends Value>(
