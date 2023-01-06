@@ -7,6 +7,7 @@ type Key = string;
 
 export type ImSet<K extends Key> = {
   type: typeof type;
+  size: number;
   root: hamt.HamtNode<K, true>;
 };
 
@@ -16,15 +17,22 @@ export class ImSetTrait {
     for (const k of items ?? []) {
       map = hamt.set(map, k, true);
     }
-    return {type, root: map};
+    const keysSet = new Set(asArray(items ?? []).map(([k]) => k));
+    return {type, size: keysSet.size, root: map};
   }
 
   static put<K extends Key>(map: ImSet<K>, key: K): ImSet<K> {
-    return {type, root: hamt.set(map.root, key, true)};
+    const mapHasKey = hamt.get(map.root, key) !== undefined;
+    const size = map.size + (mapHasKey ? 0 : 1);
+    return {type, size, root: hamt.set(map.root, key, true)};
   }
 
   static delete<K extends Key>(map: ImSet<K>, key: K): ImSet<K> {
-    return {type, root: hamt.del(map.root, key)};
+    const mapHasKey = hamt.get(map.root, key) !== undefined;
+    if (!mapHasKey) return map;
+
+    const size = map.size - 1;
+    return {type, size, root: hamt.del(map.root, key)};
   }
 
   static has<K extends Key>(map: ImSet<K>, key: K): boolean {
@@ -32,3 +40,8 @@ export class ImSetTrait {
     return r === true;
   }
 }
+
+const asArray = <T>(ary: Iterable<T>): T[] => {
+  if (Array.isArray(ary)) return ary;
+  return [...ary];
+};
