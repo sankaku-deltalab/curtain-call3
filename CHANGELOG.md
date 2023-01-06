@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `ImStruct`.
+- Add `ImSet.size`.
+- Add `ImMap.size`.
+
 ## [1.0.0-alpha.16] - 2023-01-01
 
 ### Added
