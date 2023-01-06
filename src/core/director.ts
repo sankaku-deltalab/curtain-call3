@@ -1,4 +1,4 @@
-import {ImList} from '../utils/im-list';
+import {ImList} from '../utils/collections/im-list';
 import {AnyCue, CuePriority} from './components/cue';
 import {GameState} from './game-state';
 import {Setting} from './setting';

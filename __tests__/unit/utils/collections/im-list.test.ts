@@ -1,4 +1,4 @@
-import {ImListTrait} from '../../../src/utils/im-list';
+import {ImListTrait} from '../../../../src/utils/collections/im-list';
 
 describe('ImListTrait.new', (): void => {
   test('can create empty ImList', (): void => {

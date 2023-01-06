@@ -8,7 +8,7 @@ import {
 } from '../setting';
 import {Im} from '../../utils/immutable-manipulation';
 import {Enum} from '../../utils/enum';
-import {ImMap, ImMapTrait} from '../../utils/im-map';
+import {ImMap, ImMapTrait} from '../../utils/collections/im-map';
 
 export type ActressPartsState<Stg extends Setting> = Readonly<{
   bodyIdCount: number;

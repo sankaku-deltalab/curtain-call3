@@ -27,7 +27,7 @@ import {Res, Result} from '../utils/result';
 import {Im} from '../utils/immutable-manipulation';
 import {Enum} from '../utils/enum';
 import {RecM2MTrait} from '../utils/rec-m2m';
-import {ImListTrait} from '../utils/im-list';
+import {ImListTrait} from '../utils/collections/im-list';
 
 export class GameStateHelper {
   static getMinds<Stg extends Setting>(

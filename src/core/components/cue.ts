@@ -1,6 +1,6 @@
 import {CuePayload, CueTypes, Setting} from '../setting';
 import {Im} from '../../utils/immutable-manipulation';
-import {ImList, ImListTrait} from '../../utils/im-list';
+import {ImList, ImListTrait} from '../../utils/collections/im-list';
 
 export type CueState<Stg extends Setting> = Readonly<{
   cues: Partial<OrganizedCues<Stg>>;

@@ -18,7 +18,7 @@ import {OverlapCalculation} from './components/collision/overlap-calculation';
 import {AnyNotification, NotificationTrait} from './notification';
 import {AnyCue, CueTrait} from './components/cue';
 import {CollisionTrait} from './components/collision/collision-state';
-import {ImListTrait} from '../utils/im-list';
+import {ImListTrait} from '../utils/collections/im-list';
 
 export type UpdateArgs<Stg extends Setting> = {
   input: CanvasInput<Stg>;

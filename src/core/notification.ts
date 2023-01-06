@@ -1,6 +1,6 @@
 import {NotificationPayload, NotificationTypes, Setting} from './setting';
 import {Im} from '../utils/immutable-manipulation';
-import {ImList, ImListTrait} from '../utils/im-list';
+import {ImList, ImListTrait} from '../utils/collections/im-list';
 
 export type NotificationState<Stg extends Setting> = {
   notifications: ImList<AnyNotification<Stg>>;

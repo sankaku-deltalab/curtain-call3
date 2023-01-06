@@ -1,5 +1,5 @@
 import {Im, Res, Result} from '../utils';
-import {ImList, ImListTrait} from '../utils/im-list';
+import {ImList, ImListTrait} from '../utils/collections/im-list';
 import {Collision, Graphic} from './components';
 import {
   ActressPartsTrait,

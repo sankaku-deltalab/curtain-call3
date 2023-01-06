@@ -1,4 +1,4 @@
-import {ImList} from '../utils/im-list';
+import {ImList} from '../utils/collections/im-list';
 import {GameState} from './game-state';
 import {CuePayload, CueTypes, Setting} from './setting';
 

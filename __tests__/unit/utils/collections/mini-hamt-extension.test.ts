@@ -1,5 +1,5 @@
 import * as hamt from 'mini-hamt';
-import {collectMiniHamtItems} from '../../../src/utils/mini-hamt-extension';
+import {collectMiniHamtItems} from '../../../../src/utils/collections/mini-hamt-extension';
 
 const items: [string, number][] = Array(500)
   .fill(0)
