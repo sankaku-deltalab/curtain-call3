@@ -1,5 +1,6 @@
 import * as hamt from 'mini-hamt';
 import {collectionTypes} from './collection-types';
+import {collectMiniHamtItems} from './mini-hamt-extension';
 
 const type = collectionTypes.set;
 
@@ -38,6 +39,10 @@ export class ImSetTrait {
   static has<K extends Key>(map: ImSet<K>, key: K): boolean {
     const r = hamt.get(map.root, key);
     return r === true;
+  }
+
+  static keys<K extends Key>(map: ImSet<K>): K[] {
+    return collectMiniHamtItems(map.root).map(([k, _v]) => k);
   }
 }
 
