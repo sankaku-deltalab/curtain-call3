@@ -34,7 +34,7 @@ import {ImListTrait} from '../utils/collections/im-list';
 import {DataSourcesTrait} from '../core/components/data-sources';
 
 export class GameStateHelper {
-  static fetchDataSource<
+  static fetchFromDataSource<
     Stg extends Setting,
     Type extends DataSourceTypes<Stg>,
     Key extends DataSourceKey<Stg, Type>
