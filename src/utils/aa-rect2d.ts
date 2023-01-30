@@ -122,6 +122,13 @@ export class AaRect2dTrait {
     return {x, y};
   }
 
+  static expandArea(area: AaRect2d, expandSize: Vec2d): AaRect2d {
+    const expandSizeHalf = Vec2dTrait.div(expandSize, 2);
+    const nw = Vec2dTrait.sub(area.nw, expandSizeHalf);
+    const se = Vec2dTrait.add(area.se, expandSizeHalf);
+    return {nw, se};
+  }
+
   static reduceArea(area: AaRect2d, reduceSize: Vec2d): AaRect2d {
     const reduceSizeHalf = Vec2dTrait.div(reduceSize, 2);
     const nw = Vec2dTrait.add(area.nw, reduceSizeHalf);
