@@ -11,11 +11,17 @@ import {
   CollisionState,
   CollisionTrait,
 } from './components/collision/collision-state';
+import {
+  DataSources,
+  DataSourcesState,
+  DataSourcesTrait,
+} from './components/data-sources';
 
 export type GameState<Stg extends Setting> = Readonly<{
   time: TimeState<Stg>;
   camera: CameraState<Stg>;
   input: InputState<Stg>;
+  dataSources: DataSourcesState<Stg>;
   actressParts: ActressPartsState<Stg>;
   collision: CollisionState;
   scene: SceneState<Stg>;
@@ -28,6 +34,7 @@ export type StateInitializer<Stg extends Setting> = Readonly<{
     size: Vec2d;
   }>;
   level: LevelState<Stg>;
+  dataSources: DataSources<Stg>;
 }>;
 
 export class GameStateTrait {
@@ -39,6 +46,7 @@ export class GameStateTrait {
       camera: CameraTrait.initialState(args.camera),
       input: InputTrait.initialState(),
       collision: CollisionTrait.initialState(),
+      dataSources: DataSourcesTrait.initialState(args.dataSources),
       actressParts: ActressPartsTrait.initialState(),
       scene: SceneTrait.initialState({initialLevel: args.level}),
       cue: CueTrait.initialState(),

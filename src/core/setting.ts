@@ -2,11 +2,23 @@ type Rec = Record<string, unknown>;
 
 export type Setting = {
   level: Rec;
+  dataSources: Record<string, {key: string; value: unknown}>;
   bodies: Record<string, {state: Rec}>;
   minds: Record<string, {state: Rec; props: Rec}>;
   cues: Record<string, Rec>;
   notifications: Record<string, Rec>;
 };
+
+export type DataSourceTypes<Stg extends Setting> = keyof Stg['dataSources'] &
+  string;
+export type DataSourceKey<
+  Stg extends Setting,
+  Type extends DataSourceTypes<Stg>
+> = Stg['dataSources'][Type]['key'];
+export type DataSourceValue<
+  Stg extends Setting,
+  Type extends DataSourceTypes<Stg>
+> = Stg['dataSources'][Type]['value'];
 
 export type BodyTypes<Stg extends Setting> = keyof Stg['bodies'] & string;
 export type MindTypes<Stg extends Setting> = keyof Stg['minds'] & string;
