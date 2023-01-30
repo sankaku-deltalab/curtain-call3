@@ -31,7 +31,7 @@ import {Im} from '../utils/immutable-manipulation';
 import {Enum} from '../utils/enum';
 import {RecM2MTrait} from '../utils/rec-m2m';
 import {ImListTrait} from '../utils/collections/im-list';
-import {DataSourcesTrait} from 'src/core/components/data-sources';
+import {DataSourcesTrait} from '../core/components/data-sources';
 
 export class GameStateHelper {
   static fetchDataSource<
