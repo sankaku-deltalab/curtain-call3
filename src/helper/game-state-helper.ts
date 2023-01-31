@@ -17,9 +17,6 @@ import {
   BodyTypes,
   CuePayload,
   CueTypes,
-  DataSourceKey,
-  DataSourceTypes,
-  DataSourceValue,
   LevelState,
   MindTypes,
   NotificationPayload,
@@ -31,17 +28,8 @@ import {Im} from '../utils/immutable-manipulation';
 import {Enum} from '../utils/enum';
 import {RecM2MTrait} from '../utils/rec-m2m';
 import {ImListTrait} from '../utils/collections/im-list';
-import {DataSourcesTrait} from '../core/components/data-sources';
 
 export class GameStateHelper {
-  static fetchFromDataSource<
-    Stg extends Setting,
-    Type extends DataSourceTypes<Stg>,
-    Key extends DataSourceKey<Stg, Type>
-  >(state: GameState<Stg>, type: Type, key: Key): DataSourceValue<Stg, Type> {
-    return DataSourcesTrait.fetch(state.dataSources, type, key);
-  }
-
   static getMinds<Stg extends Setting>(
     state: GameState<Stg>
   ): [MindId, AnyMindState<Stg>][] {
