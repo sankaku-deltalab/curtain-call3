@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `ImMap.size`.
 - Add `ImSetTrait.keys`.
 - Add `Setting.dataSources` and `DataSourcesHelper`.
+- Add `Setting.dynamicSources` and `DynamicSourceHelper`.
 
 ## [1.0.0-alpha.16] - 2023-01-01
 
