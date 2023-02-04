@@ -9,6 +9,12 @@ import {
 import {DynamicSources, DynamicSourcesTrait} from '../core/dynamic-sources';
 
 export class DynamicSourceHelper {
+  static new<Stg extends Setting>(
+    dynamicSources: DynamicSources<Stg>
+  ): DynamicSources<Stg> {
+    return DynamicSourcesTrait.new(dynamicSources);
+  }
+
   static fetch<Stg extends Setting, Type extends DynamicSourceTypes<Stg>>(
     sources: DynamicSources<Stg>,
     type: Type,
