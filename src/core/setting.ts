@@ -3,6 +3,7 @@ type Rec = Record<string, unknown>;
 export type Setting = {
   level: Rec;
   dataSources: Record<string, {key: string; value: unknown}>;
+  dynamicSources: Record<string, {key: string; props: unknown; value: unknown}>;
   bodies: Record<string, {state: Rec}>;
   minds: Record<string, {state: Rec; props: Rec}>;
   cues: Record<string, Rec>;
@@ -19,6 +20,21 @@ export type DataSourceValue<
   Stg extends Setting,
   Type extends DataSourceTypes<Stg>
 > = Stg['dataSources'][Type]['value'];
+
+export type DynamicSourceTypes<Stg extends Setting> =
+  keyof Stg['dynamicSources'] & string;
+export type DynamicSourceKey<
+  Stg extends Setting,
+  Type extends DynamicSourceTypes<Stg>
+> = Stg['dynamicSources'][Type]['key'];
+export type DynamicSourceProps<
+  Stg extends Setting,
+  Type extends DynamicSourceTypes<Stg>
+> = Stg['dynamicSources'][Type]['props'];
+export type DynamicSourceValue<
+  Stg extends Setting,
+  Type extends DynamicSourceTypes<Stg>
+> = Stg['dynamicSources'][Type]['value'];
 
 export type BodyTypes<Stg extends Setting> = keyof Stg['bodies'] & string;
 export type MindTypes<Stg extends Setting> = keyof Stg['minds'] & string;
