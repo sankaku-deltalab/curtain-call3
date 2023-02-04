@@ -23,7 +23,7 @@ export type DynamicSources<Stg extends Setting> = {
 };
 
 export class DynamicSourcesTrait {
-  static initialState<Stg extends Setting>(
+  static new<Stg extends Setting>(
     dynamicSources: DynamicSources<Stg>
   ): DynamicSources<Stg> {
     return dynamicSources;
