@@ -4,7 +4,7 @@ export type Setting = {
   level: Rec;
   dataSources: Record<string, {key: string; value: unknown}>;
   dynamicSources: Record<string, {key: string; props: unknown; value: unknown}>;
-  bodies: Record<string, {state: Rec}>;
+  bodies: Record<string, Rec>;
   minds: Record<string, {state: Rec; props: Rec}>;
   cues: Record<string, Rec>;
   notifications: Record<string, Rec>;
@@ -57,7 +57,7 @@ export type LevelState<Stg extends Setting> = Stg['level'];
 export type BodyStateRaw<
   Stg extends Setting,
   BT extends BodyTypes<Stg>
-> = Stg['bodies'][BT]['state'];
+> = Stg['bodies'][BT];
 
 export type AnyBodyStateRaw<Stg extends Setting> = BodyStateRaw<
   Stg,
@@ -67,7 +67,7 @@ export type AnyBodyStateRaw<Stg extends Setting> = BodyStateRaw<
 export type MindStateRaw<
   Stg extends Setting,
   MT extends MindTypes<Stg>
-> = Stg['minds'][MT]['state'];
+> = Stg['minds'][MT];
 
 export type AnyMindStateRaw<Stg extends Setting> = MindStateRaw<
   Stg,
