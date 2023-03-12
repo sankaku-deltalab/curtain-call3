@@ -67,7 +67,7 @@ export type AnyBodyStateRaw<Stg extends Setting> = BodyStateRaw<
 export type MindStateRaw<
   Stg extends Setting,
   MT extends MindTypes<Stg>
-> = Stg['minds'][MT];
+> = Stg['minds'][MT]['state'];
 
 export type AnyMindStateRaw<Stg extends Setting> = MindStateRaw<
   Stg,
