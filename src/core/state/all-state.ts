@@ -1,12 +1,10 @@
 import {AaRect2d, Im} from '../../utils';
 import {
-  CanvasGraphic,
   Collision,
   FlattenCollision,
-  Graphic,
   TCollision,
-  TGraphic,
-} from '../components';
+} from '../components/collision/collision';
+import {CanvasGraphic, Graphic, TGraphic} from '../components/graphics/graphic';
 import {AnyTypeBodyId, DataDefinition} from '../setting/data-definition';
 import {GameState} from './game-states';
 import {

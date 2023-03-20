@@ -9,7 +9,7 @@ export class CollisionHelper {
   static createAaRectShape(box: AaRect2d): AaRectCollisionShape {
     return {
       type: 'aa_rect',
-      box,
+      aabb: box,
     };
   }
 

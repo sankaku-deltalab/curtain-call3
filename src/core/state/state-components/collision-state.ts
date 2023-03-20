@@ -1,6 +1,6 @@
 import {RecM2MTrait} from '../../../utils';
-import {OverlapCalculation} from '../../components';
 import {FlattenCollision, Overlaps} from '../../components/collision/collision';
+import {OverlapCalculation} from '../../components/collision/overlap-calculation';
 import {DataDefinition} from '../../setting/data-definition';
 
 export type CollisionState<Def extends DataDefinition> = Readonly<{

@@ -3,7 +3,6 @@ import {Im} from '../../../utils/immutable-manipulation';
 import {Enum} from '../../../utils/enum';
 import {RecM2M, RecM2MTrait} from '../../../utils/rec-m2m';
 import {FlattenCollision, Overlaps} from './collision';
-import {BodyId} from '../actress-parts';
 import {DataDefinition} from '../../setting/data-definition';
 
 export class OverlapCalculation {
@@ -29,7 +28,7 @@ const splitCollisionsToExcessAndNonExcess = <Stg extends DataDefinition>(
 const calcAabbOverlaps = <Stg extends DataDefinition>(collisions: {
   excess: FlattenCollision<Stg>[];
   nonExcess: FlattenCollision<Stg>[];
-}): RecM2M<BodyId> => {
+}): RecM2M<string> => {
   const eCol = collisions.excess;
   const neCol = collisions.nonExcess;
 

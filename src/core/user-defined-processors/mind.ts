@@ -1,6 +1,7 @@
 import {GameState} from '../state/game-states';
 import {Body, BodyType, DataDefinition} from '../setting/data-definition';
-import {Collision, Graphic} from '../components';
+import {Graphic} from '../components/graphics/graphic';
+import {Collision} from '../components/collision/collision';
 
 export interface Mind<
   Def extends DataDefinition,
