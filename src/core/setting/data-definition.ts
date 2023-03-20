@@ -16,6 +16,7 @@ export type Level<Def extends DataDefinition> = Def['level'];
 // Body
 export type BodyBase<Type extends string> = {
   id: [Type, string];
+  type: Type;
 };
 export type BodyType<Def extends DataDefinition> = keyof Def['bodies'] & string;
 export type Body<
@@ -26,12 +27,16 @@ export type BodyWithoutId<
   Def extends DataDefinition,
   BT extends BodyType<Def>
 > = Omit<Body<Def, BT>, 'id'>;
-export type BodyId<Def extends DataDefinition, BT extends BodyType<Def>> = Body<
-  Def,
-  BT
->['id'];
+export type BodyId<Def extends DataDefinition, BT extends BodyType<Def>> = [
+  BT,
+  string
+];
 export type AnyTypeBody<Def extends DataDefinition> = Body<Def, BodyType<Def>>;
 export type AnyTypeBodyId<Def extends DataDefinition> = BodyId<
+  Def,
+  BodyType<Def>
+>;
+export type AnyTypeBodyWithoutId<Def extends DataDefinition> = BodyWithoutId<
   Def,
   BodyType<Def>
 >;
@@ -71,10 +76,14 @@ export type DynamicSourceProps<
 export type NotificationBase = {};
 export type NotificationType<Def extends DataDefinition> =
   keyof Def['notifications'] & string;
-export type NotificationPayload<
+export type Notification<
   Def extends DataDefinition,
   Type extends NotificationType<Def>
-> = Def['notifications'][Type];
+> = {type: Type; payload: Def['notifications'][Type]};
+export type AnyTypeNotification<Def extends DataDefinition> = Notification<
+  Def,
+  NotificationType<Def>
+>;
 
 // functions
 export const serializeBodyId = <Def extends DataDefinition>(

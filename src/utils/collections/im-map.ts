@@ -1,6 +1,7 @@
 import * as hamt from 'mini-hamt';
 import {collectMiniHamtItems} from './mini-hamt-extension';
 import {collectionTypes} from './collection-types';
+import {Res, Result} from '../result';
 
 const type = collectionTypes.map;
 
@@ -46,13 +47,12 @@ export class ImMapTrait {
     return {type, size, root: hamt.del(map.root, key)};
   }
 
-  static fetch<K extends Key, V extends Value, DefaultVal = undefined>(
+  static fetch<K extends Key, V extends Value>(
     map: ImMap<K, V>,
-    key: K,
-    defaultVal: DefaultVal
-  ): V | DefaultVal {
+    key: K
+  ): Result<V> {
     const r = hamt.get(map.root, key);
-    return r !== undefined ? r : defaultVal;
+    return r !== undefined ? Res.ok(r) : Res.err(`key "${key}" not in map`);
   }
 
   static update<K extends Key, V extends Value>(
@@ -61,11 +61,10 @@ export class ImMapTrait {
     defaultVal: V,
     updater: (v: V) => V
   ): ImMap<K, V> {
-    const notFoundObj = Symbol('__not_found_for_ImMap');
-    const oldVal = ImMapTrait.fetch(map, key, notFoundObj);
-    if (oldVal === notFoundObj) return ImMapTrait.put(map, key, defaultVal);
+    const maybeOldVal = ImMapTrait.fetch(map, key);
+    if (maybeOldVal.err) return ImMapTrait.put(map, key, defaultVal);
 
-    const newVal = updater(oldVal);
+    const newVal = updater(maybeOldVal.val);
     return ImMapTrait.put(map, key, newVal);
   }
 

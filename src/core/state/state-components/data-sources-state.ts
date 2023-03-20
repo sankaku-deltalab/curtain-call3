@@ -25,11 +25,11 @@ export class TDataSourcesState {
     };
   }
 
-  static fetchB<
-    Def extends DataDefinition,
-    Type extends DataSourceType<Def>,
-    Id extends DataSourceId<Def, Type>
-  >(ds: DataSourcesState<Def>, type: Type, id: Id): DataSourceItem<Def, Type> {
+  static fetchB<Def extends DataDefinition, Type extends DataSourceType<Def>>(
+    ds: DataSourcesState<Def>,
+    type: Type,
+    id: DataSourceId<Def, Type>
+  ): DataSourceItem<Def, Type> {
     const source = ds.dataSources[type];
     if (!(id in source))
       throw new Error(`data source "${type}" do not have id "${id}"`);

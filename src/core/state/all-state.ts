@@ -5,8 +5,13 @@ import {
   TCollision,
 } from '../components/collision/collision';
 import {CanvasGraphic, Graphic, TGraphic} from '../components/graphics/graphic';
-import {AnyTypeBodyId, DataDefinition} from '../setting/data-definition';
+import {
+  AnyTypeBodyId,
+  AnyTypeNotification,
+  DataDefinition,
+} from '../setting/data-definition';
 import {GameState} from './game-states';
+import {SerializableState} from './serializable-state';
 import {
   CanvasRenderingState,
   TCameraState,
@@ -74,7 +79,21 @@ export class TAllState {
     };
   }
 
-  static updateAsGameState<Def extends DataDefinition>(
+  static extractSerializableState<Def extends DataDefinition>(
+    state: AllState<Def>
+  ): SerializableState<Def> {
+    return {
+      level: state.level,
+      bodies: state.bodies,
+      camera: state.camera,
+      collision: state.collision,
+      dataSources: state.dataSources,
+      time: state.time,
+      inputPointer: state.inputPointer,
+    };
+  }
+
+  private static updateAsGameState<Def extends DataDefinition>(
     state: AllState<Def>,
     updater: (
       gameState: GameState<Def>,
@@ -87,7 +106,7 @@ export class TAllState {
 
   static updateState<Def extends DataDefinition>(
     state: AllState<Def>
-  ): AllState<Def> {
+  ): {state: AllState<Def>; notifications: AnyTypeNotification<Def>[]} {
     let st = state;
     st = Im.pipe(
       () => st,
@@ -104,7 +123,9 @@ export class TAllState {
       st => this.updateByLaterProcedures(st)
     )();
 
-    return st;
+    const notifications = st.director.director.generateNotification(st);
+
+    return {state: st, notifications};
   }
 
   private static updateTime<Def extends DataDefinition>(

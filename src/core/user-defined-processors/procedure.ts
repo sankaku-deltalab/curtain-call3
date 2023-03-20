@@ -19,7 +19,7 @@ export abstract class BodiesReducerProcedure<
   ): GameState<Def>;
 
   apply(state: GameState<Def>): GameState<Def> {
-    let bodies = TBodiesState.bodiesInType(state.bodies, this.type);
+    let bodies = TBodiesState.getBodiesInType(state.bodies, this.type);
     bodies = bodies.filter(b => this.filterBody(b, state));
     return bodies.reduce((state, b) => this.applyBody(state, b), state);
   }

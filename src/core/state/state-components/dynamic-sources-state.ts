@@ -37,13 +37,13 @@ export class TDynamicSourcesState {
     Def extends DataDefinition,
     Type extends DynamicSourceType<Def>
   >(
-    sources: DynamicSources<Def>,
+    sources: DynamicSourcesState<Def>,
     type: Type,
     id: DynamicSourceId<Def, Type>,
     props: DynamicSourceProps<Def, Type>,
     state: GameState<Def>
   ): DynamicSourceItem<Def, Type> {
-    const source = sources[type];
+    const source = sources.dynamicSources[type];
     if (!(id in source))
       throw new Error(`dynamic source "${type}" do not have id "${id}"`);
     return source[id](props, state);

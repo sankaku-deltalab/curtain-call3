@@ -9,6 +9,12 @@ export class TLevelState {
     return {level};
   }
 
+  static getLevel<Def extends DataDefinition>(
+    levelState: LevelState<Def>
+  ): Level<Def> {
+    return levelState.level;
+  }
+
   static putLevel<Def extends DataDefinition>(
     levelState: LevelState<Def>,
     level: Level<Def>
