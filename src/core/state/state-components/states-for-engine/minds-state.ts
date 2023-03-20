@@ -30,7 +30,7 @@ export class TMindsState {
     });
   }
 
-  static updateGameStateByMinds<Def extends DataDefinition>(
+  static updateGameStateByMindUpdate<Def extends DataDefinition>(
     {minds}: MindsState<Def>,
     state: GameState<Def>
   ): GameState<Def> {
@@ -40,6 +40,25 @@ export class TMindsState {
     const newBodies = bodyPropsMindArray.map(({body, props, mind}) => {
       return mind.updateBody(body, props);
     });
+
+    return {
+      ...state,
+      bodies: TBodiesState.resetAllBodies(state.bodies, newBodies),
+    };
+  }
+
+  static updateGameStateByMindDelete<Def extends DataDefinition>(
+    {minds}: MindsState<Def>,
+    state: GameState<Def>
+  ): GameState<Def> {
+    const bodyPropsMindArray = this.calcBodyPropsMindArray({minds}, state);
+
+    // Use multi-processing in future if we can
+    const newBodies = bodyPropsMindArray
+      .filter(({body, props, mind}) => {
+        return !mind.mustDeleteSelf(body, props);
+      })
+      .map(({body}) => body);
 
     return {
       ...state,

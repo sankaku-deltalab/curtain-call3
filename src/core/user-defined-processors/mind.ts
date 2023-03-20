@@ -11,6 +11,7 @@ export interface Mind<
   calcProps(state: GameState<Def>, body: Body<Def, BT>): Props;
   updateBody(body: Body<Def, BT>, props: Props): Body<Def, BT>;
 
+  mustDeleteSelf(body: Body<Def, BT>, props: Props): boolean;
   generateGraphics(body: Body<Def, BT>, props: Props): Graphic<Def>[];
   generateCollision(body: Body<Def, BT>, props: Props): Collision;
 }

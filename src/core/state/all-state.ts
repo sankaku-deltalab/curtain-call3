@@ -119,8 +119,9 @@ export class TAllState {
       () => st,
       st => this.updateByEarlyProcedures(st),
       st => this.updateByDirector(st),
-      st => this.updateByMinds(st),
-      st => this.updateByLaterProcedures(st)
+      st => this.updateByMindUpdate(st),
+      st => this.updateByLaterProcedures(st),
+      st => this.updateByMindDelete(st)
     )();
 
     const notifications = st.director.director.generateNotification(st);
@@ -204,11 +205,11 @@ export class TAllState {
     });
   }
 
-  private static updateByMinds<Def extends DataDefinition>(
+  private static updateByMindUpdate<Def extends DataDefinition>(
     state: AllState<Def>
   ): AllState<Def> {
     return this.updateAsGameState(state, (gameState, allState) => {
-      return TMindsState.updateGameStateByMinds(allState.minds, gameState);
+      return TMindsState.updateGameStateByMindUpdate(allState.minds, gameState);
     });
   }
 
@@ -220,6 +221,14 @@ export class TAllState {
         allState.procedures,
         gameState
       );
+    });
+  }
+
+  private static updateByMindDelete<Def extends DataDefinition>(
+    state: AllState<Def>
+  ): AllState<Def> {
+    return this.updateAsGameState(state, (gameState, allState) => {
+      return TMindsState.updateGameStateByMindDelete(allState.minds, gameState);
     });
   }
 
