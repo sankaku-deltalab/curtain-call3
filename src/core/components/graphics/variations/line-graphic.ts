@@ -1,7 +1,11 @@
-import {Setting} from '../../../setting';
 import {Vec2d, Vec2dTrait} from '../../../../utils/vec2d';
-import {CameraState, CameraTrait, RenderingState} from '../../camera';
 import {CanvasGraphicBase, Color, GraphicBase} from '../graphic-base';
+import {
+  CameraState,
+  CanvasRenderingState,
+  TCameraState,
+} from '../../../state/state-components/camera-state';
+import {DataDefinition} from '../../../setting/data-definition';
 
 export type LineGraphic = GraphicBase &
   Readonly<{
@@ -43,19 +47,24 @@ export class LineGraphicTrait {
     };
   }
 
-  static convertToCanvas<Stg extends Setting>(
+  static convertToCanvas<Def extends DataDefinition>(
     graphic: LineGraphic,
     args: {
-      camSt: CameraState<Stg>;
-      renSt: RenderingState;
+      cameraState: CameraState<Def>;
+      renderingState: CanvasRenderingState;
     }
   ): CanvasLineGraphic {
     const paths = graphic.paths.map(point => {
       const gamePos = Vec2dTrait.add(graphic.pos, point);
-      return CameraTrait.projectGamePointToCanvas(gamePos, args);
+      return TCameraState.projectGamePointToCanvas(
+        args.cameraState,
+        gamePos,
+        args
+      );
     });
 
-    const thickness = CameraTrait.gameScaleToRenderingScale(
+    const thickness = TCameraState.gameScaleToRenderingScale(
+      args.cameraState,
       graphic.thickness,
       args
     );

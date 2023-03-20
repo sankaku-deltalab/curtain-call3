@@ -1,8 +1,3 @@
-import {Setting} from '../../setting';
-import {Im} from '../../../utils/immutable-manipulation';
-import {Vec2dTrait} from '../../../utils/vec2d';
-import {AaRect2d, AaRect2dTrait} from '../../../utils/aa-rect2d';
-import {CameraState, CameraTrait, RenderingState} from '../camera';
 import {
   CanvasLineGraphic,
   LineGraphic,
@@ -13,88 +8,66 @@ import {
   SpriteGraphic,
   SpriteGraphicTrait,
 } from './variations/sprite-graphic';
+import {DataDefinition} from '../../setting/data-definition';
+import {
+  CameraState,
+  CanvasRenderingState,
+} from '../../state/state-components/camera-state';
 
-export type Graphic<_Stg extends Setting> = SpriteGraphic | LineGraphic;
-export type CanvasGraphic<_Stg extends Setting> =
+export type Graphic<_Def extends DataDefinition> = SpriteGraphic | LineGraphic;
+export type CanvasGraphic<_Def extends DataDefinition> =
   | CanvasSpriteGraphic
   | CanvasLineGraphic;
 
-export class GraphicTrait {
-  static appendKey<Stg extends Setting>(
+export class TGraphic {
+  static appendKey<Def extends DataDefinition>(
     preKey: string,
-    graphic: Graphic<Stg>
-  ): Graphic<Stg> {
+    graphic: Graphic<Def>
+  ): Graphic<Def> {
     return {
       ...graphic,
       key: `${preKey}-${graphic.key}`,
     };
   }
 
-  static appendKeys<Stg extends Setting>(
+  static appendKeys<Def extends DataDefinition>(
     preKey: string,
-    graphics: Graphic<Stg>[]
-  ): Graphic<Stg>[] {
+    graphics: Graphic<Def>[]
+  ): Graphic<Def>[] {
     return graphics.map(g => ({
       ...g,
       key: `${preKey}-${g.key}`,
     }));
   }
-}
 
-export class CanvasGraphicTrait {
-  static getRenderingArea<Stg extends Setting>(args: {
-    camSt: CameraState<Stg>;
-    renSt: RenderingState;
-  }): AaRect2d {
-    const {nw: gameNw, se: gameSe} = AaRect2dTrait.fromCenterAndSize(
-      Vec2dTrait.zero(),
-      args.camSt.size
-    );
-
-    const canvasNw = Im.pipe(
-      () => gameNw,
-      p => CameraTrait.projectGamePointToCanvas(p, args)
-    )();
-    const canvasSe = Im.pipe(
-      () => gameSe,
-      p => CameraTrait.projectGamePointToCanvas(p, args)
-    )();
-
-    return {
-      nw: canvasNw,
-      se: canvasSe,
-    };
+  static convertGraphicsToCanvas<Def extends DataDefinition>(
+    graphics: Graphic<Def>[],
+    args: {
+      cameraState: CameraState<Def>;
+      renderingState: CanvasRenderingState;
+    }
+  ): CanvasGraphic<Def>[] {
+    return graphics.map(g => this.convertGraphicToCanvas(g, args));
   }
 
-  static convertGraphicsToCanvas<Stg extends Setting>(
-    graphics: Graphic<Stg>[],
+  private static convertGraphicToCanvas<Def extends DataDefinition>(
+    graphic: Graphic<Def>,
     args: {
-      camSt: CameraState<Stg>;
-      renSt: RenderingState;
+      cameraState: CameraState<Def>;
+      renderingState: CanvasRenderingState;
     }
-  ): CanvasGraphic<Stg>[] {
-    return graphics.map(g =>
-      CanvasGraphicTrait.convertGraphicToCanvas(g, args)
-    );
-  }
-
-  private static convertGraphicToCanvas<Stg extends Setting>(
-    graphic: Graphic<Stg>,
-    args: {
-      camSt: CameraState<Stg>;
-      renSt: RenderingState;
-    }
-  ): CanvasGraphic<Stg> {
+  ): CanvasGraphic<Def> {
     const traits = {
       line: LineGraphicTrait,
       sprite: SpriteGraphicTrait,
     };
-    if (graphic.type === 'line') {
-      return traits['line'].convertToCanvas(graphic, args);
+
+    switch (graphic.type) {
+      case 'line':
+        return traits['line'].convertToCanvas(graphic, args);
+      case 'sprite':
+        return traits['sprite'].convertToCanvas(graphic, args);
     }
-    if (graphic.type === 'sprite') {
-      return traits['sprite'].convertToCanvas(graphic, args);
-    }
-    throw new Error('no trait for graphic');
+    // throw new Error('no trait for graphic');
   }
 }

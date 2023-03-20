@@ -2,11 +2,14 @@ import boxIntersect = require('box-intersect');
 import {Im} from '../../../utils/immutable-manipulation';
 import {Enum} from '../../../utils/enum';
 import {RecM2M, RecM2MTrait} from '../../../utils/rec-m2m';
-import {FlatCollision, Overlaps} from './collision';
+import {FlattenCollision, Overlaps} from './collision';
 import {BodyId} from '../actress-parts';
+import {DataDefinition} from '../../setting/data-definition';
 
 export class OverlapCalculation {
-  static calcOverlaps(collisions: FlatCollision[]): Overlaps {
+  static calcOverlaps<Stg extends DataDefinition>(
+    collisions: FlattenCollision<Stg>[]
+  ): Overlaps {
     return Im.pipe(
       () => collisions,
       splitCollisionsToExcessAndNonExcess,
@@ -15,17 +18,17 @@ export class OverlapCalculation {
   }
 }
 
-const splitCollisionsToExcessAndNonExcess = (
-  collisions: FlatCollision[]
-): {excess: FlatCollision[]; nonExcess: FlatCollision[]} => {
+const splitCollisionsToExcessAndNonExcess = <Stg extends DataDefinition>(
+  collisions: FlattenCollision<Stg>[]
+): {excess: FlattenCollision<Stg>[]; nonExcess: FlattenCollision<Stg>[]} => {
   const excess = collisions.filter(c => c.excess);
   const nonExcess = collisions.filter(c => !c.excess);
   return {excess, nonExcess};
 };
 
-const calcAabbOverlaps = (collisions: {
-  excess: FlatCollision[];
-  nonExcess: FlatCollision[];
+const calcAabbOverlaps = <Stg extends DataDefinition>(collisions: {
+  excess: FlattenCollision<Stg>[];
+  nonExcess: FlattenCollision<Stg>[];
 }): RecM2M<BodyId> => {
   const eCol = collisions.excess;
   const neCol = collisions.nonExcess;
