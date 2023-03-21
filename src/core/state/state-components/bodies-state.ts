@@ -30,7 +30,7 @@ export class TBodiesState {
     body: AnyTypeBody<Def>,
     bodyType: BT
   ): body is Body<Def, BT> {
-    return body.type === bodyType;
+    return body.bodyType === bodyType;
   }
 
   static fetch<Def extends DataDefinition, BT extends BodyType<Def>>(
@@ -46,7 +46,7 @@ export class TBodiesState {
     bodyWithoutId: BodyWithoutId<Def, BT>
   ): {state: BodiesState<Def>; body: Body<Def, BT>} {
     const bodyIdKey = 'body-' + bodies.bodyIdCount.toString();
-    const bodyType = bodyWithoutId.type;
+    const bodyType = bodyWithoutId.bodyType;
     const bodyId = [bodyType, bodyIdKey] as BodyId<Def, BT>;
 
     const body = {...bodyWithoutId, id: bodyId} as unknown as Body<Def, BT>;
@@ -129,7 +129,7 @@ export class TBodiesState {
     };
 
     for (const b of newBodies) {
-      const bodyType: BodyType<Def> = b.type;
+      const bodyType: BodyType<Def> = b.bodyType;
       const bodyIdKey = b.id[1];
       const bodyAry = getMutAry(bodyType);
       bodyAry.push([bodyIdKey, b]);

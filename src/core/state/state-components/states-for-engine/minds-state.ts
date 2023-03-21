@@ -24,7 +24,7 @@ export class TMindsState {
   ): {body: AnyTypeBody<Def>; props: unknown; mind: AnyTypeMind<Def>}[] {
     const bodies = TBodiesState.getAllBodies(state.bodies);
     return bodies.map(body => {
-      const mind = minds[body.type];
+      const mind = minds[body.bodyType];
       const props = mind.calcProps(state, body);
       return {body, props, mind};
     });

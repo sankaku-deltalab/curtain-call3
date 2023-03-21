@@ -16,7 +16,7 @@ export type Level<Def extends DataDefinition> = Def['level'];
 // Body
 export type BodyBase<Type extends string> = {
   id: [Type, string];
-  type: Type;
+  bodyType: Type;
 };
 export type BodyType<Def extends DataDefinition> = keyof Def['bodies'] & string;
 export type Body<
