@@ -1,4 +1,4 @@
-import {Vec2d, Vec2dTrait} from '../../../../utils';
+import {Vec2d, TVec2d} from '../../../../utils';
 import {DataDefinition} from '../../../setting/data-definition';
 import {CameraState, CanvasRenderingState, TCameraState} from '../camera-state';
 import {RawPointerState} from '../input-pointer-state';
@@ -15,7 +15,7 @@ export type RawCanvasPointerState = {
 export class TInputCanvasPointerState {
   static new(): InputCanvasPointerState {
     return {
-      pointer: {down: false, canvasPos: Vec2dTrait.zero()},
+      pointer: {down: false, canvasPos: TVec2d.zero()},
     };
   }
 

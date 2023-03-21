@@ -1,4 +1,4 @@
-import {Vec2d, Vec2dTrait} from '../../../../utils/vec2d';
+import {Vec2d, TVec2d} from '../../../../utils/vec2d';
 import {CanvasGraphicBase, Color, GraphicBase} from '../graphic-base';
 import {
   CameraState,
@@ -25,7 +25,7 @@ export type CanvasLineGraphic = CanvasGraphicBase &
     closed: boolean;
   }>;
 
-export class LineGraphicTrait {
+export class TLineGraphic {
   static create(args: {
     key: string;
     pos: Vec2d;
@@ -55,7 +55,7 @@ export class LineGraphicTrait {
     }
   ): CanvasLineGraphic {
     const paths = graphic.paths.map(point => {
-      const gamePos = Vec2dTrait.add(graphic.pos, point);
+      const gamePos = TVec2d.add(graphic.pos, point);
       return TCameraState.projectGamePointToCanvas(
         args.cameraState,
         gamePos,

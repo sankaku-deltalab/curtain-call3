@@ -12,7 +12,7 @@ export type ImSet<K extends Key> = {
   root: hamt.HamtNode<K, true>;
 };
 
-export class ImSetTrait {
+export class TImSet {
   static new<K extends Key>(items?: Iterable<K>): ImSet<K> {
     let map = hamt.empty as hamt.HamtNode<K, true>;
     for (const k of items ?? []) {

@@ -2,7 +2,7 @@ import {Im} from './immutable-manipulation';
 
 export type Vec2d = Readonly<{x: number; y: number}>;
 
-export class Vec2dTrait {
+export class TVec2d {
   static zero(): Vec2d {
     return {x: 0, y: 0};
   }
@@ -16,12 +16,12 @@ export class Vec2dTrait {
   }
 
   static size(a: Vec2d): number {
-    return Math.sqrt(Vec2dTrait.sizeSq(a));
+    return Math.sqrt(TVec2d.sizeSq(a));
   }
 
   static uniformed(a: Vec2d): Vec2d {
-    const size = Vec2dTrait.size(a);
-    return Vec2dTrait.div(a, size);
+    const size = TVec2d.size(a);
+    return TVec2d.div(a, size);
   }
 
   static add(a: Vec2d, b: Vec2d): Vec2d {
@@ -70,12 +70,12 @@ export class Vec2dTrait {
   ): Vec2d {
     const uniformNormal = opt?.uniformNormal ?? true;
     const v = velocity;
-    const vn = Vec2dTrait.mlt(v, -1);
-    const n = uniformNormal ? Vec2dTrait.uniformed(normal) : normal;
+    const vn = TVec2d.mlt(v, -1);
+    const n = uniformNormal ? TVec2d.uniformed(normal) : normal;
 
-    const scale = 2 * Vec2dTrait.dot(vn, n);
+    const scale = 2 * TVec2d.dot(vn, n);
     const args = {v, n};
-    return Vec2dTrait.broadcast(args, ({v, n}) => v + n * scale);
+    return TVec2d.broadcast(args, ({v, n}) => v + n * scale);
   }
 
   static eq(a: Vec2d, b: Vec2d): boolean {

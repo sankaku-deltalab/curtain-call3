@@ -11,7 +11,7 @@ export type ImListNode<T> = {v: T; next?: ImListNode<T>};
 
 const empty: ImList<unknown> = {size: 0, type};
 
-export class ImListTrait {
+export class TImList {
   static new<T>(items?: Iterable<T>): ImList<T> {
     if (items === undefined) return empty as ImList<T>;
 
@@ -63,7 +63,7 @@ export class ImListTrait {
     if (left.head === undefined) return right;
     if (right.head === undefined) return left;
 
-    const leftArray = ImListTrait.toArray(left);
+    const leftArray = TImList.toArray(left);
     const len = leftArray.length;
     let head = right.head;
     for (let i = len - 1; i >= 0; i -= 1) {
@@ -81,7 +81,7 @@ export class ImListTrait {
   static pushMulti<T>(list: ImList<T>, values: Iterable<T>): ImList<T> {
     let r = list;
     for (const v of values) {
-      r = ImListTrait.push(r, v);
+      r = TImList.push(r, v);
     }
     return r;
   }

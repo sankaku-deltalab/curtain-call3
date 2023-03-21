@@ -1,4 +1,4 @@
-import {ImMap, ImMapTrait, Result} from '../../../utils';
+import {ImMap, TImMap, Result} from '../../../utils';
 import {
   AnyTypeBody,
   AnyTypeBodyWithoutId,
@@ -38,7 +38,7 @@ export class TBodiesState {
     [type, key]: BodyId<Def, BT>
   ): Result<Body<Def, BT>> {
     const bodyMap = this.fetchBodyMapOfType(bodies, type);
-    return ImMapTrait.fetch(bodyMap, key);
+    return TImMap.fetch(bodyMap, key);
   }
 
   static addBodyB<Def extends DataDefinition, BT extends BodyType<Def>>(
@@ -50,7 +50,7 @@ export class TBodiesState {
     const bodyId = [bodyType, bodyIdKey] as BodyId<Def, BT>;
 
     const body = {...bodyWithoutId, id: bodyId} as unknown as Body<Def, BT>;
-    const bodyMap = ImMapTrait.put(
+    const bodyMap = TImMap.put(
       this.fetchBodyMapOfType(bodies, bodyType),
       bodyIdKey,
       body
@@ -93,7 +93,7 @@ export class TBodiesState {
     bodyType: BT
   ): Body<Def, BT>[] {
     const bodyMap = this.fetchBodyMapOfType(bodies, bodyType);
-    return ImMapTrait.values(bodyMap);
+    return TImMap.values(bodyMap);
   }
 
   static getAllBodies<Def extends DataDefinition>(
@@ -106,7 +106,7 @@ export class TBodiesState {
     let mutBodies: AnyTypeBody<Def>[] = [];
     for (const t of availableBodyTypes) {
       const bodyMap = this.fetchBodyMapOfType(bodiesState, t);
-      mutBodies = mutBodies.concat(ImMapTrait.values(bodyMap));
+      mutBodies = mutBodies.concat(TImMap.values(bodyMap));
     }
     return mutBodies;
   }
@@ -142,7 +142,7 @@ export class TBodiesState {
       const bodyType: BodyType<Def> = bt;
       const bodyAry = mutBodyArrays[bodyType];
       if (bodyAry === undefined) throw new Error('engine bug');
-      mutBodyMaps[bodyType] = ImMapTrait.new(bodyAry);
+      mutBodyMaps[bodyType] = TImMap.new(bodyAry);
     }
 
     return {
@@ -156,6 +156,6 @@ export class TBodiesState {
     BT extends BodyType<Def>
   >(bodies: BodiesState<Def>, type: BT): ImMap<string, Body<Def, BT>> {
     const source = bodies.bodyMaps[type];
-    return source ?? ImMapTrait.new();
+    return source ?? TImMap.new();
   }
 }

@@ -1,15 +1,15 @@
-import {Vec2d, Vec2dTrait} from './vec2d';
+import {Vec2d, TVec2d} from './vec2d';
 
 /**
  * Axis-aligned rectangle in 2d
  */
 export type AaRect2d = Readonly<{nw: Vec2d; se: Vec2d}>;
 
-export class AaRect2dTrait {
+export class TAaRect2d {
   static zero(): AaRect2d {
     return {
-      nw: Vec2dTrait.zero(),
-      se: Vec2dTrait.zero(),
+      nw: TVec2d.zero(),
+      se: TVec2d.zero(),
     };
   }
 
@@ -30,7 +30,7 @@ export class AaRect2dTrait {
 
   static center(rect: AaRect2d): Vec2d {
     const {nw, se} = rect;
-    return Vec2dTrait.div(Vec2dTrait.add(nw, se), 2);
+    return TVec2d.div(TVec2d.add(nw, se), 2);
   }
 
   static isCorrect(rect: AaRect2d): boolean {
@@ -38,32 +38,30 @@ export class AaRect2dTrait {
   }
 
   static eq(area1: AaRect2d, area2: AaRect2d): boolean {
-    return (
-      Vec2dTrait.eq(area1.nw, area2.nw) && Vec2dTrait.eq(area1.se, area2.se)
-    );
+    return TVec2d.eq(area1.nw, area2.nw) && TVec2d.eq(area1.se, area2.se);
   }
 
   static move(rect: AaRect2d, delta: Vec2d): AaRect2d {
     return {
-      nw: Vec2dTrait.add(rect.nw, delta),
-      se: Vec2dTrait.add(rect.se, delta),
+      nw: TVec2d.add(rect.nw, delta),
+      se: TVec2d.add(rect.se, delta),
     };
   }
 
   static fromCenterAndSize(center: Vec2d, size: Vec2d): AaRect2d {
-    const sizeHalf = Vec2dTrait.div(size, 2);
+    const sizeHalf = TVec2d.div(size, 2);
     return {
-      nw: Vec2dTrait.sub(center, sizeHalf),
-      se: Vec2dTrait.add(center, sizeHalf),
+      nw: TVec2d.sub(center, sizeHalf),
+      se: TVec2d.add(center, sizeHalf),
     };
   }
 
   static projectPointToUnitArea(pos: Vec2d, args: {prevArea: AaRect2d}): Vec2d {
     const p = args.prevArea;
-    const scale = AaRect2dTrait.size(p);
-    const center = AaRect2dTrait.center(p);
+    const scale = TAaRect2d.size(p);
+    const center = TAaRect2d.center(p);
 
-    const offsettedPos = Vec2dTrait.sub(pos, center);
+    const offsettedPos = TVec2d.sub(pos, center);
     return {
       x: offsettedPos.x / scale.x,
       y: offsettedPos.y / scale.y,
@@ -75,19 +73,19 @@ export class AaRect2dTrait {
     args: {nextArea: AaRect2d}
   ): Vec2d {
     const n = args.nextArea;
-    const scale = AaRect2dTrait.size(n);
-    const center = AaRect2dTrait.center(n);
+    const scale = TAaRect2d.size(n);
+    const center = TAaRect2d.center(n);
 
-    const scaledPos = Vec2dTrait.hProduct(pos, scale);
-    return Vec2dTrait.add(scaledPos, center);
+    const scaledPos = TVec2d.hProduct(pos, scale);
+    return TVec2d.add(scaledPos, center);
   }
 
   static projectPoint(
     pos: Vec2d,
     args: {prevArea: AaRect2d; nextArea: AaRect2d}
   ): Vec2d {
-    const posInUnit = AaRect2dTrait.projectPointToUnitArea(pos, args);
-    return AaRect2dTrait.projectPointFromUnitArea(posInUnit, args);
+    const posInUnit = TAaRect2d.projectPointToUnitArea(pos, args);
+    return TAaRect2d.projectPointFromUnitArea(posInUnit, args);
   }
 
   /**
@@ -123,16 +121,16 @@ export class AaRect2dTrait {
   }
 
   static expandArea(area: AaRect2d, expandSize: Vec2d): AaRect2d {
-    const expandSizeHalf = Vec2dTrait.div(expandSize, 2);
-    const nw = Vec2dTrait.sub(area.nw, expandSizeHalf);
-    const se = Vec2dTrait.add(area.se, expandSizeHalf);
+    const expandSizeHalf = TVec2d.div(expandSize, 2);
+    const nw = TVec2d.sub(area.nw, expandSizeHalf);
+    const se = TVec2d.add(area.se, expandSizeHalf);
     return {nw, se};
   }
 
   static reduceArea(area: AaRect2d, reduceSize: Vec2d): AaRect2d {
-    const reduceSizeHalf = Vec2dTrait.div(reduceSize, 2);
-    const nw = Vec2dTrait.add(area.nw, reduceSizeHalf);
-    const se = Vec2dTrait.sub(area.se, reduceSizeHalf);
+    const reduceSizeHalf = TVec2d.div(reduceSize, 2);
+    const nw = TVec2d.add(area.nw, reduceSizeHalf);
+    const se = TVec2d.sub(area.se, reduceSizeHalf);
     return {nw, se};
   }
 
@@ -147,21 +145,21 @@ export class AaRect2dTrait {
   }
 
   static intersection(area1: AaRect2d, area2: AaRect2d): AaRect2d {
-    const nw = Vec2dTrait.max(area1.nw, area2.nw);
-    const se = Vec2dTrait.min(area1.se, area2.se);
+    const nw = TVec2d.max(area1.nw, area2.nw);
+    const se = TVec2d.min(area1.se, area2.se);
     const area = {nw, se};
-    if (!AaRect2dTrait.isCorrect(area)) return AaRect2dTrait.zero();
+    if (!TAaRect2d.isCorrect(area)) return TAaRect2d.zero();
     return area;
   }
 
   static isIn(smaller: AaRect2d, larger: AaRect2d): boolean {
-    const intersection = AaRect2dTrait.intersection(smaller, larger);
-    return AaRect2dTrait.eq(intersection, smaller);
+    const intersection = TAaRect2d.intersection(smaller, larger);
+    return TAaRect2d.eq(intersection, smaller);
   }
 
   static isOutOf(smaller: AaRect2d, larger: AaRect2d): boolean {
-    const intersection = AaRect2dTrait.intersection(smaller, larger);
-    return AaRect2dTrait.eq(intersection, AaRect2dTrait.zero());
+    const intersection = TAaRect2d.intersection(smaller, larger);
+    return TAaRect2d.eq(intersection, TAaRect2d.zero());
   }
 
   static corners(react: AaRect2d): {

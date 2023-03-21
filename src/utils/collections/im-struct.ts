@@ -12,7 +12,7 @@ export type ImStruct<Items extends Rec> = {
   root: hamt.HamtNode<Keyof<Items>, Items[keyof Items]>;
 };
 
-export class ImStructTrait {
+export class TImStruct {
   static new<Items extends Rec>(items: Items): ImStruct<Items> {
     let map = hamt.empty as hamt.HamtNode<Keyof<Items>, Items[keyof Items]>;
     for (const k in items) {
@@ -46,9 +46,9 @@ export class ImStructTrait {
     key: Key,
     updater: (v: Items[Key]) => Items[Key]
   ): ImStruct<Items> {
-    const oldVal = ImStructTrait.fetch(map, key);
+    const oldVal = TImStruct.fetch(map, key);
     const newVal = updater(oldVal);
-    return ImStructTrait.put(map, key, newVal);
+    return TImStruct.put(map, key, newVal);
   }
 
   static items<Items extends Rec>(
@@ -82,7 +82,7 @@ export class ImStructTrait {
   ): ImStruct<Items> {
     let m = map;
     for (const [k, v] of Object.entries(items)) {
-      m = ImStructTrait.put(m, k, v);
+      m = TImStruct.put(m, k, v);
     }
     return m;
   }

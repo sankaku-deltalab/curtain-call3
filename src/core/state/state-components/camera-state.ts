@@ -1,4 +1,4 @@
-import {AaRect2d, AaRect2dTrait, Vec2d, Vec2dTrait} from '../../../utils';
+import {AaRect2d, TAaRect2d, Vec2d, TVec2d} from '../../../utils';
 import {DataDefinition} from '../../setting/data-definition';
 
 export type CameraState<_Def extends DataDefinition> = Readonly<{
@@ -16,13 +16,13 @@ export class TCameraState {
   static new<Def extends DataDefinition>(args: {
     size: Vec2d;
   }): CameraState<Def> {
-    return {pos: Vec2dTrait.zero(), size: args.size};
+    return {pos: TVec2d.zero(), size: args.size};
   }
 
   static cameraArea<Def extends DataDefinition>(
     cameraState: CameraState<Def>
   ): AaRect2d {
-    return AaRect2dTrait.fromCenterAndSize(cameraState.pos, cameraState.size);
+    return TAaRect2d.fromCenterAndSize(cameraState.pos, cameraState.size);
   }
 
   static calcRenderingAreaOfCanvas<Def extends DataDefinition>(
@@ -31,8 +31,8 @@ export class TCameraState {
       renderingState: CanvasRenderingState;
     }
   ): AaRect2d {
-    const {nw: gameNw, se: gameSe} = AaRect2dTrait.fromCenterAndSize(
-      Vec2dTrait.zero(),
+    const {nw: gameNw, se: gameSe} = TAaRect2d.fromCenterAndSize(
+      TVec2d.zero(),
       cameraState.size
     );
 
@@ -53,13 +53,13 @@ export class TCameraState {
     const camSt = cameraState;
     const renSt = args.renderingState;
 
-    const renderingArea = AaRect2dTrait.fromCenterAndSize(
+    const renderingArea = TAaRect2d.fromCenterAndSize(
       renSt.center,
-      Vec2dTrait.mlt(camSt.size, renSt.scale)
+      TVec2d.mlt(camSt.size, renSt.scale)
     );
     const cameraArea = TCameraState.cameraArea(camSt);
 
-    const gameAreaPos = AaRect2dTrait.projectPoint(canvasPos, {
+    const gameAreaPos = TAaRect2d.projectPoint(canvasPos, {
       prevArea: renderingArea,
       nextArea: cameraArea,
     });
@@ -74,13 +74,13 @@ export class TCameraState {
     const camSt = cameraState;
     const renSt = args.renderingState;
 
-    const renderingArea = AaRect2dTrait.fromCenterAndSize(
+    const renderingArea = TAaRect2d.fromCenterAndSize(
       renSt.center,
-      Vec2dTrait.mlt(camSt.size, renSt.scale)
+      TVec2d.mlt(camSt.size, renSt.scale)
     );
     const cameraArea = TCameraState.cameraArea(camSt);
 
-    const renderingAreaPos = AaRect2dTrait.projectPoint(gamePos, {
+    const renderingAreaPos = TAaRect2d.projectPoint(gamePos, {
       prevArea: cameraArea,
       nextArea: renderingArea,
     });

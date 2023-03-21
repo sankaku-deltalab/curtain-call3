@@ -1,7 +1,7 @@
 import boxIntersect = require('box-intersect');
 import {Im} from '../../../utils/immutable-manipulation';
 import {Enum} from '../../../utils/enum';
-import {RecM2M, RecM2MTrait} from '../../../utils/rec-m2m';
+import {RecM2M, TRecM2M} from '../../../utils/rec-m2m';
 import {FlattenCollision, Overlaps} from './collision';
 import {DataDefinition} from '../../setting/data-definition';
 
@@ -54,5 +54,5 @@ const calcAabbOverlaps = <Stg extends DataDefinition>(collisions: {
   );
   const overlapKeysAll = [...overlapKeys, ...overlapKeysRev];
 
-  return RecM2MTrait.fromPairs(overlapKeysAll);
+  return TRecM2M.fromPairs(overlapKeysAll);
 };

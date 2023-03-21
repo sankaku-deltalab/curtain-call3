@@ -1,7 +1,7 @@
 import {AnyTypeNotification, DataDefinition} from '../setting/data-definition';
 import {GameState} from '../state/game-states';
 
-export class DirectorTrait {}
+export class TDirector {}
 
 export interface Director<Def extends DataDefinition> {
   applyInput(state: GameState<Def>): GameState<Def>;

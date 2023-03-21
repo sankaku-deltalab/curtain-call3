@@ -1,4 +1,4 @@
-import {Vec2d, Vec2dTrait} from '../../../utils/vec2d';
+import {Vec2d, TVec2d} from '../../../utils/vec2d';
 import {DataDefinition} from '../../setting/data-definition';
 
 export type InputPointerState = {
@@ -14,8 +14,8 @@ export type RawPointerState = Readonly<{
 export class TInputPointerState {
   static new(): InputPointerState {
     return {
-      current: {down: false, pos: Vec2dTrait.zero()},
-      prev: {down: false, pos: Vec2dTrait.zero()},
+      current: {down: false, pos: TVec2d.zero()},
+      prev: {down: false, pos: TVec2d.zero()},
     };
   }
 
@@ -36,10 +36,10 @@ export class TInputPointerState {
     const downing = current.down && prev.down;
 
     if (!downing) {
-      return Vec2dTrait.zero();
+      return TVec2d.zero();
     }
 
-    return Vec2dTrait.sub(current.pos, prev.pos);
+    return TVec2d.sub(current.pos, prev.pos);
   }
 
   static upped(input: InputPointerState): boolean {

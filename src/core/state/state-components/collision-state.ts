@@ -1,4 +1,4 @@
-import {RecM2MTrait} from '../../../utils';
+import {TRecM2M} from '../../../utils';
 import {FlattenCollision, Overlaps} from '../../components/collision/collision';
 import {OverlapCalculation} from '../../components/collision/overlap-calculation';
 import {DataDefinition} from '../../setting/data-definition';
@@ -14,7 +14,7 @@ export class TCollisionState {
     return {
       flattenCollisions: [],
       // flatCollisionsRecord: {},
-      overlaps: RecM2MTrait.new(),
+      overlaps: TRecM2M.new(),
     };
   }
 

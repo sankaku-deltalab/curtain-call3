@@ -1,4 +1,4 @@
-import {Vec2d, Vec2dTrait} from '../../../../utils/vec2d';
+import {Vec2d, TVec2d} from '../../../../utils/vec2d';
 import {CanvasGraphicBase, GraphicBase} from '../graphic-base';
 import {DataDefinition} from '../../../setting/data-definition';
 import {
@@ -22,7 +22,7 @@ export type CanvasSpriteGraphic = CanvasGraphicBase &
     scale: Vec2d;
   }>;
 
-export class SpriteGraphicTrait {
+export class TSpriteGraphic {
   static create(args: {
     key: string;
     pos: Vec2d;
@@ -36,7 +36,7 @@ export class SpriteGraphicTrait {
       zIndex: args.zIndex,
       imgKey: args.imgKey,
       type: 'sprite',
-      scale: args.scale ?? Vec2dTrait.one(),
+      scale: args.scale ?? TVec2d.one(),
     };
   }
 

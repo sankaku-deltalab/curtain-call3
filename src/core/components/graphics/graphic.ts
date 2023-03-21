@@ -1,12 +1,12 @@
 import {
   CanvasLineGraphic,
   LineGraphic,
-  LineGraphicTrait,
+  TLineGraphic,
 } from './variations/line-graphic';
 import {
   CanvasSpriteGraphic,
   SpriteGraphic,
-  SpriteGraphicTrait,
+  TSpriteGraphic,
 } from './variations/sprite-graphic';
 import {DataDefinition} from '../../setting/data-definition';
 import {
@@ -58,8 +58,8 @@ export class TGraphic {
     }
   ): CanvasGraphic<Def> {
     const traits = {
-      line: LineGraphicTrait,
-      sprite: SpriteGraphicTrait,
+      line: TLineGraphic,
+      sprite: TSpriteGraphic,
     };
 
     switch (graphic.type) {

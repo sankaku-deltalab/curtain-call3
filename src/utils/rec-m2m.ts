@@ -1,5 +1,5 @@
 import {Im} from './immutable-manipulation';
-import {RecSet, RecSetTrait} from './rec-set';
+import {RecSet, TRecSet} from './rec-set';
 
 /**
  * Record represents many to many relation.
@@ -10,7 +10,7 @@ export type RecM2M<
   T2 extends string = string
 > = Record<T1, RecSet<T2>>;
 
-export class RecM2MTrait {
+export class TRecM2M {
   static new<T1 extends string, T2 extends string>(): RecM2M<T1, T2> {
     return {} as RecM2M<T1, T2>;
   }
@@ -21,10 +21,10 @@ export class RecM2MTrait {
     to: T2
   ): RecM2M<T1, T2> {
     if (from in rel) {
-      return Im.update(rel, from, opponents => RecSetTrait.add(opponents, to));
+      return Im.update(rel, from, opponents => TRecSet.add(opponents, to));
     }
 
-    return Im.add(rel, from, RecSetTrait.new([to]));
+    return Im.add(rel, from, TRecSet.new([to]));
   }
 
   static hasRelation<T1 extends string, T2 extends string>(
@@ -44,8 +44,8 @@ export class RecM2MTrait {
     pairs: [T1, T2][]
   ): RecM2M<T1, T2> {
     return pairs.reduce(
-      (rel, curr) => RecM2MTrait.addRelation(rel, curr[0], curr[1]),
-      RecM2MTrait.new()
+      (rel, curr) => TRecM2M.addRelation(rel, curr[0], curr[1]),
+      TRecM2M.new()
     );
   }
 
@@ -54,7 +54,7 @@ export class RecM2MTrait {
   ): [T1, T2][] {
     const entries = Object.entries(rel) as [T1, RecSet<T2>][];
     return entries.flatMap(([from, opponents]) => {
-      return RecSetTrait.iter(opponents).map<[T1, T2]>(o => [from, o]);
+      return TRecSet.iter(opponents).map<[T1, T2]>(o => [from, o]);
     });
   }
 
