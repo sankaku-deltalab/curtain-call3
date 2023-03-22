@@ -4,7 +4,12 @@ import {
   OverlapCalculation,
   Overlaps,
 } from '../../components/collision/overlap-calculation';
-import {DataDefinition} from '../../setting/data-definition';
+import {
+  AnyTypeBodyId,
+  BodyId,
+  BodyType,
+  DataDefinition,
+} from '../../setting/data-definition';
 
 export type CollisionState<Def extends DataDefinition> = Readonly<{
   flattenCollisions: FlattenCollision<Def>[];
@@ -34,5 +39,24 @@ export class TCollisionState {
       flattenCollisions,
       overlaps,
     };
+  }
+
+  static getOverlapsInType<
+    Def extends DataDefinition,
+    LeftBT extends BodyType<Def>,
+    RightBT extends BodyType<Def>
+  >(
+    col: CollisionState<Def>,
+    leftBodyType: LeftBT,
+    rightBodyType: RightBT
+  ): [BodyId<Def, LeftBT>, BodyId<Def, RightBT>][] {
+    return TRecM2M.toPairs(col.overlaps.overlaps)
+      .map<[AnyTypeBodyId<Def>, AnyTypeBodyId<Def>]>(([key1, key2]) => [
+        col.overlaps.keyToId[key1],
+        col.overlaps.keyToId[key2],
+      ])
+      .filter(
+        ([b1, b2]) => b1[0] === leftBodyType && b2[0] === rightBodyType
+      ) as [BodyId<Def, LeftBT>, BodyId<Def, RightBT>][];
   }
 }
