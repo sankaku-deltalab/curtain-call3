@@ -23,7 +23,7 @@ export type SerializableState<Def extends DataDefinition> = Omit<
   'dynamicSources'
 >;
 
-export type StatesNotInSerializable<Def extends DataDefinition> = Omit<
+export type StatesNotSerializable<Def extends DataDefinition> = Omit<
   AllState<Def>,
   keyof SerializableState<Def>
 >;

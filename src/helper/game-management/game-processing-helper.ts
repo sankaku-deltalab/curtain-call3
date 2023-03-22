@@ -8,7 +8,7 @@ import {DataSources} from '../../core/state';
 import {AllState, TAllState} from '../../core/state/all-state';
 import {
   SerializableState,
-  StatesNotInSerializable,
+  StatesNotSerializable,
   TSerializableState,
 } from '../../core/state/serializable-state';
 import {AaRect2d, Vec2d} from '../../utils';
@@ -24,7 +24,7 @@ export class GameProcessingHelper {
 
   static updateState<Def extends DataDefinition>(
     state: SerializableState<Def>,
-    otherStates: StatesNotInSerializable<Def>
+    otherStates: StatesNotSerializable<Def>
   ): {
     state: SerializableState<Def>;
     notifications: AnyTypeNotification<Def>[];
@@ -39,7 +39,7 @@ export class GameProcessingHelper {
 
   private static generateAllState<Def extends DataDefinition>(
     serializableState: SerializableState<Def>,
-    otherStates: StatesNotInSerializable<Def>
+    otherStates: StatesNotSerializable<Def>
   ): AllState<Def> {
     return {
       ...serializableState,
@@ -49,7 +49,7 @@ export class GameProcessingHelper {
 
   static generateGraphics<Def extends DataDefinition>(
     state: SerializableState<Def>,
-    otherStates: StatesNotInSerializable<Def>
+    otherStates: StatesNotSerializable<Def>
   ): CanvasGraphic<Def>[] {
     const allState = this.generateAllState(state, otherStates);
     return TAllState.generateGraphics(allState);
@@ -57,7 +57,7 @@ export class GameProcessingHelper {
 
   static calcRenderingAreaOfCanvas<Def extends DataDefinition>(
     state: SerializableState<Def>,
-    otherStates: StatesNotInSerializable<Def>
+    otherStates: StatesNotSerializable<Def>
   ): AaRect2d {
     const allState = this.generateAllState(state, otherStates);
     return TAllState.calcRenderingAreaOfCanvas(allState);
