@@ -2,17 +2,25 @@ import {CanvasGraphic} from '../../core/components/graphics/graphic';
 import {
   AnyTypeNotification,
   DataDefinition,
+  Level,
 } from '../../core/setting/data-definition';
+import {DataSources} from '../../core/state';
 import {AllState, TAllState} from '../../core/state/all-state';
 import {
   SerializableState,
   StatesNotInSerializable,
+  TSerializableState,
 } from '../../core/state/serializable-state';
-import {CanvasRenderingState} from '../../core/state/state-components/camera-state';
-import {AaRect2d} from '../../utils';
+import {AaRect2d, Vec2d} from '../../utils';
 
 export class GameProcessingHelper {
-  static createSerializableState() {}
+  static createSerializableState<Def extends DataDefinition>(args: {
+    level: Level<Def>;
+    cameraSize: Vec2d;
+    dataSources: DataSources<Def>;
+  }): SerializableState<Def> {
+    return TSerializableState.new(args);
+  }
 
   static updateState<Def extends DataDefinition>(
     state: SerializableState<Def>,
