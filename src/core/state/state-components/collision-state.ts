@@ -1,12 +1,15 @@
 import {TRecM2M} from '../../../utils';
-import {FlattenCollision, Overlaps} from '../../components/collision/collision';
-import {OverlapCalculation} from '../../components/collision/overlap-calculation';
+import {FlattenCollision} from '../../components/collision/collision';
+import {
+  OverlapCalculation,
+  Overlaps,
+} from '../../components/collision/overlap-calculation';
 import {DataDefinition} from '../../setting/data-definition';
 
 export type CollisionState<Def extends DataDefinition> = Readonly<{
   flattenCollisions: FlattenCollision<Def>[];
   // flatCollisionsRecord: Record<string, FlattenCollision<Def>>;  // add if we need
-  overlaps: Overlaps;
+  overlaps: Overlaps<Def>;
 }>;
 
 export class TCollisionState {
@@ -14,7 +17,10 @@ export class TCollisionState {
     return {
       flattenCollisions: [],
       // flatCollisionsRecord: {},
-      overlaps: TRecM2M.new(),
+      overlaps: {
+        overlaps: TRecM2M.new(),
+        keyToId: {},
+      },
     };
   }
 

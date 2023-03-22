@@ -1,5 +1,4 @@
 import {AaRect2d} from '../../../utils/aa-rect2d';
-import {RecM2M} from '../../../utils/rec-m2m';
 import {
   AnyTypeBodyId,
   DataDefinition,
@@ -64,11 +63,3 @@ export class TCollision {
     return true;
   }
 }
-
-export const isOverlapped = (_col_a: Collision, _col_b: Collision): boolean => {
-  // given: two aabb is overlapped
-  // Currently, shape is only aabb. So this function is always true.
-  return true;
-};
-
-export type Overlaps = RecM2M<string>;

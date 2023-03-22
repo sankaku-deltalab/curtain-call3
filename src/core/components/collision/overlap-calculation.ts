@@ -2,32 +2,45 @@ import boxIntersect = require('box-intersect');
 import {Im} from '../../../utils/immutable-manipulation';
 import {Enum} from '../../../utils/enum';
 import {RecM2M, TRecM2M} from '../../../utils/rec-m2m';
-import {FlattenCollision, Overlaps} from './collision';
-import {DataDefinition} from '../../setting/data-definition';
+import {FlattenCollision} from './collision';
+import {AnyTypeBodyId, DataDefinition} from '../../setting/data-definition';
+
+export type Overlaps<Def extends DataDefinition> = {
+  overlaps: RecM2M<string>;
+  keyToId: Record<string, AnyTypeBodyId<Def>>;
+};
 
 export class OverlapCalculation {
-  static calcOverlaps<Stg extends DataDefinition>(
-    collisions: FlattenCollision<Stg>[]
-  ): Overlaps {
-    return Im.pipe(
+  static calcOverlaps<Def extends DataDefinition>(
+    collisions: FlattenCollision<Def>[]
+  ): Overlaps<Def> {
+    const overlaps = Im.pipe(
       () => collisions,
       splitCollisionsToExcessAndNonExcess,
       calcAabbOverlaps
     )();
+
+    return {
+      overlaps,
+      keyToId: calcKeyToId(collisions),
+    };
   }
 }
 
-const splitCollisionsToExcessAndNonExcess = <Stg extends DataDefinition>(
-  collisions: FlattenCollision<Stg>[]
-): {excess: FlattenCollision<Stg>[]; nonExcess: FlattenCollision<Stg>[]} => {
+const splitCollisionsToExcessAndNonExcess = <Def extends DataDefinition>(
+  collisions: FlattenCollision<Def>[]
+): {
+  excess: FlattenCollision<Def>[];
+  nonExcess: FlattenCollision<Def>[];
+} => {
   const excess = collisions.filter(c => c.excess);
   const nonExcess = collisions.filter(c => !c.excess);
   return {excess, nonExcess};
 };
 
-const calcAabbOverlaps = <Stg extends DataDefinition>(collisions: {
-  excess: FlattenCollision<Stg>[];
-  nonExcess: FlattenCollision<Stg>[];
+const calcAabbOverlaps = <Def extends DataDefinition>(collisions: {
+  excess: FlattenCollision<Def>[];
+  nonExcess: FlattenCollision<Def>[];
 }): RecM2M<string> => {
   const eCol = collisions.excess;
   const neCol = collisions.nonExcess;
@@ -55,4 +68,10 @@ const calcAabbOverlaps = <Stg extends DataDefinition>(collisions: {
   const overlapKeysAll = [...overlapKeys, ...overlapKeysRev];
 
   return TRecM2M.fromPairs(overlapKeysAll);
+};
+
+const calcKeyToId = <Def extends DataDefinition>(
+  collisions: FlattenCollision<Def>[]
+): Record<string, AnyTypeBodyId<Def>> => {
+  return Object.fromEntries(collisions.map(c => [c.key, c.bodyId]));
 };
