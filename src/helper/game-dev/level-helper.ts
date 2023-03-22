@@ -2,7 +2,7 @@ import {DataDefinition, Level} from '../../core/setting/data-definition';
 import {GameState} from '../../core/state/game-states';
 import {TLevelState} from '../../core/state/state-components/level-state';
 
-export class BodiesHelper {
+export class LevelHelper {
   static getLevel<Def extends DataDefinition>(
     state: GameState<Def>
   ): Level<Def> {
