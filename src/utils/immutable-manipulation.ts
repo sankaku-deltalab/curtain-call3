@@ -12,7 +12,7 @@ export class Im {
     return {...obj, [key]: newValue};
   }
 
-  static update_in2<
+  static updateIn2<
     Key1 extends string,
     Key2 extends string,
     T extends Record<Key1, Record<Key2, unknown>>
@@ -28,7 +28,7 @@ export class Im {
     }));
   }
 
-  static update_in3<
+  static updateIn3<
     Key1 extends string,
     Key2 extends string,
     Key3 extends string,
@@ -39,7 +39,7 @@ export class Im {
     updater: (prev: T[Key1][Key2][Key3]) => T[Key1][Key2][Key3]
   ): T {
     const newValue = updater(obj[key1][key2][key3]);
-    return Im.update_in2(obj, [key1, key2], nestedObj => ({
+    return Im.updateIn2(obj, [key1, key2], nestedObj => ({
       ...nestedObj,
       [key3]: newValue,
     }));
