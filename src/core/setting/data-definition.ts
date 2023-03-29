@@ -23,7 +23,7 @@ export type Body<
   Def extends DataDefinition,
   BT extends BodyType<Def>
 > = Def['bodies'][BT];
-export type BodyWithoutId<
+export type BodyAttrs<
   Def extends DataDefinition,
   BT extends BodyType<Def>
 > = Omit<Body<Def, BT>, 'id'>;
@@ -36,7 +36,7 @@ export type AnyTypeBodyId<Def extends DataDefinition> = BodyId<
   Def,
   BodyType<Def>
 >;
-export type AnyTypeBodyWithoutId<Def extends DataDefinition> = BodyWithoutId<
+export type AnyTypeBodyAttrs<Def extends DataDefinition> = BodyAttrs<
   Def,
   BodyType<Def>
 >;

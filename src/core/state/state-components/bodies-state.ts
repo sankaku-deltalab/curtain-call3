@@ -1,11 +1,11 @@
 import {ImMap, TImMap, Result} from '../../../utils';
 import {
   AnyTypeBody,
-  AnyTypeBodyWithoutId,
+  AnyTypeBodyAttrs,
   Body,
   BodyId,
   BodyType,
-  BodyWithoutId,
+  BodyAttrs,
   DataDefinition,
 } from '../../setting/data-definition';
 
@@ -43,13 +43,13 @@ export class TBodiesState {
 
   static addBodyB<Def extends DataDefinition, BT extends BodyType<Def>>(
     bodies: BodiesState<Def>,
-    bodyWithoutId: BodyWithoutId<Def, BT>
+    bodyAttrs: BodyAttrs<Def, BT>
   ): {state: BodiesState<Def>; body: Body<Def, BT>} {
     const bodyIdKey = 'body-' + bodies.bodyIdCount.toString();
-    const bodyType = bodyWithoutId.bodyType;
+    const bodyType = bodyAttrs.bodyType;
     const bodyId = [bodyType, bodyIdKey] as BodyId<Def, BT>;
 
-    const body = {...bodyWithoutId, id: bodyId} as unknown as Body<Def, BT>;
+    const body = {...bodyAttrs, id: bodyId} as unknown as Body<Def, BT>;
     const bodyMap = TImMap.put(
       this.fetchBodyMapOfType(bodies, bodyType),
       bodyIdKey,
@@ -73,7 +73,7 @@ export class TBodiesState {
 
   static addBodiesB<Def extends DataDefinition>(
     bodies: BodiesState<Def>,
-    bodiesWithoutId: AnyTypeBodyWithoutId<Def>[]
+    bodiesWithoutId: AnyTypeBodyAttrs<Def>[]
   ): {state: BodiesState<Def>; bodies: AnyTypeBody<Def>[]} {
     let state = bodies;
     const mutBodiesArray: AnyTypeBody<Def>[] = [];

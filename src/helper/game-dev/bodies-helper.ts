@@ -1,10 +1,10 @@
 import {
   AnyTypeBody,
-  AnyTypeBodyWithoutId,
+  AnyTypeBodyAttrs,
   Body,
   BodyId,
   BodyType,
-  BodyWithoutId,
+  BodyAttrs,
   DataDefinition,
 } from '../../core/setting/data-definition';
 import {GameState} from '../../core/state/game-states';
@@ -58,11 +58,11 @@ export class BodiesHelper {
 
   static addBodyB<Def extends DataDefinition, BT extends BodyType<Def>>(
     state: GameState<Def>,
-    bodyWithoutId: BodyWithoutId<Def, BT>
+    bodyAttrs: BodyAttrs<Def, BT>
   ): {state: GameState<Def>; body: Body<Def, BT>} {
     const {state: newBodiesState, body} = TBodiesState.addBodyB(
       state.bodies,
-      bodyWithoutId
+      bodyAttrs
     );
 
     return {
@@ -73,7 +73,7 @@ export class BodiesHelper {
 
   static addBodiesB<Def extends DataDefinition>(
     state: GameState<Def>,
-    bodiesWithoutId: AnyTypeBodyWithoutId<Def>[]
+    bodiesWithoutId: AnyTypeBodyAttrs<Def>[]
   ): {state: GameState<Def>; bodies: AnyTypeBody<Def>[]} {
     const {state: newBodiesState, bodies} = TBodiesState.addBodiesB(
       state.bodies,
