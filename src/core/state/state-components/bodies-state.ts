@@ -1,4 +1,4 @@
-import {ImMap, TImMap, Result} from '../../../utils';
+import {ImMap, TImMap, Result, Res} from '../../../utils';
 import {
   AnyTypeBody,
   AnyTypeBodyAttrs,
@@ -109,6 +109,27 @@ export class TBodiesState {
       mutBodies = mutBodies.concat(TImMap.values(bodyMap));
     }
     return mutBodies;
+  }
+
+  static getFirstBodyInType<
+    Def extends DataDefinition,
+    BT extends BodyType<Def>
+  >(bodies: BodiesState<Def>, bodyType: BT): Result<Body<Def, BT>, string> {
+    const bodyMap = this.fetchBodyMapOfType(bodies, bodyType);
+    const allBodies = TImMap.values(bodyMap);
+    if (allBodies.length === 0)
+      return Res.err(`body has type "${bodyType}" is not exist`);
+
+    return Res.ok(allBodies[0]);
+  }
+
+  static getFirstBodyInTypeB<
+    Def extends DataDefinition,
+    BT extends BodyType<Def>
+  >(bodies: BodiesState<Def>, bodyType: BT): Body<Def, BT> {
+    const maybeBody = this.getFirstBodyInType(bodies, bodyType);
+    if (maybeBody.err) throw new Error(maybeBody.val);
+    return maybeBody.val;
   }
 
   static resetAllBodies<Def extends DataDefinition>(

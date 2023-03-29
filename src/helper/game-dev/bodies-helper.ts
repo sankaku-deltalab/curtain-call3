@@ -39,6 +39,20 @@ export class BodiesHelper {
     return TBodiesState.getAllBodies(state.bodies);
   }
 
+  static getFirstBodyInType<
+    Def extends DataDefinition,
+    BT extends BodyType<Def>
+  >(state: GameState<Def>, bodyType: BT): Result<Body<Def, BT>, string> {
+    return TBodiesState.getFirstBodyInType(state.bodies, bodyType);
+  }
+
+  static getFirstBodyInTypeB<
+    Def extends DataDefinition,
+    BT extends BodyType<Def>
+  >(state: GameState<Def>, bodyType: BT): Body<Def, BT> {
+    return TBodiesState.getFirstBodyInTypeB(state.bodies, bodyType);
+  }
+
   static fetchBody<Def extends DataDefinition, BT extends BodyType<Def>>(
     state: GameState<Def>,
     bodyId: BodyId<Def, BT>
