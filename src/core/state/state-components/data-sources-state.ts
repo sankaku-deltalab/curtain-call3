@@ -5,6 +5,10 @@ import {
   DataSourceItem,
 } from '../../setting/data-definition';
 
+export type DataSourcesList<Def extends DataDefinition> = {
+  [Type in DataSourceType<Def>]: DataSourceItem<Def, Type>[];
+};
+
 export type DataSources<Def extends DataDefinition> = {
   [Type in DataSourceType<Def>]: Record<
     DataSourceId<Def, Type>,
@@ -18,10 +22,10 @@ export type DataSourcesState<Def extends DataDefinition> = Readonly<{
 
 export class TDataSourcesState {
   static new<Def extends DataDefinition>(
-    dataSources: DataSources<Def>
+    dataSources: DataSourcesList<Def>
   ): DataSourcesState<Def> {
     return {
-      dataSources,
+      dataSources: this.dataSourcesListToDataSources(dataSources),
     };
   }
 
@@ -34,5 +38,17 @@ export class TDataSourcesState {
     if (!(id in source))
       throw new Error(`data source "${type}" do not have id "${id}"`);
     return source[id];
+  }
+
+  private static dataSourcesListToDataSources<Def extends DataDefinition>(
+    dataSources: DataSourcesList<Def>
+  ): DataSources<Def> {
+    const r = Object.entries(dataSources).map<
+      [string, Record<string, DataSourceItem<Def, string>>]
+    >(([type, items]) => {
+      const itemsObj = Object.fromEntries(items.map(item => [item.id, item]));
+      return [type, itemsObj];
+    });
+    return Object.fromEntries(r) as DataSources<Def>;
   }
 }

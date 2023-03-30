@@ -3,7 +3,7 @@ import {DataDefinition, Level} from '../setting/data-definition';
 import {AllState} from './all-state';
 import {GameState} from './game-states';
 import {
-  DataSources,
+  DataSourcesList,
   TBodiesState,
   TCameraState,
   TCollisionState,
@@ -32,7 +32,7 @@ export class TSerializableState {
   static new<Def extends DataDefinition>(args: {
     level: Level<Def>;
     cameraSize: Vec2d;
-    dataSources: DataSources<Def>;
+    dataSources: DataSourcesList<Def>;
   }): SerializableState<Def> {
     return {
       level: TLevelState.new(args.level),

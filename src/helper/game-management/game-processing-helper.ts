@@ -4,7 +4,7 @@ import {
   DataDefinition,
   Level,
 } from '../../core/setting/data-definition';
-import {DataSources} from '../../core/state';
+import {DataSourcesList} from '../../core/state';
 import {AllState, TAllState} from '../../core/state/all-state';
 import {
   SerializableState,
@@ -17,7 +17,7 @@ export class GameProcessingHelper {
   static createSerializableState<Def extends DataDefinition>(args: {
     level: Level<Def>;
     cameraSize: Vec2d;
-    dataSources: DataSources<Def>;
+    dataSources: DataSourcesList<Def>;
   }): SerializableState<Def> {
     return TSerializableState.new(args);
   }
