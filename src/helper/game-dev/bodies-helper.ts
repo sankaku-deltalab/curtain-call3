@@ -102,4 +102,16 @@ export class BodiesHelper {
       bodies,
     };
   }
+
+  static putBody<Def extends DataDefinition, BT extends BodyType<Def>>(
+    state: GameState<Def>,
+    body: Body<Def, BT>
+  ): GameState<Def> {
+    const newBodiesState = TBodiesState.putBody(state.bodies, body);
+
+    return {
+      ...state,
+      bodies: newBodiesState,
+    };
+  }
 }

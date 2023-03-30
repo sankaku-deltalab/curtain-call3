@@ -91,6 +91,27 @@ export class TBodiesState {
     return {state, bodies: mutBodiesArray};
   }
 
+  static putBody<Def extends DataDefinition, BT extends BodyType<Def>>(
+    bodies: BodiesState<Def>,
+    body: Body<Def, BT>
+  ): BodiesState<Def> {
+    const bodyMap = TImMap.put(
+      this.fetchBodyMapOfType(bodies, body.bodyType),
+      body.id[1],
+      body
+    );
+
+    const bodiesMapRecord = {
+      ...bodies.bodyMaps,
+      [body.bodyType]: bodyMap,
+    };
+
+    return {
+      ...bodies,
+      bodyMaps: bodiesMapRecord,
+    };
+  }
+
   static getBodiesInType<Def extends DataDefinition, BT extends BodyType<Def>>(
     bodies: BodiesState<Def>,
     bodyType: BT
