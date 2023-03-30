@@ -70,11 +70,14 @@ export class BodiesHelper {
     return maybeBody.val;
   }
 
-  static addBodyB<Def extends DataDefinition, BT extends BodyType<Def>>(
+  static addBodyFromAttrsB<
+    Def extends DataDefinition,
+    BT extends BodyType<Def>
+  >(
     state: GameState<Def>,
     bodyAttrs: BodyAttrs<Def, BT>
   ): {state: GameState<Def>; body: Body<Def, BT>} {
-    const {state: newBodiesState, body} = TBodiesState.addBodyB(
+    const {state: newBodiesState, body} = TBodiesState.addBodyFromAttrsB(
       state.bodies,
       bodyAttrs
     );
@@ -85,11 +88,11 @@ export class BodiesHelper {
     };
   }
 
-  static addBodiesB<Def extends DataDefinition>(
+  static addBodiesFromAttrsB<Def extends DataDefinition>(
     state: GameState<Def>,
     bodiesWithoutId: AnyTypeBodyAttrs<Def>[]
   ): {state: GameState<Def>; bodies: AnyTypeBody<Def>[]} {
-    const {state: newBodiesState, bodies} = TBodiesState.addBodiesB(
+    const {state: newBodiesState, bodies} = TBodiesState.addBodiesFromAttrsB(
       state.bodies,
       bodiesWithoutId
     );

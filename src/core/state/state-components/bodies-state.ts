@@ -41,7 +41,10 @@ export class TBodiesState {
     return TImMap.fetch(bodyMap, key);
   }
 
-  static addBodyB<Def extends DataDefinition, BT extends BodyType<Def>>(
+  static addBodyFromAttrsB<
+    Def extends DataDefinition,
+    BT extends BodyType<Def>
+  >(
     bodies: BodiesState<Def>,
     bodyAttrs: BodyAttrs<Def, BT>
   ): {state: BodiesState<Def>; body: Body<Def, BT>} {
@@ -71,7 +74,7 @@ export class TBodiesState {
     };
   }
 
-  static addBodiesB<Def extends DataDefinition>(
+  static addBodiesFromAttrsB<Def extends DataDefinition>(
     bodies: BodiesState<Def>,
     bodiesWithoutId: AnyTypeBodyAttrs<Def>[]
   ): {state: BodiesState<Def>; bodies: AnyTypeBody<Def>[]} {
@@ -80,7 +83,7 @@ export class TBodiesState {
 
     // This can replace to reduce
     for (const b of bodiesWithoutId) {
-      const {state: st, body} = this.addBodyB(bodies, b);
+      const {state: st, body} = this.addBodyFromAttrsB(bodies, b);
       state = st;
       mutBodiesArray.push(body);
     }
