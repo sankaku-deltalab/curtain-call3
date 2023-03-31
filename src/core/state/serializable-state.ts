@@ -1,6 +1,5 @@
 import {Vec2d} from '../../utils';
 import {DataDefinition, Level} from '../setting/data-definition';
-import {AllState} from './all-state';
 import {GameState} from './game-states';
 import {
   DataSourcesList,
@@ -21,11 +20,6 @@ import {
 export type SerializableState<Def extends DataDefinition> = Omit<
   GameState<Def>,
   'dynamicSources'
->;
-
-export type StatesNotSerializable<Def extends DataDefinition> = Omit<
-  AllState<Def>,
-  keyof SerializableState<Def>
 >;
 
 export class TSerializableState {

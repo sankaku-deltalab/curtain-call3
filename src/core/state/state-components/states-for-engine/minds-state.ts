@@ -3,7 +3,11 @@ import {
   BodyType,
   DataDefinition,
 } from '../../../setting/data-definition';
-import {AnyTypeMind, Mind} from '../../../user-defined-processors/mind';
+import {
+  AnyTypeMind,
+  Mind,
+  MindArgs,
+} from '../../../user-defined-processors/mind';
 import {GameState} from '../../game-states';
 import {TBodiesState} from '../bodies-state';
 
@@ -21,12 +25,21 @@ export class TMindsState {
   static calcBodyPropsMindArray<Def extends DataDefinition>(
     {minds}: MindsState<Def>,
     state: GameState<Def>
-  ): {body: AnyTypeBody<Def>; props: unknown; mind: AnyTypeMind<Def>}[] {
+  ): {
+    body: AnyTypeBody<Def>;
+    props: unknown;
+    args: MindArgs;
+    mind: AnyTypeMind<Def>;
+  }[] {
     const bodies = TBodiesState.getAllBodies(state.bodies);
     return bodies.map(body => {
       const mind = minds[body.bodyType];
       const props = mind.calcProps(state, body);
-      return {body, props, mind};
+      const args: MindArgs = {
+        deltaMs: state.time.gameTimeMs,
+        engineDeltaMs: state.time.gameTimeMs,
+      };
+      return {body, props, args, mind};
     });
   }
 
@@ -37,8 +50,8 @@ export class TMindsState {
     const bodyPropsMindArray = this.calcBodyPropsMindArray({minds}, state);
 
     // Use multi-processing in future if we can
-    const newBodies = bodyPropsMindArray.map(({body, props, mind}) => {
-      return mind.updateBody(body, props);
+    const newBodies = bodyPropsMindArray.map(({body, props, args, mind}) => {
+      return mind.updateBody(body, args, props);
     });
 
     return {

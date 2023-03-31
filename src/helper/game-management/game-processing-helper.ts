@@ -5,12 +5,13 @@ import {
   Level,
 } from '../../core/setting/data-definition';
 import {DataSourcesList} from '../../core/state';
+import {AllProcessorsState} from '../../core/state/all-processors-state';
 import {AllState, TAllState} from '../../core/state/all-state';
 import {
   SerializableState,
-  StatesNotSerializable,
   TSerializableState,
 } from '../../core/state/serializable-state';
+import {UserGivenValuesState} from '../../core/state/user-given-values-state';
 import {AaRect2d, Vec2d} from '../../utils';
 
 export class GameProcessingHelper {
@@ -24,12 +25,13 @@ export class GameProcessingHelper {
 
   static updateState<Def extends DataDefinition>(
     state: SerializableState<Def>,
-    otherStates: StatesNotSerializable<Def>
+    processors: AllProcessorsState<Def>,
+    values: UserGivenValuesState<Def>
   ): {
     state: SerializableState<Def>;
     notifications: AnyTypeNotification<Def>[];
   } {
-    const allState = this.generateAllState(state, otherStates);
+    const allState = this.generateAllState(state, processors, values);
     const {state: newAllState, notifications} = TAllState.updateState(allState);
     const newSerializableState =
       TAllState.extractSerializableState(newAllState);
@@ -39,27 +41,31 @@ export class GameProcessingHelper {
 
   private static generateAllState<Def extends DataDefinition>(
     serializableState: SerializableState<Def>,
-    otherStates: StatesNotSerializable<Def>
+    processors: AllProcessorsState<Def>,
+    values: UserGivenValuesState<Def>
   ): AllState<Def> {
     return {
       ...serializableState,
-      ...otherStates,
+      ...values,
+      ...processors,
     };
   }
 
   static generateGraphics<Def extends DataDefinition>(
     state: SerializableState<Def>,
-    otherStates: StatesNotSerializable<Def>
+    processors: AllProcessorsState<Def>,
+    values: UserGivenValuesState<Def>
   ): CanvasGraphic<Def>[] {
-    const allState = this.generateAllState(state, otherStates);
+    const allState = this.generateAllState(state, processors, values);
     return TAllState.generateGraphics(allState);
   }
 
   static calcRenderingAreaOfCanvas<Def extends DataDefinition>(
     state: SerializableState<Def>,
-    otherStates: StatesNotSerializable<Def>
+    processors: AllProcessorsState<Def>,
+    values: UserGivenValuesState<Def>
   ): AaRect2d {
-    const allState = this.generateAllState(state, otherStates);
+    const allState = this.generateAllState(state, processors, values);
     return TAllState.calcRenderingAreaOfCanvas(allState);
   }
 }
