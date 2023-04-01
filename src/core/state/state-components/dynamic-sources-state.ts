@@ -48,4 +48,34 @@ export class TDynamicSourcesState {
       throw new Error(`dynamic source "${type}" do not have id "${id}"`);
     return source[id](props, state);
   }
+
+  static keys<Def extends DataDefinition, Type extends DynamicSourceType<Def>>(
+    ds: DynamicSourcesState<Def>,
+    type: Type
+  ): DynamicSourceId<Def, Type>[] {
+    const source = ds.dynamicSources[type];
+    return Object.keys(source);
+  }
+
+  static values<
+    Def extends DataDefinition,
+    Type extends DynamicSourceType<Def>
+  >(
+    ds: DynamicSourcesState<Def>,
+    type: Type
+  ): DynamicSourceFunction<Def, Type>[] {
+    const source = ds.dynamicSources[type];
+    return Object.values(source);
+  }
+
+  static entires<
+    Def extends DataDefinition,
+    Type extends DynamicSourceType<Def>
+  >(
+    ds: DynamicSourcesState<Def>,
+    type: Type
+  ): [DynamicSourceId<Def, Type>, DynamicSourceFunction<Def, Type>][] {
+    const source = ds.dynamicSources[type];
+    return Object.entries(source);
+  }
 }
