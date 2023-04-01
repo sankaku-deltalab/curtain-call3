@@ -40,6 +40,30 @@ export class TDataSourcesState {
     return source[id];
   }
 
+  static keys<Def extends DataDefinition, Type extends DataSourceType<Def>>(
+    ds: DataSourcesState<Def>,
+    type: Type
+  ): DataSourceId<Def, Type>[] {
+    const source = ds.dataSources[type];
+    return Object.keys(source);
+  }
+
+  static values<Def extends DataDefinition, Type extends DataSourceType<Def>>(
+    ds: DataSourcesState<Def>,
+    type: Type
+  ): DataSourceItem<Def, Type>[] {
+    const source = ds.dataSources[type];
+    return Object.values(source);
+  }
+
+  static entires<Def extends DataDefinition, Type extends DataSourceType<Def>>(
+    ds: DataSourcesState<Def>,
+    type: Type
+  ): [DataSourceId<Def, Type>, DataSourceItem<Def, Type>][] {
+    const source = ds.dataSources[type];
+    return Object.entries(source);
+  }
+
   private static dataSourcesListToDataSources<Def extends DataDefinition>(
     dataSources: DataSourcesList<Def>
   ): DataSources<Def> {

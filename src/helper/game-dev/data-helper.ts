@@ -24,6 +24,30 @@ export class DataHelper {
     return TDataSourcesState.fetchB(state.dataSources, type, id);
   }
 
+  static keysFromDataSource<
+    Def extends DataDefinition,
+    Type extends DataSourceType<Def>
+  >(state: GameState<Def>, type: Type): DataSourceId<Def, Type>[] {
+    return TDataSourcesState.keys(state.dataSources, type);
+  }
+
+  static valuesFromDataSource<
+    Def extends DataDefinition,
+    Type extends DataSourceType<Def>
+  >(state: GameState<Def>, type: Type): DataSourceItem<Def, Type>[] {
+    return TDataSourcesState.values(state.dataSources, type);
+  }
+
+  static entiresFromDataSource<
+    Def extends DataDefinition,
+    Type extends DataSourceType<Def>
+  >(
+    state: GameState<Def>,
+    type: Type
+  ): [DataSourceId<Def, Type>, DataSourceItem<Def, Type>][] {
+    return TDataSourcesState.entires(state.dataSources, type);
+  }
+
   static fetchDynamicSourceB<
     Def extends DataDefinition,
     Type extends DynamicSourceType<Def>
