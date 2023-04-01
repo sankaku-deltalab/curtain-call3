@@ -16,24 +16,10 @@ export class DataSourceHelper {
     return TDataSourcesState.fetchB(state.dataSources, type, id);
   }
 
-  static keys<Def extends DataDefinition, Type extends DataSourceType<Def>>(
-    state: GameState<Def>,
-    type: Type
-  ): DataSourceId<Def, Type>[] {
-    return TDataSourcesState.keys(state.dataSources, type);
-  }
-
-  static values<Def extends DataDefinition, Type extends DataSourceType<Def>>(
+  static items<Def extends DataDefinition, Type extends DataSourceType<Def>>(
     state: GameState<Def>,
     type: Type
   ): DataSourceItem<Def, Type>[] {
     return TDataSourcesState.values(state.dataSources, type);
-  }
-
-  static entires<Def extends DataDefinition, Type extends DataSourceType<Def>>(
-    state: GameState<Def>,
-    type: Type
-  ): [DataSourceId<Def, Type>, DataSourceItem<Def, Type>][] {
-    return TDataSourcesState.entires(state.dataSources, type);
   }
 }
