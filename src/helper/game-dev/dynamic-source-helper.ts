@@ -9,7 +9,10 @@ import {GameState} from '../../core/state/game-states';
 import {TDynamicSourcesState} from '../../core/state/state-components/dynamic-sources-state';
 
 export class DynamicSourceHelper {
-  static fetch<Def extends DataDefinition, Type extends DynamicSourceType<Def>>(
+  static fetchB<
+    Def extends DataDefinition,
+    Type extends DynamicSourceType<Def>
+  >(
     state: GameState<Def>,
     type: Type,
     id: DynamicSourceId<Def, Type>,
