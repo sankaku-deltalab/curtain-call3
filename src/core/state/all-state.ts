@@ -12,6 +12,7 @@ import {
 } from '../setting/data-definition';
 import {GameState} from './game-states';
 import {SerializableState} from './serializable-state';
+import {THitStopsState} from './state-components';
 import {
   CanvasRenderingState,
   TCameraState,
@@ -57,6 +58,7 @@ export class TAllState {
       collision: state.collision,
       dataSources: state.dataSources,
       dynamicSources: state.dynamicSources,
+      hitStops: state.hitStops,
       time: state.time,
       inputPointer: state.inputPointer,
     };
@@ -88,6 +90,7 @@ export class TAllState {
       camera: state.camera,
       collision: state.collision,
       dataSources: state.dataSources,
+      hitStops: state.hitStops,
       time: state.time,
       inputPointer: state.inputPointer,
     };
@@ -111,6 +114,7 @@ export class TAllState {
     st = Im.pipe(
       () => st,
       st => this.updateTime(st),
+      st => this.updateHitStop(st),
       st => this.updateInput(st),
       st => this.updateCollision(st)
     )();
@@ -136,10 +140,25 @@ export class TAllState {
       this.extractGameState(state)
     );
     const engineDeltaMs = state.realWorldTime.realWorldTimeDeltaMs;
+    const hitStopTimeScale = THitStopsState.getWorldTimeScale(state.hitStops);
 
     return {
       ...state,
-      time: TTimeState.update(state.time, {engineDeltaMs, baseTimeScale}),
+      time: TTimeState.update(
+        state.time,
+        {engineDeltaMs, baseTimeScale},
+        hitStopTimeScale
+      ),
+    };
+  }
+
+  private static updateHitStop<Def extends DataDefinition>(
+    state: AllState<Def>
+  ): AllState<Def> {
+    const engineDeltaMs = state.time.lastEngineDeltaMs;
+    return {
+      ...state,
+      hitStops: THitStopsState.update(state.hitStops, engineDeltaMs),
     };
   }
 

@@ -10,6 +10,7 @@ import {
 } from '../../../user-defined-processors/mind';
 import {GameState} from '../../game-states';
 import {TBodiesState} from '../bodies-state';
+import {THitStopsState} from '../hit-stop-state';
 
 export type MindsState<Def extends DataDefinition> = {
   minds: {[BT in BodyType<Def>]: Mind<Def, BT>};
@@ -35,8 +36,12 @@ export class TMindsState {
     return bodies.map(body => {
       const mind = minds[body.bodyType];
       const props = mind.calcProps(state, body);
+      const timeScale = THitStopsState.getBodyTimeScale(
+        state.hitStops,
+        body.id
+      );
       const args: MindArgs = {
-        deltaMs: state.time.gameTimeMs,
+        deltaMs: state.time.gameTimeMs * timeScale,
         engineDeltaMs: state.time.gameTimeMs,
       };
       return {body, props, args, mind};

@@ -7,6 +7,7 @@ import {
   TCameraState,
   TCollisionState,
   TDataSourcesState,
+  THitStopsState,
   TInputPointerState,
   TLevelState,
   TTimeState,
@@ -34,6 +35,7 @@ export class TSerializableState {
       camera: TCameraState.new({size: args.cameraSize}),
       collision: TCollisionState.new(),
       dataSources: TDataSourcesState.new(args.dataSources),
+      hitStops: THitStopsState.new(),
       time: TTimeState.new(),
       inputPointer: TInputPointerState.new(),
     };

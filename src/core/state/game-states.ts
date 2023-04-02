@@ -1,4 +1,5 @@
 import {DataDefinition} from '../setting/data-definition';
+import {HitStopsState} from './state-components';
 import {BodiesState} from './state-components/bodies-state';
 import {CameraState} from './state-components/camera-state';
 import {CollisionState} from './state-components/collision-state';
@@ -20,6 +21,7 @@ export type GameState<Def extends DataDefinition> = {
   collision: CollisionState<Def>;
   dataSources: DataSourcesState<Def>;
   dynamicSources: DynamicSourcesState<Def>;
+  hitStops: HitStopsState<Def>;
   time: TimeState<Def>;
   inputPointer: InputPointerState;
   // notification?

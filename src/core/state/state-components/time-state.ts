@@ -29,9 +29,11 @@ export class TTimeState {
 
   static update<Def extends DataDefinition>(
     time: TimeState<Def>,
-    input: TimeInput<Def>
+    input: TimeInput<Def>,
+    worldTimeScaleByHitStop: number
   ): TimeState<Def> {
-    const gameDelta = input.engineDeltaMs * input.baseTimeScale;
+    const gameDelta =
+      input.engineDeltaMs * input.baseTimeScale * worldTimeScaleByHitStop;
     return {
       engineTimeMs: time.engineTimeMs + input.engineDeltaMs,
       lastEngineDeltaMs: input.engineDeltaMs,
