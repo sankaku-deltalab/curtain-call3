@@ -4,17 +4,21 @@ import {TInputPointerState} from '../../core/state/state-components/input-pointe
 import {Vec2d} from '../../utils/vec2d';
 
 export class InputHelper {
-  static deltaWhileDown<Def extends DataDefinition>(
+  static pointerDeltaWhileDown<Def extends DataDefinition>(
     state: GameState<Def>
   ): Vec2d {
     return TInputPointerState.moveDeltaWhileDown(state.inputPointer);
   }
 
-  static upped<Def extends DataDefinition>(state: GameState<Def>): boolean {
+  static pointerUpped<Def extends DataDefinition>(
+    state: GameState<Def>
+  ): boolean {
     return TInputPointerState.upped(state.inputPointer);
   }
 
-  static downed<Def extends DataDefinition>(state: GameState<Def>): boolean {
+  static pointerDowned<Def extends DataDefinition>(
+    state: GameState<Def>
+  ): boolean {
     return TInputPointerState.downed(state.inputPointer);
   }
 }
