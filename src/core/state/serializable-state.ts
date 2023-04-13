@@ -1,5 +1,5 @@
 import {Vec2d} from '../../utils';
-import {DataDefinition, Level} from '../setting/data-definition';
+import {CustomInputs, DataDefinition, Level} from '../setting/data-definition';
 import {GameState} from './game-states';
 import {
   DataSourcesList,
@@ -12,6 +12,7 @@ import {
   TLevelState,
   TTimeState,
 } from './state-components';
+import {TInputCustomState} from './state-components/input-custom-state';
 
 /**
  * SerializableState is
@@ -28,6 +29,7 @@ export class TSerializableState {
     level: Level<Def>;
     cameraSize: Vec2d;
     dataSources: DataSourcesList<Def>;
+    initialCustomInputs: CustomInputs<Def>;
   }): SerializableState<Def> {
     return {
       level: TLevelState.new(args.level),
@@ -37,6 +39,7 @@ export class TSerializableState {
       dataSources: TDataSourcesState.new(args.dataSources),
       hitStops: THitStopsState.new(),
       time: TTimeState.new(),
+      inputCustom: TInputCustomState.new(args.initialCustomInputs),
       inputPointer: TInputPointerState.new(),
     };
   }

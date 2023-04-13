@@ -1,5 +1,5 @@
 import {AllProcessorsState} from '../../core/state/all-processors-state';
-import {UserGivenValuesState} from '../../core/state/user-given-values-state';
+import {UpdateInput} from '../../core/state/user-given-values-state';
 import {GameProcessingHelper} from '../../helper/game-management';
 import {TVec2d} from '../../utils';
 import {ExampleDataDefinition} from '../def';
@@ -25,6 +25,9 @@ const serializableState = GameProcessingHelper.createSerializableState<Def>({
       {id: 'special', score: 1, spriteKey: ''},
     ],
   },
+  initialCustomInputs: {
+    pressedButtonA: false,
+  },
 });
 
 const allProcessors: AllProcessorsState<Def> = {
@@ -43,12 +46,11 @@ const allProcessors: AllProcessorsState<Def> = {
   },
 };
 
-const givenValues: UserGivenValuesState<Def> = {
-  inputCanvasPointer: {pointer: {down: false, canvasPos: TVec2d.zero()}},
-  realWorldTime: {
-    realWorldTimeDeltaMs: 0,
-  },
-  rendering: {
+const updateInput: UpdateInput<Def> = {
+  canvasPointer: {down: false, canvasPos: TVec2d.zero()},
+  customInput: {pressedButtonA: false},
+  realWorldTimeDeltaMs: 123,
+  renderingState: {
     canvasSize: TVec2d.zero(),
     center: TVec2d.zero(),
     scale: 1,
@@ -58,5 +60,5 @@ const givenValues: UserGivenValuesState<Def> = {
 const {state: _newState, notifications: _} = GameProcessingHelper.updateState(
   serializableState,
   allProcessors,
-  givenValues
+  updateInput
 );

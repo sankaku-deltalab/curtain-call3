@@ -3,7 +3,7 @@ export type RealWorldTimeState = Readonly<{
 }>;
 
 export class TRealWorldTimeState {
-  static new(): RealWorldTimeState {
-    return {realWorldTimeDeltaMs: 0};
+  static new(realWorldTimeDeltaMs = 0): RealWorldTimeState {
+    return {realWorldTimeDeltaMs};
   }
 }

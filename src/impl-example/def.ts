@@ -28,4 +28,7 @@ export type ExampleDataDefinition = DefineDataDefinition<{
   notifications: {
     endGame: EndGameNotification;
   };
+  customInputs: {
+    pressedButtonA: boolean;
+  };
 }>;

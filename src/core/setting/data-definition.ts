@@ -7,6 +7,7 @@ export type DataDefinition = {
     {props: DynamicSourcePropsBase; item: DynamicSourceItemBase}
   >;
   notifications: Record<string, NotificationPayloadBase>;
+  customInputs: Record<string, unknown>;
 };
 
 // Level
@@ -84,6 +85,9 @@ export type AnyTypeNotification<Def extends DataDefinition> = Notification<
   Def,
   NotificationType<Def>
 >;
+
+// CustomInputs
+export type CustomInputs<Def extends DataDefinition> = Def['customInputs'];
 
 // functions
 export const serializeBodyId = <Def extends DataDefinition>(

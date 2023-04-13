@@ -12,10 +12,17 @@ export type RawCanvasPointerState = {
   canvasPos: Vec2d;
 };
 
+const initialRawCanvasPointer: RawCanvasPointerState = {
+  down: false,
+  canvasPos: TVec2d.zero(),
+};
+
 export class TInputCanvasPointerState {
-  static new(): InputCanvasPointerState {
+  static new(
+    rawCanvasPointer: RawCanvasPointerState = initialRawCanvasPointer
+  ): InputCanvasPointerState {
     return {
-      pointer: {down: false, canvasPos: TVec2d.zero()},
+      pointer: rawCanvasPointer,
     };
   }
 

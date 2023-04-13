@@ -1,6 +1,7 @@
 import {CanvasGraphic} from '../../core/components/graphics/graphic';
 import {
   AnyTypeNotification,
+  CustomInputs,
   DataDefinition,
   Level,
 } from '../../core/setting/data-definition';
@@ -11,7 +12,11 @@ import {
   SerializableState,
   TSerializableState,
 } from '../../core/state/serializable-state';
-import {UserGivenValuesState} from '../../core/state/user-given-values-state';
+import {
+  TUserGivenValuesState,
+  UpdateInput,
+  UserGivenValuesState,
+} from '../../core/state/user-given-values-state';
 import {AaRect2d, Vec2d} from '../../utils';
 
 export class GameProcessingHelper {
@@ -19,19 +24,27 @@ export class GameProcessingHelper {
     level: Level<Def>;
     cameraSize: Vec2d;
     dataSources: DataSourcesList<Def>;
+    initialCustomInputs: CustomInputs<Def>;
   }): SerializableState<Def> {
     return TSerializableState.new(args);
+  }
+
+  static createUserGivenValuesState<Def extends DataDefinition>(
+    args: UpdateInput<Def>
+  ): UserGivenValuesState<Def> {
+    return TUserGivenValuesState.new(args);
   }
 
   static updateState<Def extends DataDefinition>(
     state: SerializableState<Def>,
     processors: AllProcessorsState<Def>,
-    values: UserGivenValuesState<Def>
+    updateInput: UpdateInput<Def>
   ): {
     state: SerializableState<Def>;
     notifications: AnyTypeNotification<Def>[];
   } {
-    const allState = this.generateAllState(state, processors, values);
+    const userGivenValues = TUserGivenValuesState.new(updateInput);
+    const allState = this.generateAllState(state, processors, userGivenValues);
     const {state: newAllState, notifications} = TAllState.updateState(allState);
     const newSerializableState =
       TAllState.extractSerializableState(newAllState);

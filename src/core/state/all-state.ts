@@ -18,12 +18,14 @@ import {
   TCameraState,
 } from './state-components/camera-state';
 import {TCollisionState} from './state-components/collision-state';
+import {TInputCustomState} from './state-components/input-custom-state';
 import {TInputPointerState} from './state-components/input-pointer-state';
 import {DirectorState} from './state-components/states-for-engine/director-state';
 import {
   InputCanvasPointerState,
   TInputCanvasPointerState,
 } from './state-components/states-for-engine/input-canvas-pointer-state';
+import {InputRawCustomInputsState} from './state-components/states-for-engine/input-raw-custom-inputs-state';
 import {
   MindsState,
   TMindsState,
@@ -43,6 +45,7 @@ export type AllState<Def extends DataDefinition> = GameState<Def> & {
   procedures: ProceduresState<Def>;
   director: DirectorState<Def>;
   inputCanvasPointer: InputCanvasPointerState;
+  inputRawCustomInputs: InputRawCustomInputsState<Def>;
   rendering: CanvasRenderingState;
   realWorldTime: RealWorldTimeState;
 };
@@ -60,6 +63,7 @@ export class TAllState {
       dynamicSources: state.dynamicSources,
       hitStops: state.hitStops,
       time: state.time,
+      inputCustom: state.inputCustom,
       inputPointer: state.inputPointer,
     };
   }
@@ -92,6 +96,7 @@ export class TAllState {
       dataSources: state.dataSources,
       hitStops: state.hitStops,
       time: state.time,
+      inputCustom: state.inputCustom,
       inputPointer: state.inputPointer,
     };
   }
@@ -115,7 +120,8 @@ export class TAllState {
       () => st,
       st => this.updateTime(st),
       st => this.updateHitStop(st),
-      st => this.updateInput(st),
+      st => this.updateInputPointer(st),
+      st => this.updateInputCustom(st),
       st => this.updateCollision(st)
     )();
 
@@ -162,7 +168,7 @@ export class TAllState {
     };
   }
 
-  private static updateInput<Def extends DataDefinition>(
+  private static updateInputPointer<Def extends DataDefinition>(
     state: AllState<Def>
   ): AllState<Def> {
     const newRawPointer = TInputCanvasPointerState.convertToRawPointer(
@@ -177,6 +183,18 @@ export class TAllState {
       inputPointer: TInputPointerState.update(state.inputPointer, {
         newRawPointer,
       }),
+    };
+  }
+
+  private static updateInputCustom<Def extends DataDefinition>(
+    state: AllState<Def>
+  ): AllState<Def> {
+    const inputCustom = TInputCustomState.update(state.inputCustom, {
+      newInput: state.inputRawCustomInputs.inputs,
+    });
+    return {
+      ...state,
+      inputCustom: inputCustom,
     };
   }
 
