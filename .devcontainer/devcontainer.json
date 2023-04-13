@@ -29,7 +29,8 @@
 				"bierner.markdown-mermaid",
 				"bpruitt-goddard.mermaid-markdown-syntax-highlighting",
 				"wayou.vscode-todo-highlight",
-				"shardulm94.trailing-spaces"
+				"shardulm94.trailing-spaces",
+				"streetsidesoftware.code-spell-checker"
 			]
 		}
 	}
