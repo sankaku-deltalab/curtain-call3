@@ -20,7 +20,10 @@ import {
 import {TCollisionState} from './state-components/collision-state';
 import {TInputCustomState} from './state-components/input-custom-state';
 import {TInputPointerState} from './state-components/input-pointer-state';
-import {DirectorState} from './state-components/states-for-engine/director-state';
+import {
+  DirectorState,
+  TDirectorState,
+} from './state-components/states-for-engine/director-state';
 import {
   InputCanvasPointerState,
   TInputCanvasPointerState,
@@ -238,7 +241,11 @@ export class TAllState {
     state: AllState<Def>
   ): AllState<Def> {
     return this.updateAsGameState(state, (gameState, allState) => {
-      return allState.director.director.update(gameState);
+      const timeScale = THitStopsState.getWorldTimeScale(state.hitStops);
+      return TDirectorState.updateGameState(allState.director, gameState, {
+        deltaMs: state.time.lastDeltaMs * timeScale,
+        engineDeltaMs: state.time.lastEngineDeltaMs,
+      });
     });
   }
 

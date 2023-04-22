@@ -1,5 +1,8 @@
 import {DataDefinition} from '../../../setting/data-definition';
-import {Director} from '../../../user-defined-processors/director';
+import {
+  Director,
+  DirectorUpdateArgs,
+} from '../../../user-defined-processors/director';
 import {GameState} from '../../game-states';
 
 export type DirectorState<Def extends DataDefinition> = {
@@ -15,8 +18,9 @@ export class TDirectorState {
 
   static updateGameState<Def extends DataDefinition>(
     {director}: DirectorState<Def>,
-    state: GameState<Def>
+    state: GameState<Def>,
+    args: DirectorUpdateArgs
   ): GameState<Def> {
-    return director.update(state);
+    return director.update(state, args);
   }
 }
