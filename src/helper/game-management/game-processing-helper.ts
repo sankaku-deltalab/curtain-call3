@@ -1,9 +1,9 @@
 import {CanvasGraphic} from '../../core/components/graphics/graphic';
 import {
-  AnyTypeNotification,
   CustomInputs,
   DataDefinition,
   Level,
+  Representation,
 } from '../../core/setting/data-definition';
 import {DataSourcesList} from '../../core/state';
 import {AllProcessorsState} from '../../core/state/all-processors-state';
@@ -41,15 +41,16 @@ export class GameProcessingHelper {
     updateInput: UpdateInput<Def>
   ): {
     state: SerializableState<Def>;
-    notifications: AnyTypeNotification<Def>[];
+    representation: Representation<Def>;
   } {
     const userGivenValues = TUserGivenValuesState.new(updateInput);
     const allState = this.generateAllState(state, processors, userGivenValues);
-    const {state: newAllState, notifications} = TAllState.updateState(allState);
+    const {state: newAllState, representation} =
+      TAllState.updateState(allState);
     const newSerializableState =
       TAllState.extractSerializableState(newAllState);
 
-    return {state: newSerializableState, notifications};
+    return {state: newSerializableState, representation};
   }
 
   private static generateAllState<Def extends DataDefinition>(

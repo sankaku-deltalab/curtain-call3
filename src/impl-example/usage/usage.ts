@@ -57,7 +57,7 @@ const updateInput: UpdateInput<Def> = {
   },
 };
 
-const {state: _newState, notifications: _} = GameProcessingHelper.updateState(
+const {state: _newState, representation: _} = GameProcessingHelper.updateState(
   serializableState,
   allProcessors,
   updateInput
