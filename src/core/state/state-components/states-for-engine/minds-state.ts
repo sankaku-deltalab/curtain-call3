@@ -41,8 +41,8 @@ export class TMindsState {
         body.id
       );
       const args: MindArgs = {
-        deltaMs: state.time.gameTimeMs * timeScale,
-        engineDeltaMs: state.time.gameTimeMs,
+        deltaMs: state.time.lastDeltaMs * timeScale,
+        engineDeltaMs: state.time.lastEngineDeltaMs,
       };
       return {body, props, args, mind};
     });
