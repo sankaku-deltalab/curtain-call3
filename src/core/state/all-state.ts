@@ -7,8 +7,8 @@ import {
 import {CanvasGraphic, Graphic, TGraphic} from '../components/graphics/graphic';
 import {
   AnyTypeBodyId,
-  AnyTypeNotification,
   DataDefinition,
+  Representation,
 } from '../setting/data-definition';
 import {GameState} from './game-states';
 import {SerializableState} from './serializable-state';
@@ -114,7 +114,7 @@ export class TAllState {
 
   static updateState<Def extends DataDefinition>(
     state: AllState<Def>
-  ): {state: AllState<Def>; notifications: AnyTypeNotification<Def>[]} {
+  ): {state: AllState<Def>; representation: Representation<Def>} {
     let st = state;
     st = Im.pipe(
       () => st,
@@ -134,9 +134,9 @@ export class TAllState {
       st => this.updateByMindDelete(st)
     )();
 
-    const notifications = st.director.director.generateNotification(st);
+    const representation = st.director.director.represent(st);
 
-    return {state: st, notifications};
+    return {state: st, representation};
   }
 
   private static updateTime<Def extends DataDefinition>(

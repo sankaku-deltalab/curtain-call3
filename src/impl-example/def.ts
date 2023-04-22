@@ -26,7 +26,11 @@ export type ExampleDataDefinition = DefineDataDefinition<{
     targetSpawnPos: {props: TargetSpawnPosProps; item: TargetSpawnPosItem};
   };
   notifications: {
+    // notifications is deprecated
     endGame: EndGameNotification;
+  };
+  representation: {
+    status: {type: 'playing'} | {type: 'ended'; finalScore: number};
   };
   customInputs: {
     pressedButtonA: boolean;

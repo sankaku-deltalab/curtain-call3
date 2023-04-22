@@ -6,7 +6,8 @@ export type DataDefinition = {
     string,
     {props: DynamicSourcePropsBase; item: DynamicSourceItemBase}
   >;
-  notifications: Record<string, NotificationPayloadBase>;
+  notifications: Record<string, NotificationPayloadBase>; // Deprecated
+  representation: Record<string, unknown>;
   customInputs: Record<string, unknown>;
 };
 
@@ -73,7 +74,10 @@ export type DynamicSourceProps<
   Type extends DynamicSourceType<Def>
 > = Def['dynamicSources'][Type]['props'];
 
-// Notification
+// Representation
+export type Representation<Def extends DataDefinition> = Def['representation'];
+
+// Representation
 export type NotificationPayloadBase = {};
 export type NotificationType<Def extends DataDefinition> =
   keyof Def['notifications'] & string;

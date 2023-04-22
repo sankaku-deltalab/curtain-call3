@@ -1,4 +1,4 @@
-import {AnyTypeNotification} from '../core/setting';
+import {Representation} from '../core/setting';
 import {GameState} from '../core/state';
 import {Director, TimeScaling} from '../core/user-defined-processors';
 import {ExampleDataDefinition} from './def';
@@ -18,7 +18,9 @@ export class ExampleDirector implements Director<Def> {
     return {base: 1};
   }
 
-  generateNotification(_state: GameState<Def>): AnyTypeNotification<Def>[] {
-    return [];
+  represent(_state: GameState<Def>): Representation<Def> {
+    return {
+      status: {type: 'playing'},
+    };
   }
 }
