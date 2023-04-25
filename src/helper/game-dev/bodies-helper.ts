@@ -90,11 +90,11 @@ export class BodiesHelper {
 
   static addBodiesFromAttrsB<Def extends DataDefinition>(
     state: GameState<Def>,
-    bodiesWithoutId: AnyTypeBodyAttrs<Def>[]
+    bodyAttrsArray: AnyTypeBodyAttrs<Def>[]
   ): {state: GameState<Def>; bodies: AnyTypeBody<Def>[]} {
     const {state: newBodiesState, bodies} = TBodiesState.addBodiesFromAttrsB(
       state.bodies,
-      bodiesWithoutId
+      bodyAttrsArray
     );
 
     return {

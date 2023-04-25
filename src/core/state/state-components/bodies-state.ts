@@ -76,13 +76,13 @@ export class TBodiesState {
 
   static addBodiesFromAttrsB<Def extends DataDefinition>(
     bodies: BodiesState<Def>,
-    bodiesWithoutId: AnyTypeBodyAttrs<Def>[]
+    bodyAttrsArray: AnyTypeBodyAttrs<Def>[]
   ): {state: BodiesState<Def>; bodies: AnyTypeBody<Def>[]} {
     let state = bodies;
     const mutBodiesArray: AnyTypeBody<Def>[] = [];
 
     // This can replace to reduce
-    for (const b of bodiesWithoutId) {
+    for (const b of bodyAttrsArray) {
       const {state: st, body} = this.addBodyFromAttrsB(bodies, b);
       state = st;
       mutBodiesArray.push(body);
