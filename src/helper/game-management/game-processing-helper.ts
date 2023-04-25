@@ -68,18 +68,20 @@ export class GameProcessingHelper {
   static generateGraphics<Def extends DataDefinition>(
     state: SerializableState<Def>,
     processors: AllProcessorsState<Def>,
-    values: UserGivenValuesState<Def>
+    updateInput: UpdateInput<Def>
   ): CanvasGraphic<Def>[] {
-    const allState = this.generateAllState(state, processors, values);
+    const userGivenValues = TUserGivenValuesState.new(updateInput);
+    const allState = this.generateAllState(state, processors, userGivenValues);
     return TAllState.generateGraphics(allState);
   }
 
   static calcRenderingAreaOfCanvas<Def extends DataDefinition>(
     state: SerializableState<Def>,
     processors: AllProcessorsState<Def>,
-    values: UserGivenValuesState<Def>
+    updateInput: UpdateInput<Def>
   ): AaRect2d {
-    const allState = this.generateAllState(state, processors, values);
+    const userGivenValues = TUserGivenValuesState.new(updateInput);
+    const allState = this.generateAllState(state, processors, userGivenValues);
     return TAllState.calcRenderingAreaOfCanvas(allState);
   }
 }
