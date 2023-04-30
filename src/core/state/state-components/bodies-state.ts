@@ -1,4 +1,4 @@
-import {ImMap, TImMap, Result, Res} from '../../../utils';
+import {ImMap, TImMap, Result, Res, Enum} from '../../../utils';
 import {
   AnyTypeBody,
   AnyTypeBodyAttrs,
@@ -75,20 +75,21 @@ export class TBodiesState {
   }
 
   static addBodiesFromAttrsB<Def extends DataDefinition>(
-    bodies: BodiesState<Def>,
+    state: BodiesState<Def>,
     bodyAttrsArray: AnyTypeBodyAttrs<Def>[]
   ): {state: BodiesState<Def>; bodies: AnyTypeBody<Def>[]} {
-    let state = bodies;
     const mutBodiesArray: AnyTypeBody<Def>[] = [];
 
-    // This can replace to reduce
-    for (const b of bodyAttrsArray) {
-      const {state: st, body} = this.addBodyFromAttrsB(bodies, b);
-      state = st;
-      mutBodiesArray.push(body);
-    }
-
-    return {state, bodies: mutBodiesArray};
+    const newState = Enum.reduce(
+      bodyAttrsArray,
+      state,
+      (attrs, bodies: BodiesState<Def>) => {
+        const {state, body} = this.addBodyFromAttrsB(bodies, attrs);
+        mutBodiesArray.push(body);
+        return state;
+      }
+    );
+    return {state: newState, bodies: mutBodiesArray};
   }
 
   static putBody<Def extends DataDefinition, BT extends BodyType<Def>>(
