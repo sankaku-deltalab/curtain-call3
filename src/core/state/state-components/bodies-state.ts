@@ -113,6 +113,15 @@ export class TBodiesState {
     };
   }
 
+  static putBodies<Def extends DataDefinition, BT extends BodyType<Def>>(
+    state: BodiesState<Def>,
+    bodies: Body<Def, BT>[]
+  ): BodiesState<Def> {
+    return Enum.reduce(bodies, state, (b, state: BodiesState<Def>) => {
+      return this.putBody(state, b);
+    });
+  }
+
   static getBodiesInType<Def extends DataDefinition, BT extends BodyType<Def>>(
     bodies: BodiesState<Def>,
     bodyType: BT
