@@ -83,6 +83,7 @@ export class TAllState {
       collision: gameState.collision,
       dataSources: gameState.dataSources,
       dynamicSources: gameState.dynamicSources,
+      hitStops: gameState.hitStops,
       time: gameState.time,
       inputPointer: gameState.inputPointer,
     };

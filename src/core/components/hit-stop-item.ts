@@ -137,7 +137,7 @@ export class THitStopsItem {
     switch (props.type) {
       case 'constant':
         if (props.type !== state.type) throw Error('Invalid item'); // for type-inference
-        return state.consumedEngineTimeMs >= props.engineTimeDurationMs;
+        return state.consumedEngineTimeMs <= props.engineTimeDurationMs;
       case 'linear-curve':
         throw new Error('linear-curve hit stop item is not implemented.');
       case 'frame-drop':
@@ -150,7 +150,7 @@ export class THitStopsItem {
       case 'constant':
         return (
           item.props.engineTimeDurationMs > 0 &&
-          item.props.gameTimeDurationMs > 0
+          item.props.gameTimeDurationMs >= 0
         );
       case 'linear-curve':
         throw new Error('linear-curve hit stop item is not implemented.');
