@@ -43,10 +43,16 @@ export class TRecM2M {
   static fromPairs<T1 extends string, T2 extends string>(
     pairs: [T1, T2][]
   ): RecM2M<T1, T2> {
-    return pairs.reduce(
-      (rel, curr) => TRecM2M.addRelation(rel, curr[0], curr[1]),
-      TRecM2M.new()
-    );
+    const mutRel = TRecM2M.new();
+    for (const [from, to] of pairs) {
+      if (mutRel[from] === undefined) {
+        mutRel[from] = TRecSet.new();
+      }
+      if (mutRel[from][to] === undefined) {
+        mutRel[from][to] = true;
+      }
+    }
+    return mutRel;
   }
 
   static toPairs<T1 extends string, T2 extends string>(
