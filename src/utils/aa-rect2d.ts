@@ -170,8 +170,8 @@ export class TAaRect2d {
   } {
     const nw = react.nw;
     const se = react.se;
-    const ne = {x: react.nw.x, y: react.se.y};
-    const sw = {x: react.se.x, y: react.nw.y};
+    const ne = {x: react.se.x, y: react.nw.y};
+    const sw = {x: react.nw.x, y: react.se.y};
     return {nw, se, ne, sw};
   }
 }
