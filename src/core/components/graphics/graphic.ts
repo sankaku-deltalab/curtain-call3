@@ -13,11 +13,20 @@ import {
   CameraState,
   CanvasRenderingState,
 } from '../../state/state-components/camera-state';
+import {
+  CanvasRectGraphic,
+  RectGraphic,
+  TRectGraphic,
+} from './variations/rect-graphic';
 
-export type Graphic<_Def extends DataDefinition> = SpriteGraphic | LineGraphic;
+export type Graphic<_Def extends DataDefinition> =
+  | SpriteGraphic
+  | LineGraphic
+  | RectGraphic;
 export type CanvasGraphic<_Def extends DataDefinition> =
   | CanvasSpriteGraphic
-  | CanvasLineGraphic;
+  | CanvasLineGraphic
+  | CanvasRectGraphic;
 
 export class TGraphic {
   static appendKey<Def extends DataDefinition>(
@@ -60,6 +69,7 @@ export class TGraphic {
     const traits = {
       line: TLineGraphic,
       sprite: TSpriteGraphic,
+      rect: TRectGraphic,
     };
 
     switch (graphic.type) {
@@ -67,6 +77,8 @@ export class TGraphic {
         return traits['line'].convertToCanvas(graphic, args);
       case 'sprite':
         return traits['sprite'].convertToCanvas(graphic, args);
+      case 'rect':
+        return traits['rect'].convertToCanvas(graphic, args);
     }
     // throw new Error('no trait for graphic');
   }
